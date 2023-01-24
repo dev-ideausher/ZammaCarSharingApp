@@ -1,0 +1,124 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:zammacarsharing/app/modules/models/login_details_model.dart';
+import 'package:zammacarsharing/app/modules/profile/controllers/profile_controller.dart';
+import 'package:zammacarsharing/app/services/dio/api_service.dart';
+import 'package:zammacarsharing/app/services/globalData.dart';
+import 'package:zammacarsharing/app/services/snackbar.dart';
+
+class LicenceVerificationFormController extends GetxController {
+  //TODO: Implement LicenceVerificationFormController
+  Rx<TextEditingController> licenceNumberController =
+      TextEditingController().obs;
+  Rx<TextEditingController> dateController = TextEditingController().obs;
+  Rx<TextEditingController> monthController = TextEditingController().obs;
+  Rx<TextEditingController> yearController = TextEditingController().obs;
+  final count = 0.obs;
+  final instanceOfLoginData =
+      Get.find<ProfileController>().logindetails.value.user?.dl;
+  final instanceOfGlobalData=Get.find<GlobalData>();
+  Rx<logedInDetails> logindetails = logedInDetails().obs;
+  var pickedImage = File("").obs;
+  final profilestatus = 0.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    valueSetup();
+  }
+
+  valueSetup() {
+    licenceNumberController.value.text =
+        (instanceOfLoginData?.licenceNumber).toString();
+    BreakDateFormat();
+  }
+
+  Future<void> BreakDateFormat() async {
+    try {
+      var str = (instanceOfLoginData?.validTill).toString();
+
+      // print(str.substring(0,4));
+      // print(str.substring(5,7));
+      // print(str.substring(8,10));
+
+      yearController.value.text = str.substring(6, 10);
+      monthController.value.text = str.substring(3, 5);
+      dateController.value.text = str.substring(0, 2);
+    } catch (e) {}
+  }
+  Future<void> pickImage() async {
+    profilestatus.value = 1;
+    print("file return ::: ${pickedImage.value.path}");
+    final ImagePicker picker = ImagePicker();
+
+    try {
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      pickedImage.value = File(image!.path);
+      print("pickedImage path ${pickedImage.value.path}");
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> pickFromCamera() async {
+    profilestatus.value = 1;
+    print("file return ::: ${pickedImage.value.path}");
+    final ImagePicker picker = ImagePicker();
+
+    try {
+      final XFile? image = await picker.pickImage(source: ImageSource.camera);
+      pickedImage.value = File(image!.path);
+      print("pickedImage path ${pickedImage.value.path}");
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+  Future<int> upDateDl() async {
+    if(licenceNumberController.value.text=="" || licenceNumberController.value.text==null ||dateController.value.text=="" || dateController.value.text==null || yearController.value.text=="" || yearController.value.text==null ||monthController.value.text=="" || monthController.value.text==null ){
+      showMySnackbar(title: "Error",msg: "Field must not be empty");
+      return 0;
+    }
+    else {
+      instanceOfGlobalData.loader.value=true;
+      try {
+        var body = {
+          "dl": {
+            "licenceNumber": licenceNumberController.value.text,
+            "validTill":
+            "${dateController.value.text}-${monthController.value
+                .text}-${yearController.value.text}",
+            "image":
+            "https://www.shutterstock.com/image-vector/driver-license-male-photo-identification-260nw-1227173818.jpg"
+          },
+        };
+        final response = await APIManager.updateDetails(body: body);
+
+        logindetails.value =
+            logedInDetails.fromJson(jsonDecode(response.toString()));
+        print("response.data : ${response}");
+        instanceOfGlobalData.loader.value=false;
+        return 1;
+      } catch (e) {
+        instanceOfGlobalData.loader.value=false;
+        showMySnackbar(
+            title: "Error", msg: "Error while updating Licence Details");
+        return 0;
+      }
+    }
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
+  void increment() => count.value++;
+}

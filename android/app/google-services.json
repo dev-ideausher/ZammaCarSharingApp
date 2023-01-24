@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "141437408544",
+    "project_id": "symbol-drive",
+    "storage_bucket": "symbol-drive.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141437408544:android:c56af5420d24adc63bf345",
+        "android_client_info": {
+          "package_name": "com.ideausher.symboldrive"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "141437408544-um0tnu919keqadvc5nh7rm33il54u6am.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ideausher.symboldrive",
+            "certificate_hash": "609b390680020556a4059b4475a8af9d03aaf6df"
+          }
+        },
+        {
+          "client_id": "141437408544-addvve7j73bnnpdpglsnpjn6m9t7mdaf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh1Rp_ynsNa3Jycwy1qu3lUE6L890ZzKQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "141437408544-addvve7j73bnnpdpglsnpjn6m9t7mdaf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
