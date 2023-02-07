@@ -77,7 +77,8 @@ class SettingsView extends GetView<SettingsController> {
                                           Radius.circular(11),
                                         ),
                                       ),
-                                      child: Column(children: [
+                                      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
                                         SizedBox(
                                           height: 6.kh,
                                         ),
@@ -113,7 +114,8 @@ class SettingsView extends GetView<SettingsController> {
                                           Radius.circular(11),
                                         ),
                                       ),
-                                      child: Column(children: [
+                                      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
                                         SizedBox(
                                           height: 6.kh,
                                         ),

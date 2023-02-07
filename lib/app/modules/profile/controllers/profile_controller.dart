@@ -28,6 +28,7 @@ class ProfileController extends GetxController {
   var pickedImage = File("").obs;
   final profilestatus = 0.obs;
   final imageUpload = ImageUpload().obs;
+  Rx<bool> updateProfile = false.obs;
   @override
    onInit() async {
     super.onInit();
@@ -137,22 +138,25 @@ class ProfileController extends GetxController {
 
   Future<int> userOnBoard() async {
 
-    if(nameController.value.text=="" || nameController.value.text==null || emailController.value.text=="" || emailController.value.text==null ||dateController.value.text=="" || dateController.value.text==null || yearController.value.text=="" || yearController.value.text==null ||monthController.value.text=="" || monthController.value.text==null || gender.value==""){
+    if(pickedImage.value.path=="" || nameController.value.text=="" || nameController.value.text==null || emailController.value.text=="" || emailController.value.text==null ||dateController.value.text=="" || dateController.value.text==null || yearController.value.text=="" || yearController.value.text==null ||monthController.value.text=="" || monthController.value.text==null || gender.value==""){
       showMySnackbar(title: "Error",msg: "Field must not be empty");
       return 0;
     }
     else{
-      var response = await uploadImage(pickedImage.value.path);
+      updateProfile.value=true;
+        var response = await uploadImage(pickedImage.value.path);
+        imageUpload.value = ImageUpload.fromJson(response);
 
-      imageUpload.value = ImageUpload.fromJson(response);
+
+
     //  print("response ${"${(imageUpload.value.urls)?.substring(1,length)}"}");
       instanceOfGlobalData.loader.value=true;
       var body = {
         "name": nameController.value.text,
         "email": emailController.value.text,
         "dob":
-        "${dateController.value.text}-${monthController.value.text}-${yearController.value.text}",
-        "image":"${"${(imageUpload.value.urls)?.substring(1,((imageUpload.value.urls?.length)!-1))}"}",//"https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg", //"${pickedImage.value.path}",
+        "${yearController.value.text}-${monthController.value.text}-${dateController.value.text}",
+        "image":imageUpload.value.urls?[0],//"https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg", //"${pickedImage.value.path}",
         "gender": gender.value,
        // "address":"Hauz Khas Delhi"
       };
@@ -163,8 +167,10 @@ class ProfileController extends GetxController {
          print("response.data : ${response.toString()}");
 
         instanceOfGlobalData.loader.value=false;
+        updateProfile.value=false;
         return 1;
       } catch (e) {
+        updateProfile.value=false;
         instanceOfGlobalData.loader.value=false;
         return 0;
       }

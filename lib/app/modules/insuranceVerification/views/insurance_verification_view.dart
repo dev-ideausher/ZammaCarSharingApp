@@ -68,7 +68,7 @@ class InsuranceVerificationView
                         context: context,
                         builder: (BuildContext context) {
                           return SizedBox(
-                            height: 200,
+                            height: 200.kh,
                             child: Center(
                               child: Column(
                                 mainAxisAlignment:

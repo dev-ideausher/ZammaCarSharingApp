@@ -36,4 +36,26 @@ class APIManager {
   static Future<Response> updateDetails({required dynamic body}) async =>
       await DioClient(Dio(), showSnakbar: false, isOverlayLoader: false)
           .patch(Endpoints.upDateDetails+"${Get.find<GlobalData>().userId}",data: jsonEncode(body));
+
+  static Future<Response> postInspection({required dynamic body}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).post(
+          Endpoints.onBoardApi,data: jsonEncode(body)
+      );
+
+  static Future<Response> createBooking({required dynamic body}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).post(
+          Endpoints.createBooking,data: jsonEncode(body)
+      );
+  static Future<Response> cancelBooking({required dynamic body,required String bookingId}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).patch(
+          Endpoints.createBooking+"/$bookingId/cancel",data: jsonEncode(body)
+      );
+  static Future<Response> postInspectionImageUrl({required dynamic body,required String bookingId}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).post(
+          Endpoints.createBooking+"/$bookingId/inspection",data: jsonEncode(body)
+      );
+  static Future<Response> endInspectionImageUrl({required dynamic body,required String bookingId}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).patch(
+          Endpoints.createBooking+"/$bookingId/end-ride",data: jsonEncode(body)
+      );
 }

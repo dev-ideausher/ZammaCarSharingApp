@@ -25,7 +25,7 @@ class ProfileView extends GetView<ProfileController> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
-          height: 900.kh,
+          height: 950.kh,
           padding: EdgeInsets.all(16),
           child: Obx(
             () => controller.instanceOfGlobalData.loader.value == true
@@ -125,7 +125,7 @@ class ProfileView extends GetView<ProfileController> {
                               context: context,
                               builder: (BuildContext context) {
                                 return SizedBox(
-                                  height: 200,
+                                  height: 200.kh,
                                   child: Center(
                                     child: Column(
                                       mainAxisAlignment:
@@ -200,11 +200,27 @@ class ProfileView extends GetView<ProfileController> {
                       SizedBox(
                         height: 50.kh,
                       ),
+                      Text(
+                        "Name",
+                        style: TextStyle(
+                            fontSize: 16.kh, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 16.kh,
+                      ),
                       Obx(()=>
                          TextFieldDesign(
                           hintText: 'Enter your name as per driver’s licence',
                           controller: controller.nameController.value,
                         ),
+                      ),
+                      SizedBox(
+                        height: 16.kh,
+                      ),
+                      Text(
+                        "Email",
+                        style: TextStyle(
+                            fontSize: 16.kh, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
                         height: 16.kh,
@@ -279,7 +295,12 @@ class ProfileView extends GetView<ProfileController> {
                         ],
                       ),
                       Spacer(),
-                      ButtonDesign(
+              controller.updateProfile.value==true? Center(
+                child: SizedBox(
+                    width: 200.kh,
+                    height: 100.kh,
+                    child: Lottie.asset('assets/json/car_loader.json')),
+              ):ButtonDesign(
                           onPressed: () {
                             controller.userOnBoard().then((value) {
                               if(value==1)

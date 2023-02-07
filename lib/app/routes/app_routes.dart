@@ -19,6 +19,8 @@ abstract class Routes {
   static const VIEW_INSURANCE = _Paths.VIEW_INSURANCE;
   static const DOCUMENT_TYPE_LIST = _Paths.DOCUMENT_TYPE_LIST;
   static const RIDE_BOOKED = _Paths.RIDE_BOOKED;
+  static const BOOKING = _Paths.BOOKING;
+  static const REPORT = _Paths.REPORT;
 }
 
 abstract class _Paths {
@@ -39,4 +41,6 @@ abstract class _Paths {
   static const VIEW_INSURANCE = '/view-insurance';
   static const DOCUMENT_TYPE_LIST = '/document-type-list';
   static const RIDE_BOOKED = '/ride-booked';
+  static const BOOKING = '/booking';
+  static const REPORT = '/report';
 }

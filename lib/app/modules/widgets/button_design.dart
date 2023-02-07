@@ -18,16 +18,40 @@ Function()? onPressed;
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(name), // <-- Text
-          SizedBox(
+          /*SizedBox(
             width: 15.kw,
-          ),
+          ),*/
 
         ],
       ),
     );
   }
 }
+class InspectionButton extends StatelessWidget {
+  InspectionButton({Key? key, required this.name, required this.onPressed}) : super(key: key);
+  String name;
+  Function()? onPressed;
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: ColorUtil.kPrimary,
+        fixedSize: Size(344.kw, 56.kh),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(name), // <-- Text
+          /*SizedBox(
+            width: 15.kw,
+          ),*/
 
+        ],
+      ),
+    );
+  }
+}
 class ButtonDesignDeactive extends StatelessWidget {
   ButtonDesignDeactive({Key? key, required this.name, required this.onPressed}) : super(key: key);
   String name;

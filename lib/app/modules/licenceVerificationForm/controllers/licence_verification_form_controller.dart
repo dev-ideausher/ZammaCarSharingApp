@@ -4,11 +4,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:zammacarsharing/app/modules/models/image_response_model.dart';
 import 'package:zammacarsharing/app/modules/models/login_details_model.dart';
 import 'package:zammacarsharing/app/modules/profile/controllers/profile_controller.dart';
 import 'package:zammacarsharing/app/services/dio/api_service.dart';
+import 'package:zammacarsharing/app/services/dio/endpoints.dart';
 import 'package:zammacarsharing/app/services/globalData.dart';
 import 'package:zammacarsharing/app/services/snackbar.dart';
+import 'package:zammacarsharing/app/services/storage.dart';
+import 'package:http/http.dart' as http;
 
 class LicenceVerificationFormController extends GetxController {
   //TODO: Implement LicenceVerificationFormController
@@ -17,6 +21,7 @@ class LicenceVerificationFormController extends GetxController {
   Rx<TextEditingController> dateController = TextEditingController().obs;
   Rx<TextEditingController> monthController = TextEditingController().obs;
   Rx<TextEditingController> yearController = TextEditingController().obs;
+  final imageUpload = ImageUpload().obs;
   final count = 0.obs;
   final instanceOfLoginData =
       Get.find<ProfileController>().logindetails.value.user?.dl;
@@ -84,14 +89,16 @@ class LicenceVerificationFormController extends GetxController {
     else {
       instanceOfGlobalData.loader.value=true;
       try {
+        var imageresponse = await uploadImage(pickedImage.value.path);
+        imageUpload.value = ImageUpload.fromJson(imageresponse);
         var body = {
           "dl": {
             "licenceNumber": licenceNumberController.value.text,
             "validTill":
             "${dateController.value.text}-${monthController.value
                 .text}-${yearController.value.text}",
-            "image":
-            "https://www.shutterstock.com/image-vector/driver-license-male-photo-identification-260nw-1227173818.jpg"
+            "image":imageUpload.value.urls?[0]
+           //"https://www.shutterstock.com/image-vector/driver-license-male-photo-identification-260nw-1227173818.jpg"
           },
         };
         final response = await APIManager.updateDetails(body: body);
@@ -109,7 +116,29 @@ class LicenceVerificationFormController extends GetxController {
       }
     }
   }
+  Future<dynamic> uploadImage(String path) async {
+    String token = Get.find<GetStorageService>().jwToken;
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+          Endpoints.imapgeUpload),);
+    request.fields.addAll({'type': 'userProfile'});
+    var headers = {'accept': 'application/json', 'token': token};
+    request.files.add(await http.MultipartFile.fromPath('file', path));
+    request.headers.addAll(headers);
 
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      // print(await response.stream.bytesToString());
+      var value = await response.stream.bytesToString();
+      print("statusssssss ::  ${value}");
+      // var value=jsonDecode(response.);
+      return jsonDecode(value);
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
   @override
   void onReady() {
     super.onReady();

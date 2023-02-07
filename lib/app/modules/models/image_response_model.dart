@@ -5,14 +5,16 @@ class ImageUpload {
 /*
 {
   "status": true,
-  "message": "File uploaded",
-  "urls": "https://allayya-user-image.s3.us-west-1.amazonaws.com/allayya-user-login.png"
+  "message": "Files uploaded",
+  "urls": [
+    "https://mytestbuckettest.s3.us-east-2.amazonaws.com/zammadl-Screenshot%202023-01-04%20at%201.45.03%20PM.png"
+  ]
 }
 */
 
   bool? status;
   String? message;
-  String? urls;
+  List<String?>? urls;
 
   ImageUpload({
     this.status,
@@ -22,13 +24,27 @@ class ImageUpload {
   ImageUpload.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message']?.toString();
-    urls = json['urls']?.toString();
+    if (json['urls'] != null) {
+      final v = json['urls'];
+      final arr0 = <String>[];
+      v.forEach((v) {
+        arr0.add(v.toString());
+      });
+      urls = arr0;
+    }
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
-    data['urls'] = urls;
+    if (urls != null) {
+      final v = urls;
+      final arr0 = [];
+      v!.forEach((v) {
+        arr0.add(v);
+      });
+      data['urls'] = arr0;
+    }
     return data;
   }
 }

@@ -2,8 +2,8 @@ class Endpoints {
   Endpoints._();
 
   // base url
-  static const String baseUrl = "http://5.161.80.214/";
-
+  //static const String baseUrl = "http://5.161.80.214/";
+  static const String baseUrl = "http://api.symboldrive.com/";
   // receiveTimeout
   static const int receiveTimeout = 15000;
 
@@ -16,4 +16,6 @@ class Endpoints {
   static const String getAllCars = baseUrl+"car";
   static const String upDateDetails = baseUrl+"user/";
   static const String imapgeUpload = baseUrl+"file-upload";
+  static const String inspection = baseUrl+"user/onboarding";
+  static const String createBooking = baseUrl+"booking";
 }

@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import 'package:zammacarsharing/app/modules/Report/bindings/report_binding.dart';
+import 'package:zammacarsharing/app/modules/Report/views/report_view.dart';
+import 'package:zammacarsharing/app/modules/booking/bindings/booking_binding.dart';
+import 'package:zammacarsharing/app/modules/booking/views/booking_view.dart';
 import 'package:zammacarsharing/app/modules/documentTypeList/bindings/document_type_list_binding.dart';
 import 'package:zammacarsharing/app/modules/documentTypeList/views/document_type_list_view.dart';
 import 'package:zammacarsharing/app/modules/rideBooked/bindings/ride_booked_binding.dart';
@@ -121,6 +125,16 @@ class AppPages {
       name: _Paths.RIDE_BOOKED,
       page: () => RideBookedView(),
       binding: RideBookedBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOOKING,
+      page: () => BookingView(),
+      binding: BookingBinding(),
+    ),
+    GetPage(
+      name: _Paths.REPORT,
+      page: () => ReportView(),
+      binding: ReportBinding(),
     ),
   ];
 }

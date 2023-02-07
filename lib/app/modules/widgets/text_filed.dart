@@ -22,7 +22,7 @@ class TextFieldDesign extends StatelessWidget {
             backgroundColor: Colors.grey, splashColor: Colors.grey),
         child: TextField(controller: controller,readOnly: readOnly,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.all(5.0),
+            contentPadding: EdgeInsets.all(10),
             border: InputBorder.none,
             hintText:hintText ,
           ),
