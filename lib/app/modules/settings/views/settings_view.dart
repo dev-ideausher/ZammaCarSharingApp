@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
@@ -20,6 +21,7 @@ class SettingsView extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light, // 2
         elevation: 0.1,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
@@ -433,6 +435,28 @@ class SettingsView extends GetView<SettingsController> {
                                 tileColor: Colors.white),
                           )
                         : SizedBox(),
+                    controller.instanceOfGlobalData.isloginStatusGlobal.value == true? InkWell(
+                      onTap: () {
+
+                        Get.toNamed(Routes.REPORT_AN_ISSUE);
+                        // Get.toNamed(Routes.VIEW_LICENCE);
+
+                      },
+                      child: ListTile(
+                          leading: SvgPicture.asset("assets/icons/help.svg"),
+                          title: Transform.translate(
+                            offset: Offset(-16, 0),
+                            child: Text(
+                              "Report an issue",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.kh,
+                              ),
+                            ),),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                          tileColor: Colors.white),
+                    ):SizedBox(),
                     Spacer(),
                     Column(
                       children: [

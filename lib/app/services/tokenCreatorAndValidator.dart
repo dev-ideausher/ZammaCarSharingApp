@@ -24,6 +24,7 @@ class TokenCreateGenrate extends GetxService{
       Get.find<GetStorageService>().jwToken = mytoken.value;
       Get.find<GetStorageService>().setUserId = user.uid;
       print("userid : ${user.uid}");
+      print("coustomUserId : ${Get.find<GetStorageService>().getCustomUserId}");
       //Get.find<GetStorageService>().setisLoggedIn=true;
       log("${Get.find<GetStorageService>().jwToken}");
 

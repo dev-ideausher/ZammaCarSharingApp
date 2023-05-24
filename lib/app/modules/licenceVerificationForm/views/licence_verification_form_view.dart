@@ -76,6 +76,7 @@ class LicenceVerificationFormView
                               children: <Widget>[
                                 InkWell(onTap:(){
                                   controller.pickImage();
+                                  Get.back();
                                 },
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(16,0,16,0),
@@ -93,6 +94,7 @@ class LicenceVerificationFormView
                                 SizedBox(height: 1,),
                                 InkWell(onTap: (){
                                   controller.pickFromCamera();
+                                  Get.back();
                                 },
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(16,0,16,0),
@@ -109,7 +111,7 @@ class LicenceVerificationFormView
                                 ),
                                 SizedBox(height: 10,),
                                 InkWell(onTap: (){
-                                  Navigator.pop(context);
+                                  Get.back();
                                 },
                                   child: Container(
                                     margin: EdgeInsets.fromLTRB(16,0,16,0),

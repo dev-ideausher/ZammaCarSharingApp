@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
+import 'package:zammacarsharing/app/services/dio/device_di_client.dart';
 import 'package:zammacarsharing/app/services/globalData.dart';
 import 'package:zammacarsharing/app/services/storage.dart';
 import 'client.dart';
@@ -26,7 +28,7 @@ class APIManager {
           .get(Endpoints.getCategories);
 
   static Future<Response> getCars() async =>
-      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
           .get(Endpoints.getAllCars);
 
   static Future<Response> getCarsByCategory({required String cat}) async =>
@@ -47,7 +49,7 @@ class APIManager {
           Endpoints.createBooking,data: jsonEncode(body)
       );
   static Future<Response> cancelBooking({required dynamic body,required String bookingId}) async =>
-      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).patch(
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).patch(
           Endpoints.createBooking+"/$bookingId/cancel",data: jsonEncode(body)
       );
   static Future<Response> postInspectionImageUrl({required dynamic body,required String bookingId}) async =>
@@ -58,4 +60,46 @@ class APIManager {
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).patch(
           Endpoints.createBooking+"/$bookingId/end-ride",data: jsonEncode(body)
       );
+  static Future<Response> getRideHistory() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
+          .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}");
+
+  static Future<Response> markBookingOngoing({required String bookingId,required dynamic body}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).patch(
+          Endpoints.createBooking+"/$bookingId",data: jsonEncode(body)
+      );
+
+  static Future<Response> getinProcessRideHistory() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+          .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}&status=inprogress");
+
+  static Future<Response> getOnGoingRideHistory() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+          .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}&status=ongoing");
+
+  static Future<Response> ReportAnIssue({required dynamic body}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).post(
+        Endpoints.reportIssue,data: jsonEncode(body)
+      );
+
+  static Future<Response> getSavedCards() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
+          .get(Endpoints.savedCards);
+
+  static Future<Response> payment({required String bookingId,required dynamic body }) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+          .post(Endpoints.baseUrl+"booking/$bookingId/payment",data: jsonEncode(body));
+
+  static Future<Response> getPaymentHistory({required String bookingid}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+          .get(Endpoints.createBooking+"/${bookingid}/trasactions");
+
+  static Future<Response> getfinalRideHistory() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+          .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}");
+
+//getLock Status
+  static Future<Response> getLockStatus(String qnr,dynamic header) async =>
+      await DeviceDioClient(Dio(), showSnakbar: true, isOverlayLoader: false,header:header )
+          .get(Endpoints.getLockStatus+"$qnr/central-lock");
 }

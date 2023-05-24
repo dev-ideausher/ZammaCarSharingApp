@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'colors.dart';
 import 'responsiveSize.dart';
 
@@ -16,7 +17,7 @@ class DialogHelper {
                     height: 80.kh,
                     width: 80.kh,
                     decoration: BoxDecoration(
-                      color: Get.context!.brandColor1,
+                      color: Colors.white60,
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.all(
                         Radius.circular(20.0.kh),
@@ -24,7 +25,11 @@ class DialogHelper {
                     ),
                     padding: EdgeInsets.all(12.kh),
                     child: Center(
-                      child: CircularProgressIndicator(),
+                      child: SizedBox(
+                          width: 200.kh,
+                          height: 100.kh,
+                          child: Lottie.asset('assets/json/car_loader.json')),
+
                     )),
               ),
               // message != null ? SizedBox(height: 8.kh) : const SizedBox(),

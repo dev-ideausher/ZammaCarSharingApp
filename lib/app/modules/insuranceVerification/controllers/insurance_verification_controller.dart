@@ -97,17 +97,24 @@ class InsuranceVerificationController extends GetxController {
       showMySnackbar(title: "Error",msg: "Field must not be empty");
       return 0;
     }
+    else if(instanceOfLoginData?.image==null && pickedImage.value.path==""){
+      showMySnackbar(title: "Error",msg: "Field must not be empty");
+      return 0;
+
+    }
     else {
       instanceOfGlobalData.loader.value=true;
       try {
-        var imageresponse = await uploadImage(pickedImage.value.path);
-        imageUpload.value = ImageUpload.fromJson(imageresponse);
+        if(pickedImage.value.path!="") {
+          var imageresponse = await uploadImage(pickedImage.value.path);
+          imageUpload.value = ImageUpload.fromJson(imageresponse);
+        }
         var body = {
           "insurance": {
             "insuranceNumber": insuranceController.value.text,
             "validTill": "${dateController.value.text}-${monthController.value
                 .text}-${yearController.value.text}",
-            "image": imageUpload.value.urls?[0],
+            "image":pickedImage.value.path!=""?(imageUpload.value.urls?[0]):(instanceOfLoginData?.image),
             //"https://www.shutterstock.com/image-vector/driver-license-male-photo-identification-260nw-1227173818.jpg"
           },
         };

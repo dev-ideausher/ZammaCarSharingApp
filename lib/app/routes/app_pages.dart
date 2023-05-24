@@ -1,18 +1,20 @@
 import 'package:get/get.dart';
 
-import 'package:zammacarsharing/app/modules/Report/bindings/report_binding.dart';
-import 'package:zammacarsharing/app/modules/Report/views/report_view.dart';
-import 'package:zammacarsharing/app/modules/booking/bindings/booking_binding.dart';
-import 'package:zammacarsharing/app/modules/booking/views/booking_view.dart';
-import 'package:zammacarsharing/app/modules/documentTypeList/bindings/document_type_list_binding.dart';
-import 'package:zammacarsharing/app/modules/documentTypeList/views/document_type_list_view.dart';
-import 'package:zammacarsharing/app/modules/rideBooked/bindings/ride_booked_binding.dart';
-import 'package:zammacarsharing/app/modules/rideBooked/views/ride_booked_view.dart';
-import 'package:zammacarsharing/app/modules/viewInsurance/bindings/view_insurance_binding.dart';
-import 'package:zammacarsharing/app/modules/viewInsurance/views/view_insurance_view.dart';
-import 'package:zammacarsharing/app/modules/viewLicence/bindings/view_licence_binding.dart';
-import 'package:zammacarsharing/app/modules/viewLicence/views/view_licence_view.dart';
+import 'package:zammacarsharing/app/modules/CameraDesign/bindings/camera_design_binding.dart';
+import 'package:zammacarsharing/app/modules/CameraDesign/views/camera_design_view.dart';
+import 'package:zammacarsharing/app/modules/InputCardDetails/bindings/input_card_details_binding.dart';
+import 'package:zammacarsharing/app/modules/InputCardDetails/views/input_card_details_view.dart';
 
+import '../modules/CompletedRideDetails/bindings/completed_ride_details_binding.dart';
+import '../modules/CompletedRideDetails/views/completed_ride_details_view.dart';
+import '../modules/Report/bindings/report_binding.dart';
+import '../modules/Report/views/report_view.dart';
+import '../modules/ReportAnIssue/bindings/report_an_issue_binding.dart';
+import '../modules/ReportAnIssue/views/report_an_issue_view.dart';
+import '../modules/booking/bindings/booking_binding.dart';
+import '../modules/booking/views/booking_view.dart';
+import '../modules/documentTypeList/bindings/document_type_list_binding.dart';
+import '../modules/documentTypeList/views/document_type_list_view.dart';
 import '../modules/help/bindings/help_binding.dart';
 import '../modules/help/views/help_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -31,12 +33,20 @@ import '../modules/preLicenceVerification/bindings/pre_licence_verification_bind
 import '../modules/preLicenceVerification/views/pre_licence_verification_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/rideBooked/bindings/ride_booked_binding.dart';
+import '../modules/rideBooked/views/ride_booked_view.dart';
 import '../modules/rideHistory/bindings/ride_history_binding.dart';
 import '../modules/rideHistory/views/ride_history_view.dart';
+import '../modules/savedCards/bindings/saved_cards_binding.dart';
+import '../modules/savedCards/views/saved_cards_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/viewInsurance/bindings/view_insurance_binding.dart';
+import '../modules/viewInsurance/views/view_insurance_view.dart';
+import '../modules/viewLicence/bindings/view_licence_binding.dart';
+import '../modules/viewLicence/views/view_licence_view.dart';
 
 part 'app_routes.dart';
 
@@ -135,6 +145,31 @@ class AppPages {
       name: _Paths.REPORT,
       page: () => ReportView(),
       binding: ReportBinding(),
+    ),
+    GetPage(
+      name: _Paths.COMPLETED_RIDE_DETAILS,
+      page: () => CompletedRideDetailsView(),
+      binding: CompletedRideDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.REPORT_AN_ISSUE,
+      page: () => const ReportAnIssueView(),
+      binding: ReportAnIssueBinding(),
+    ),
+    GetPage(
+      name: _Paths.SAVED_CARDS,
+      page: () => const SavedCardsView(),
+      binding: SavedCardsBinding(),
+    ),
+    GetPage(
+      name: _Paths.INPUT_CARD_DETAILS,
+      page: () => InputCardDetailsView(),
+      binding: InputCardDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CAMERA_DESIGN,
+      page: () => CameraDesignView(),
+      binding: CameraDesignBinding(),
     ),
   ];
 }

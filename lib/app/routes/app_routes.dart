@@ -21,6 +21,11 @@ abstract class Routes {
   static const RIDE_BOOKED = _Paths.RIDE_BOOKED;
   static const BOOKING = _Paths.BOOKING;
   static const REPORT = _Paths.REPORT;
+  static const COMPLETED_RIDE_DETAILS = _Paths.COMPLETED_RIDE_DETAILS;
+  static const REPORT_AN_ISSUE = _Paths.REPORT_AN_ISSUE;
+  static const SAVED_CARDS = _Paths.SAVED_CARDS;
+  static const INPUT_CARD_DETAILS = _Paths.INPUT_CARD_DETAILS;
+  static const CAMERA_DESIGN = _Paths.CAMERA_DESIGN;
 }
 
 abstract class _Paths {
@@ -43,4 +48,9 @@ abstract class _Paths {
   static const RIDE_BOOKED = '/ride-booked';
   static const BOOKING = '/booking';
   static const REPORT = '/report';
+  static const COMPLETED_RIDE_DETAILS = '/completed-ride-details';
+  static const REPORT_AN_ISSUE = '/report-an-issue';
+  static const SAVED_CARDS = '/saved-cards';
+  static const INPUT_CARD_DETAILS = '/input-card-details';
+  static const CAMERA_DESIGN = '/camera-design';
 }

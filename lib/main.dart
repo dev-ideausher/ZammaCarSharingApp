@@ -1,4 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zammacarsharing/app/services/colors.dart';
+import 'package:zammacarsharing/app/services/super_controller.dart';
 import 'package:zammacarsharing/app/services/tokenCreatorAndValidator.dart';
 
 import 'app/modules/home/bindings/home_binding.dart';
@@ -10,6 +12,12 @@ import 'app/services/storage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.black, // navigation bar color
+    statusBarColor: ColorUtil.kPrimary, // status bar color
+    statusBarBrightness:Brightness.light
+  ));
+  Get.put(UserStatusController());
   await Firebase.initializeApp();
   await initGetServices();
   SystemChrome.setPreferredOrientations(

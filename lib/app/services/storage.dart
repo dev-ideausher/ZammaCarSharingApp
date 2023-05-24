@@ -8,6 +8,8 @@ class GetStorageService extends GetxService {
   static final jwtToken = GetStorage('JWT');
   static final LoginStorage = GetStorage('LOGIN');
   static final UserId = GetStorage('USERID');
+  static final CustomUserId = GetStorage('CUSTOM_USERID');
+  static final carQNR = GetStorage('QNR');
 
 
   String get jwToken => jwtToken.read('TOKEN') ?? "";
@@ -20,6 +22,12 @@ class GetStorageService extends GetxService {
   String get getUserId => LoginStorage.read('USERID') ?? "";
   set setUserId(String value) => LoginStorage.write('USERID', value);
 
+  String get getCustomUserId => LoginStorage.read('CUSTOM_USERID') ?? "";
+  set setCustomUserId(String value) => LoginStorage.write('CUSTOM_USERID', value);
+
+  String get getQNR => carQNR.read('QNR') ?? "";
+  set setQNR(String value) => carQNR.write('QNR', value);
+
   bool get setup => LoginStorage.read('SETUP') ?? false;
   set setup(bool value) => LoginStorage.write('SETUP', value);
 
@@ -27,6 +35,8 @@ class GetStorageService extends GetxService {
     jwtToken.remove('TOKEN');
     LoginStorage.remove('LOGGEDIN');
     UserId.remove('USERID');
+    UserId.remove('CUSTOM_USERID');
+    carQNR.remove('QNR');
     print("DELETED");
   }
 
@@ -36,7 +46,8 @@ class GetStorageService extends GetxService {
     await GetStorage.init('JWT');
     await GetStorage.init('LOGIN');
     await GetStorage.init('USERID');
-
+    await GetStorage.init('CUSTOM_USERID');
+    await GetStorage.init('QNR');
     return this;
   }
 

@@ -4,9 +4,9 @@
 class logedInDetailsUserInsurance {
 /*
 {
-  "insuranceNumber": "",
-  "validTill": "",
-  "image": ""
+  "insuranceNumber": "1234512345",
+  "validTill": "09-09-1234",
+  "image": "https://miro.medium.com/max/1400/1*Lm9aFB_p9Bx8afzwx6KvlA.png"
 }
 */
 
@@ -36,9 +36,9 @@ class logedInDetailsUserInsurance {
 class logedInDetailsUserDl {
 /*
 {
-  "licenceNumber": "",
-  "validTill": "",
-  "image": ""
+  "licenceNumber": "1234567890",
+  "validTill": "02-09-1995",
+  "image": "https://www.shutterstock.com/image-vector/driver-license-male-photo-identification-260nw-1227173818.jpg"
 }
 */
 
@@ -69,39 +69,39 @@ class logedInDetailsUser {
 /*
 {
   "dl": {
-    "licenceNumber": "",
-    "validTill": "",
-    "image": ""
+    "licenceNumber": "1234567890",
+    "validTill": "02-09-1995",
+    "image": "https://www.shutterstock.com/image-vector/driver-license-male-photo-identification-260nw-1227173818.jpg"
   },
   "insurance": {
-    "insuranceNumber": "",
-    "validTill": "",
-    "image": ""
+    "insuranceNumber": "1234512345",
+    "validTill": "09-09-1234",
+    "image": "https://miro.medium.com/max/1400/1*Lm9aFB_p9Bx8afzwx6KvlA.png"
   },
-  "totalTravelKm": 0,
   "_id": "6388c33fc6b2d524a07fdc15",
-  "name": "pushpam",
+  "name": "pushpam kumar",
   "phone": "+919999999999",
-  "email": "pushpam@gmail.com",
-  "image": "https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg",
+  "email": "p@gmail.com",
+  "image": "https://zammauserprofile.s3.us-west-1.amazonaws.com/user-profile-image_picker6843117698426803098.jpg",
   "role": "user",
   "firebaseUid": "UcN7eGb1oVShfCwm3Ogwry6q9T93",
   "firebaseSignInProvider": "phone",
   "gender": "male",
-  "address": "",
+  "address": "Janakpuri Delhi",
   "suspensionReason": "",
   "isSuspended": false,
-  "noOfRides": 0,
+  "noOfRides": 117,
   "isDeleted": false,
   "createdAt": "2022-12-01T15:07:43.680Z",
-  "updatedAt": "2022-12-02T09:43:16.179Z",
-  "dob": "1999-05-03T00:00:00.000Z"
+  "updatedAt": "2023-02-10T10:02:43.139Z",
+  "dob": "1999-05-09T00:00:00.000Z",
+  "isApproved": true,
+  "totalTravelKm": 0
 }
 */
 
   logedInDetailsUserDl? dl;
   logedInDetailsUserInsurance? insurance;
-  int? totalTravelKm;
   String? Id;
   String? name;
   String? phone;
@@ -119,11 +119,12 @@ class logedInDetailsUser {
   String? createdAt;
   String? updatedAt;
   String? dob;
+  bool? isApproved;
+  int? totalTravelKm;
 
   logedInDetailsUser({
     this.dl,
     this.insurance,
-    this.totalTravelKm,
     this.Id,
     this.name,
     this.phone,
@@ -141,11 +142,12 @@ class logedInDetailsUser {
     this.createdAt,
     this.updatedAt,
     this.dob,
+    this.isApproved,
+    this.totalTravelKm,
   });
   logedInDetailsUser.fromJson(Map<String, dynamic> json) {
     dl = (json['dl'] != null) ? logedInDetailsUserDl.fromJson(json['dl']) : null;
     insurance = (json['insurance'] != null) ? logedInDetailsUserInsurance.fromJson(json['insurance']) : null;
-    totalTravelKm = json['totalTravelKm']?.toInt();
     Id = json['_id']?.toString();
     name = json['name']?.toString();
     phone = json['phone']?.toString();
@@ -163,6 +165,8 @@ class logedInDetailsUser {
     createdAt = json['createdAt']?.toString();
     updatedAt = json['updatedAt']?.toString();
     dob = json['dob']?.toString();
+    isApproved = json['isApproved'];
+    totalTravelKm = json['totalTravelKm']?.toInt();
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -172,7 +176,6 @@ class logedInDetailsUser {
     if (insurance != null) {
       data['insurance'] = insurance!.toJson();
     }
-    data['totalTravelKm'] = totalTravelKm;
     data['_id'] = Id;
     data['name'] = name;
     data['phone'] = phone;
@@ -190,6 +193,8 @@ class logedInDetailsUser {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['dob'] = dob;
+    data['isApproved'] = isApproved;
+    data['totalTravelKm'] = totalTravelKm;
     return data;
   }
 }
@@ -201,33 +206,34 @@ class logedInDetails {
   "message": "User details",
   "user": {
     "dl": {
-      "licenceNumber": "",
-      "validTill": "",
-      "image": ""
+      "licenceNumber": "1234567890",
+      "validTill": "02-09-1995",
+      "image": "https://www.shutterstock.com/image-vector/driver-license-male-photo-identification-260nw-1227173818.jpg"
     },
     "insurance": {
-      "insuranceNumber": "",
-      "validTill": "",
-      "image": ""
+      "insuranceNumber": "1234512345",
+      "validTill": "09-09-1234",
+      "image": "https://miro.medium.com/max/1400/1*Lm9aFB_p9Bx8afzwx6KvlA.png"
     },
-    "totalTravelKm": 0,
     "_id": "6388c33fc6b2d524a07fdc15",
-    "name": "pushpam",
+    "name": "pushpam kumar",
     "phone": "+919999999999",
-    "email": "pushpam@gmail.com",
-    "image": "https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg",
+    "email": "p@gmail.com",
+    "image": "https://zammauserprofile.s3.us-west-1.amazonaws.com/user-profile-image_picker6843117698426803098.jpg",
     "role": "user",
     "firebaseUid": "UcN7eGb1oVShfCwm3Ogwry6q9T93",
     "firebaseSignInProvider": "phone",
     "gender": "male",
-    "address": "",
+    "address": "Janakpuri Delhi",
     "suspensionReason": "",
     "isSuspended": false,
-    "noOfRides": 0,
+    "noOfRides": 117,
     "isDeleted": false,
     "createdAt": "2022-12-01T15:07:43.680Z",
-    "updatedAt": "2022-12-02T09:43:16.179Z",
-    "dob": "1999-05-03T00:00:00.000Z"
+    "updatedAt": "2023-02-10T10:02:43.139Z",
+    "dob": "1999-05-09T00:00:00.000Z",
+    "isApproved": true,
+    "totalTravelKm": 0
   }
 }
 */

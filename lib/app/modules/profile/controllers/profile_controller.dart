@@ -103,6 +103,7 @@ class ProfileController extends GetxController {
         gender.value = (logindetails.value.user?.gender).toString();
 
         Get.find<GetStorageService>().setisLoggedIn = true;
+      Get.find<GetStorageService>().setCustomUserId = (logindetails.value.user?.Id).toString();
         Get.find<GlobalData>().isloginStatusGlobal.value = true;
       instanceOfGlobalData.loader.value = false;
 
@@ -126,26 +127,33 @@ class ProfileController extends GetxController {
     var response = await request.send();
 
     if (response.statusCode == 200) {
+
       // print(await response.stream.bytesToString());
       var value = await response.stream.bytesToString();
       print("statusssssss ::  ${value}");
       // var value=jsonDecode(response.);
       return jsonDecode(value);
     } else {
-      print(response.reasonPhrase);
+      print(response);
     }
   }
 
   Future<int> userOnBoard() async {
 
-    if(pickedImage.value.path=="" || nameController.value.text=="" || nameController.value.text==null || emailController.value.text=="" || emailController.value.text==null ||dateController.value.text=="" || dateController.value.text==null || yearController.value.text=="" || yearController.value.text==null ||monthController.value.text=="" || monthController.value.text==null || gender.value==""){
+    if( nameController.value.text=="" || nameController.value.text==null || emailController.value.text=="" || emailController.value.text==null ||dateController.value.text=="" || dateController.value.text==null || yearController.value.text=="" || yearController.value.text==null ||monthController.value.text=="" || monthController.value.text==null || gender.value==""){
+      showMySnackbar(title: "Error",msg: "Field must not be empty");
+      return 0;
+    }
+    else if(logindetails.value.user?.image==null && pickedImage.value.path==""){
       showMySnackbar(title: "Error",msg: "Field must not be empty");
       return 0;
     }
     else{
       updateProfile.value=true;
+      if(pickedImage.value.path!=""){
         var response = await uploadImage(pickedImage.value.path);
         imageUpload.value = ImageUpload.fromJson(response);
+      }
 
 
 
@@ -156,7 +164,7 @@ class ProfileController extends GetxController {
         "email": emailController.value.text,
         "dob":
         "${yearController.value.text}-${monthController.value.text}-${dateController.value.text}",
-        "image":imageUpload.value.urls?[0],//"https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg", //"${pickedImage.value.path}",
+        "image":"${(pickedImage.value.path)!=""?(imageUpload.value.urls?[0]):(logindetails.value.user?.image)}",//"https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg", //"${pickedImage.value.path}",
         "gender": gender.value,
        // "address":"Hauz Khas Delhi"
       };
