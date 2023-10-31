@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zammacarsharing/app/modules/widgets/overlay_camera.dart';
 
 class GenralCamera {
@@ -16,11 +17,11 @@ class GenralCamera {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 if (snapshot.data == null) {
-                  return const Align(
+                  return  Align(
                       alignment: Alignment.center,
                       child: Text(
                         'No camera found',
-                        style: TextStyle(color: Colors.black),
+                        style: GoogleFonts.urbanist(color: Colors.black),
                       ));
                 }
 
@@ -38,11 +39,11 @@ class GenralCamera {
                   ),
                 );
               } else {
-                return const Align(
+                return  Align(
                     alignment: Alignment.center,
                     child: Text(
                       'Fetching cameras',
-                      style: TextStyle(color: Colors.black),
+                      style: GoogleFonts.urbanist(color: Colors.black),
                     ));
               }
             },

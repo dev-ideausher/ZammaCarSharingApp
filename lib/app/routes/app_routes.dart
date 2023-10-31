@@ -26,6 +26,9 @@ abstract class Routes {
   static const SAVED_CARDS = _Paths.SAVED_CARDS;
   static const INPUT_CARD_DETAILS = _Paths.INPUT_CARD_DETAILS;
   static const CAMERA_DESIGN = _Paths.CAMERA_DESIGN;
+  static const ZONE = _Paths.ZONE;
+  static const TOTAL_PAYMENT = _Paths.TOTAL_PAYMENT;
+  static const WELCOME_BACK = _Paths.WELCOME_BACK;
 }
 
 abstract class _Paths {
@@ -53,4 +56,7 @@ abstract class _Paths {
   static const SAVED_CARDS = '/saved-cards';
   static const INPUT_CARD_DETAILS = '/input-card-details';
   static const CAMERA_DESIGN = '/camera-design';
+  static const ZONE = '/zone';
+  static const TOTAL_PAYMENT = '/total-payment';
+  static const WELCOME_BACK = '/welcome-back';
 }

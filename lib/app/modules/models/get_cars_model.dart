@@ -6,7 +6,7 @@ class GetCarsCarsPosition {
 {
   "type": "Point",
   "coordinates": [
-    127.9
+    -121.264717
   ]
 }
 */
@@ -50,77 +50,135 @@ class GetCarsCars {
   "position": {
     "type": "Point",
     "coordinates": [
-      127.9
+      -121.264717
     ]
   },
-  "_id": "63f4b3636c2c9559d406b907",
-  "brand": "Cadillac",
-  "model": "Model M",
-  "qnr": "6DB9853D00FFF015",
-  "seatCapacity": 2,
-  "color": "black",
-  "fuelType": "fuel",
-  "category": "suv",
+  "vehicle_license_plate": "",
+  "vehicle_identification_number": "",
+  "_id": "63f377e5d6cc2f883de290ce",
+  "brand": "Toyota",
+  "model": "Prius",
+  "qnr": "6DB9853D00FFF005",
+  "seatCapacity": 5,
+  "color": "White",
+  "carType": "fuel",
   "images": [
-    "https://stimg.cardekho.com/images/carexteriorimages/930x620/Rolls-Royce/Ghost/8051/1601280317407/front-left-side-47.jpg"
+    "https://zammadl.s3.us-west-1.amazonaws.com/zammadl-2021_toyota_prius_prime_angularfront.jpg"
   ],
   "isDamaged": false,
   "status": "active",
-  "fuel_level": 0,
   "bookingStatus": "idle",
   "isDeleted": false,
-  "createdAt": "2023-02-21T12:04:51.608Z",
-  "updatedAt": "2023-02-21T12:04:51.608Z"
+  "createdAt": "2023-02-20T13:38:45.912Z",
+  "updatedAt": "2023-07-10T22:20:59.143Z",
+  "category": "sedan",
+  "fuelType": "fuel",
+  "bluetooth_connection": "disconnected",
+  "board_voltage": 13.89,
+  "ignition": "off",
+  "immobilizer": "locked",
+  "mileage": 24183,
+  "mileage_since_immobilizer_unlock": 3,
+  "alarm_input": "off",
+  "alarm_input_2": "off",
+  "low_battery_level_alarm": false,
+  "low_fuel_level_alarm": false,
+  "relay_value": 0,
+  "qrCodeImage": "https://www.hellotech.com/guide/wp-content/uploads/2020/05/HelloTech-qr-code.jpg",
+  "central_lock": "locked",
+  "central_lock_last_command": "locked",
+  "speed": 0,
+  "fuel_level": 91,
+  "keyfob": "in"
 }
 */
 
   GetCarsCarsPosition? position;
+  String? vehicleLicensePlate;
+  String? vehicleIdentificationNumber;
   String? Id;
   String? brand;
   String? model;
   String? qnr;
   int? seatCapacity;
   String? color;
-  String? fuelType;
-  String? category;
+  String? carType;
   List<String?>? images;
   bool? isDamaged;
   String? status;
-  int? fuelLevel;
   String? bookingStatus;
   bool? isDeleted;
   String? createdAt;
   String? updatedAt;
+  String? category;
+  String? fuelType;
+  String? bluetoothConnection;
+  double? boardVoltage;
+  String? ignition;
+  String? immobilizer;
+  int? mileage;
+  int? mileageSinceImmobilizerUnlock;
+  String? alarmInput;
+  String? alarmInput_2;
+  bool? lowBatteryLevelAlarm;
+  bool? lowFuelLevelAlarm;
+  int? relayValue;
+  String? qrCodeImage;
+  String? centralLock;
+  String? centralLockLastCommand;
+  int? speed;
+  int? fuelLevel;
+  String? keyfob;
 
   GetCarsCars({
     this.position,
+    this.vehicleLicensePlate,
+    this.vehicleIdentificationNumber,
     this.Id,
     this.brand,
     this.model,
     this.qnr,
     this.seatCapacity,
     this.color,
-    this.fuelType,
-    this.category,
+    this.carType,
     this.images,
     this.isDamaged,
     this.status,
-    this.fuelLevel,
     this.bookingStatus,
     this.isDeleted,
     this.createdAt,
     this.updatedAt,
+    this.category,
+    this.fuelType,
+    this.bluetoothConnection,
+    this.boardVoltage,
+    this.ignition,
+    this.immobilizer,
+    this.mileage,
+    this.mileageSinceImmobilizerUnlock,
+    this.alarmInput,
+    this.alarmInput_2,
+    this.lowBatteryLevelAlarm,
+    this.lowFuelLevelAlarm,
+    this.relayValue,
+    this.qrCodeImage,
+    this.centralLock,
+    this.centralLockLastCommand,
+    this.speed,
+    this.fuelLevel,
+    this.keyfob,
   });
   GetCarsCars.fromJson(Map<String, dynamic> json) {
     position = (json['position'] != null) ? GetCarsCarsPosition.fromJson(json['position']) : null;
+    vehicleLicensePlate = json['vehicle_license_plate']?.toString();
+    vehicleIdentificationNumber = json['vehicle_identification_number']?.toString();
     Id = json['_id']?.toString();
     brand = json['brand']?.toString();
     model = json['model']?.toString();
     qnr = json['qnr']?.toString();
     seatCapacity = json['seatCapacity']?.toInt();
     color = json['color']?.toString();
-    fuelType = json['fuelType']?.toString();
-    category = json['category']?.toString();
+    carType = json['carType']?.toString();
     if (json['images'] != null) {
       final v = json['images'];
       final arr0 = <String>[];
@@ -131,25 +189,44 @@ class GetCarsCars {
     }
     isDamaged = json['isDamaged'];
     status = json['status']?.toString();
-    fuelLevel = json['fuel_level']?.toInt();
     bookingStatus = json['bookingStatus']?.toString();
     isDeleted = json['isDeleted'];
     createdAt = json['createdAt']?.toString();
     updatedAt = json['updatedAt']?.toString();
+    category = json['category']?.toString();
+    fuelType = json['fuelType']?.toString();
+    bluetoothConnection = json['bluetooth_connection']?.toString();
+    boardVoltage = json['board_voltage']?.toDouble();
+    ignition = json['ignition']?.toString();
+    immobilizer = json['immobilizer']?.toString();
+    mileage = json['mileage']?.toInt();
+    mileageSinceImmobilizerUnlock = json['mileage_since_immobilizer_unlock']?.toInt();
+    alarmInput = json['alarm_input']?.toString();
+    alarmInput_2 = json['alarm_input_2']?.toString();
+    lowBatteryLevelAlarm = json['low_battery_level_alarm'];
+    lowFuelLevelAlarm = json['low_fuel_level_alarm'];
+    relayValue = json['relay_value']?.toInt();
+    qrCodeImage = json['qrCodeImage']?.toString();
+    centralLock = json['central_lock']?.toString();
+    centralLockLastCommand = json['central_lock_last_command']?.toString();
+    speed = json['speed']?.toInt();
+    fuelLevel = json['fuel_level']?.toInt();
+    keyfob = json['keyfob']?.toString();
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     if (position != null) {
       data['position'] = position!.toJson();
     }
+    data['vehicle_license_plate'] = vehicleLicensePlate;
+    data['vehicle_identification_number'] = vehicleIdentificationNumber;
     data['_id'] = Id;
     data['brand'] = brand;
     data['model'] = model;
     data['qnr'] = qnr;
     data['seatCapacity'] = seatCapacity;
     data['color'] = color;
-    data['fuelType'] = fuelType;
-    data['category'] = category;
+    data['carType'] = carType;
     if (images != null) {
       final v = images;
       final arr0 = [];
@@ -160,11 +237,29 @@ class GetCarsCars {
     }
     data['isDamaged'] = isDamaged;
     data['status'] = status;
-    data['fuel_level'] = fuelLevel;
     data['bookingStatus'] = bookingStatus;
     data['isDeleted'] = isDeleted;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    data['category'] = category;
+    data['fuelType'] = fuelType;
+    data['bluetooth_connection'] = bluetoothConnection;
+    data['board_voltage'] = boardVoltage;
+    data['ignition'] = ignition;
+    data['immobilizer'] = immobilizer;
+    data['mileage'] = mileage;
+    data['mileage_since_immobilizer_unlock'] = mileageSinceImmobilizerUnlock;
+    data['alarm_input'] = alarmInput;
+    data['alarm_input_2'] = alarmInput_2;
+    data['low_battery_level_alarm'] = lowBatteryLevelAlarm;
+    data['low_fuel_level_alarm'] = lowFuelLevelAlarm;
+    data['relay_value'] = relayValue;
+    data['qrCodeImage'] = qrCodeImage;
+    data['central_lock'] = centralLock;
+    data['central_lock_last_command'] = centralLockLastCommand;
+    data['speed'] = speed;
+    data['fuel_level'] = fuelLevel;
+    data['keyfob'] = keyfob;
     return data;
   }
 }
@@ -179,27 +274,46 @@ class GetCars {
       "position": {
         "type": "Point",
         "coordinates": [
-          127.9
+          -121.264717
         ]
       },
-      "_id": "63f4b3636c2c9559d406b907",
-      "brand": "Cadillac",
-      "model": "Model M",
-      "qnr": "6DB9853D00FFF015",
-      "seatCapacity": 2,
-      "color": "black",
-      "fuelType": "fuel",
-      "category": "suv",
+      "vehicle_license_plate": "",
+      "vehicle_identification_number": "",
+      "_id": "63f377e5d6cc2f883de290ce",
+      "brand": "Toyota",
+      "model": "Prius",
+      "qnr": "6DB9853D00FFF005",
+      "seatCapacity": 5,
+      "color": "White",
+      "carType": "fuel",
       "images": [
-        "https://stimg.cardekho.com/images/carexteriorimages/930x620/Rolls-Royce/Ghost/8051/1601280317407/front-left-side-47.jpg"
+        "https://zammadl.s3.us-west-1.amazonaws.com/zammadl-2021_toyota_prius_prime_angularfront.jpg"
       ],
       "isDamaged": false,
       "status": "active",
-      "fuel_level": 0,
       "bookingStatus": "idle",
       "isDeleted": false,
-      "createdAt": "2023-02-21T12:04:51.608Z",
-      "updatedAt": "2023-02-21T12:04:51.608Z"
+      "createdAt": "2023-02-20T13:38:45.912Z",
+      "updatedAt": "2023-07-10T22:20:59.143Z",
+      "category": "sedan",
+      "fuelType": "fuel",
+      "bluetooth_connection": "disconnected",
+      "board_voltage": 13.89,
+      "ignition": "off",
+      "immobilizer": "locked",
+      "mileage": 24183,
+      "mileage_since_immobilizer_unlock": 3,
+      "alarm_input": "off",
+      "alarm_input_2": "off",
+      "low_battery_level_alarm": false,
+      "low_fuel_level_alarm": false,
+      "relay_value": 0,
+      "qrCodeImage": "https://www.hellotech.com/guide/wp-content/uploads/2020/05/HelloTech-qr-code.jpg",
+      "central_lock": "locked",
+      "central_lock_last_command": "locked",
+      "speed": 0,
+      "fuel_level": 91,
+      "keyfob": "in"
     }
   ]
 }

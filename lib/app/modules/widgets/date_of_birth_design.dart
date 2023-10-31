@@ -12,7 +12,7 @@ class DataOfBirthDesign extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: 56.kh,
+          height: 45.kh,
           width: 64.kw,
           //padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
           decoration: BoxDecoration(
@@ -40,7 +40,7 @@ class DataOfBirthDesign extends StatelessWidget {
           width: 24.kw,
         ),
         Container(
-          height: 56.kh,
+          height: 45.kh,
           width: 64.kw,
           //padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
           decoration: BoxDecoration(
@@ -68,8 +68,8 @@ class DataOfBirthDesign extends StatelessWidget {
           width: 24.kw,
         ),
         Container(
-          height: 56.kh,
-          width: 120.kw,
+          height: 45.kh,
+          width: 100.kw,
           //padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
           decoration: BoxDecoration(
               color: Color(0xffF3F2F3),

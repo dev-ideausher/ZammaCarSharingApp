@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
@@ -20,9 +21,9 @@ class ViewInsuranceView extends GetView<ViewInsuranceController> {
         elevation: 1,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title: const Text(
+        title:  Text(
           'Insurance details',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.urbanist(color: Colors.black),
         ),
         centerTitle: true,
       ),
@@ -31,15 +32,15 @@ class ViewInsuranceView extends GetView<ViewInsuranceController> {
           child: Obx(()=>
               Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Insurance Number",style: TextStyle(fontSize: 14.kh,fontWeight: FontWeight.bold),),
+                    Text("Insurance Number",style: GoogleFonts.urbanist(fontSize: 14.kh,fontWeight: FontWeight.bold),),
                     SizedBox(height: 8.kh,),
                     TextFieldDesign(readOnly: true,hintText: "Enter insurance number",controller: controller.insuranceController.value),
                     SizedBox(height: 24.kh,),
-                    Text("Valid till",style: TextStyle(fontSize: 14.kh,fontWeight: FontWeight.bold),),
+                    Text("Valid till",style: GoogleFonts.urbanist(fontSize: 14.kh,fontWeight: FontWeight.bold),),
                     SizedBox(height: 8.kh,),
                     DataOfBirthDesign(readOnly: true,dateController: controller.dateController.value,monthController: controller.monthController.value,yearController: controller.yearController.value),
                     SizedBox(height: 24.kh,),
-                    Text("Upload Insurance",style: TextStyle(fontSize: 14.kh,fontWeight: FontWeight.bold),),
+                    Text("Upload Insurance",style: GoogleFonts.urbanist(fontSize: 14.kh,fontWeight: FontWeight.bold),),
                     SizedBox(height: 12.kh,),
                     CachedNetworkImage(
                       fit: BoxFit.fill,

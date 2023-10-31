@@ -52,6 +52,10 @@ class APIManager {
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).patch(
           Endpoints.createBooking+"/$bookingId/cancel",data: jsonEncode(body)
       );
+  static Future<Response> getBookingByBookingId({required String bookingId}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).get(
+          Endpoints.createBooking+"/$bookingId"
+      );
   static Future<Response> postInspectionImageUrl({required dynamic body,required String bookingId}) async =>
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).post(
           Endpoints.createBooking+"/$bookingId/inspection",data: jsonEncode(body)
@@ -91,12 +95,39 @@ class APIManager {
           .post(Endpoints.baseUrl+"booking/$bookingId/payment",data: jsonEncode(body));
 
   static Future<Response> getPaymentHistory({required String bookingid}) async =>
-      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
           .get(Endpoints.createBooking+"/${bookingid}/trasactions");
 
   static Future<Response> getfinalRideHistory() async =>
-      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
           .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}");
+
+  static Future<Response> getTotalPayments() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
+          .get(Endpoints.totalPayments);
+
+  static Future<Response> getBooking({required String bookingid}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
+          .get(Endpoints.createBooking+"/${bookingid}");
+
+  static Future<Response> getParkingCoordinates() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).get(
+          Endpoints.getCoordinates
+      );
+
+  static Future<Response> patchRideTime({required dynamic body,required String bookingId}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).patch(
+          Endpoints.createBooking+"/$bookingId/update",data: jsonEncode(body)
+      );
+
+  static Future<Response> getCarPricingById({required String carId}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).get(
+        Endpoints.getcarPricing+"$carId",
+      );
+
+  static Future<Response> updateAddress({required String bookingId,required dynamic body }) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
+          .patch(Endpoints.baseUrl+"booking/$bookingId/update-address",data: jsonEncode(body));
 
 //getLock Status
   static Future<Response> getLockStatus(String qnr,dynamic header) async =>

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart';
 
@@ -57,7 +58,7 @@ class HomeView extends GetView<HomeController> {
                   onMapCreated: (GoogleMapController mcontroller) {
                     controller.mapCompleter.complete(mcontroller);
                   },
-                ):Text("No permission"),
+                ):Center(child: Text("Location permission requied.",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.kh),)),
 
                 /*GoogleMap(
                   onMapCreated: (mapController) {
@@ -134,7 +135,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Radar",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     fontSize:
                                                                         24.kh,
                                                                     color: ColorUtil
@@ -163,7 +164,7 @@ class HomeView extends GetView<HomeController> {
                                                             16.0, 16, 16, 0),
                                                         child: Text(
                                                           "Distance",
-                                                          style: TextStyle(
+                                                          style: GoogleFonts.urbanist(
                                                               color: ColorUtil
                                                                   .ZammaGrey,
                                                               fontSize: 15.kh),
@@ -211,7 +212,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Amet minim mollit non deserunt ullamco\nest sit aliqua dolor do ",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     color: ColorUtil
                                                                         .ZammaGrey),
                                                               ),
@@ -262,7 +263,7 @@ class HomeView extends GetView<HomeController> {
                                               ),
                                               Text(
                                                 "Radar",
-                                                style: TextStyle(
+                                                style: GoogleFonts.urbanist(
                                                     fontSize: 15.kh,
                                                     color: ColorUtil.ZammaGrey),
                                               )
@@ -309,7 +310,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Radar",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     fontSize:
                                                                         24.kh,
                                                                     color: ColorUtil
@@ -338,7 +339,7 @@ class HomeView extends GetView<HomeController> {
                                                             16.0, 16, 16, 0),
                                                         child: Text(
                                                           "Distance",
-                                                          style: TextStyle(
+                                                          style: GoogleFonts.urbanist(
                                                               color: ColorUtil
                                                                   .ZammaGrey,
                                                               fontSize: 15.kh),
@@ -386,7 +387,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Amet minim mollit non deserunt ullamco\nest sit aliqua dolor do ",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     color: ColorUtil
                                                                         .ZammaGrey),
                                                               ),
@@ -437,7 +438,7 @@ class HomeView extends GetView<HomeController> {
                                               ),
                                               Text(
                                                 "Radar",
-                                                style: TextStyle(
+                                                style: GoogleFonts.urbanist(
                                                     fontSize: 15.kh,
                                                     color: ColorUtil.ZammaGrey),
                                               )
@@ -459,7 +460,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         Text(
                                           "Cars",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: 15.kh,
                                               color: ColorUtil.ZammaGrey),
                                         )
@@ -468,7 +469,8 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      controller.zone.value = true;
+                                     // controller.zone.value = true;
+                                      Get.toNamed(Routes.ZONE);
                                     },
                                     child: Column(
                                       children: [
@@ -481,7 +483,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         Text(
                                           "Zone",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: 15.kh,
                                               color: ColorUtil.ZammaGrey),
                                         )
@@ -504,7 +506,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         Text(
                                           "Setting",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: 15.kh,
                                               color: ColorUtil.ZammaGrey),
                                         )
@@ -585,7 +587,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Radar",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     fontSize:
                                                                         24.kh,
                                                                     color: ColorUtil
@@ -614,7 +616,7 @@ class HomeView extends GetView<HomeController> {
                                                             16.0, 16, 16, 0),
                                                         child: Text(
                                                           "Distance",
-                                                          style: TextStyle(
+                                                          style: GoogleFonts.urbanist(
                                                               color: ColorUtil
                                                                   .ZammaGrey,
                                                               fontSize: 15.kh),
@@ -662,7 +664,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Amet minim mollit non deserunt ullamco\nest sit aliqua dolor do ",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     color: ColorUtil
                                                                         .ZammaGrey),
                                                               ),
@@ -713,7 +715,7 @@ class HomeView extends GetView<HomeController> {
                                               ),
                                               Text(
                                                 "Radar",
-                                                style: TextStyle(
+                                                style: GoogleFonts.urbanist(
                                                     fontSize: 15.kh,
                                                     color: ColorUtil.ZammaGrey),
                                               )
@@ -760,7 +762,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Radar",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     fontSize:
                                                                         24.kh,
                                                                     color: ColorUtil
@@ -789,7 +791,7 @@ class HomeView extends GetView<HomeController> {
                                                             16.0, 16, 16, 0),
                                                         child: Text(
                                                           "Distance",
-                                                          style: TextStyle(
+                                                          style: GoogleFonts.urbanist(
                                                               color: ColorUtil
                                                                   .ZammaGrey,
                                                               fontSize: 15.kh),
@@ -837,7 +839,7 @@ class HomeView extends GetView<HomeController> {
                                                             children: [
                                                               Text(
                                                                 "Amet minim mollit non deserunt ullamco\nest sit aliqua dolor do ",
-                                                                style: TextStyle(
+                                                                style: GoogleFonts.urbanist(
                                                                     color: ColorUtil
                                                                         .ZammaGrey),
                                                               ),
@@ -888,7 +890,7 @@ class HomeView extends GetView<HomeController> {
                                               ),
                                               Text(
                                                 "Radar",
-                                                style: TextStyle(
+                                                style: GoogleFonts.urbanist(
                                                     fontSize: 15.kh,
                                                     color: ColorUtil.ZammaGrey),
                                               )
@@ -910,7 +912,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         Text(
                                           "Cars",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: 15.kh,
                                               color: ColorUtil.ZammaGrey),
                                         ),
@@ -919,7 +921,8 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      controller.zone.value = true;
+                                      //controller.zone.value = true;
+                                      Get.toNamed(Routes.ZONE);
                                     },
                                     child: Column(
                                       children: [
@@ -932,7 +935,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         Text(
                                           "Zone",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: 15.kh,
                                               color: ColorUtil.ZammaGrey),
                                         )
@@ -955,7 +958,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         Text(
                                           "Setting",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                               fontSize: 15.kh,
                                               color: ColorUtil.ZammaGrey),
                                         )
@@ -1026,7 +1029,7 @@ class HomeView extends GetView<HomeController> {
                     children: [
                       Text(
                         "Cars",
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: 24.kh,
                             color: ColorUtil.ZammaBlack,
                             fontWeight: FontWeight.bold),
@@ -1078,7 +1081,7 @@ class HomeView extends GetView<HomeController> {
                             child: Center(
                               child: Text(
                                 "${controller.categoriesModels.value.category?[index]?.name}",
-                                style: TextStyle(
+                                style: GoogleFonts.urbanist(
                                     color:
                                         controller.tapAttention.value == index
                                             ? Colors.white
@@ -1137,6 +1140,24 @@ class HomeView extends GetView<HomeController> {
                                             .cars?[index]
                                             ?.seatCapacity)
                                         .toString();
+                                    controller.milage.value = (controller
+                                        .carsModel
+                                        .value
+                                        .cars?[index]
+                                        ?.mileage)
+                                        .toString();
+                                    controller.fuelType.value = (controller
+                                        .carsModel
+                                        .value
+                                        .cars?[index]
+                                        ?.fuelType)
+                                        .toString();
+                                    controller.fuelLavel.value = (controller
+                                        .carsModel
+                                        .value
+                                        .cars?[index]
+                                        ?.fuelLevel)
+                                        .toString();
                                     controller.carId.value = (controller
                                             .carsModel.value.cars?[index]?.Id)
                                         .toString();
@@ -1156,8 +1177,8 @@ class HomeView extends GetView<HomeController> {
                                     },
                                   child: Container(
                                     padding:EdgeInsets.fromLTRB(0, 8, 8, 8),
-                                      height: 90.kh,
-                                      margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                                      height: 80.kh,
+                                      margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
 
                                       decoration: BoxDecoration(
                                         border: Border.all(
@@ -1227,7 +1248,7 @@ class HomeView extends GetView<HomeController> {
                                             children: [
                                               Text(
                                                 "${controller.carsModel.value.cars?[index]?.brand} ${controller.carsModel.value.cars?[index]?.model}",
-                                                style: TextStyle(
+                                                style: GoogleFonts.urbanist(
                                                     color: ColorUtil.kPrimary,
                                                     fontSize: 16.kh,
                                                     fontWeight:
@@ -1237,8 +1258,8 @@ class HomeView extends GetView<HomeController> {
                                                 height: 5,
                                               ),
                                               Text(
-                                                "${controller.carsModel.value.cars?[index]?.fuelType}",
-                                                style: TextStyle(
+                                                "${controller.carsModel.value.cars?[index]?.fuelType} , seat capacity: ${controller.carsModel.value.cars?[index]?.seatCapacity}",
+                                                style: GoogleFonts.urbanist(
                                                     color: ColorUtil.ZammaGrey,
                                                     fontSize: 14.kh),
                                               ),
@@ -1301,7 +1322,7 @@ class HomeView extends GetView<HomeController> {
                               children: [
                                 Text(
                                   "",
-                                  style: TextStyle(
+                                  style: GoogleFonts.urbanist(
                                       fontSize: 24.kh,
                                       color: ColorUtil.ZammaBlack,
                                       fontWeight: FontWeight.bold),
@@ -1372,7 +1393,7 @@ class HomeView extends GetView<HomeController> {
                             child: Center(
                                 child: Text(
                               "${controller.model.value}",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                 color: Colors.white,
                               ),
                             ))),
@@ -1386,8 +1407,19 @@ class HomeView extends GetView<HomeController> {
                               children: [
                                 SvgPicture.asset("assets/icons/battery.svg"),
                                 Text(
-                                  "320 KM%",
-                                  style: TextStyle(fontSize: 14),
+                                  "${controller.fuelLavel.value} ${controller.fuelType.value=="fuel"?" Liter":" %"}",
+                                  style: GoogleFonts.urbanist(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Icon(Icons.speed),
+                                Obx(()=>
+                                   Text(
+                                    "${controller.milage.value}",
+                                    style: GoogleFonts.urbanist(fontSize: 14),
+                                  ),
                                 ),
                               ],
                             ),
@@ -1396,14 +1428,15 @@ class HomeView extends GetView<HomeController> {
                                 SvgPicture.asset("assets/icons/pepole.svg"),
                                 Text(
                                   "${controller.seatCapcity.value}",
-                                  style: TextStyle(fontSize: 14),
+                                  style: GoogleFonts.urbanist(fontSize: 14),
                                 ),
                               ],
                             ),
                           ],
                         ),
+
                         SizedBox(
-                          height: 20.kh,
+                          height: 8.kh,
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -1418,15 +1451,15 @@ class HomeView extends GetView<HomeController> {
                             title: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text("Feature 1",
-                                    style: TextStyle(fontSize: 18.kh))),
+                                    style: GoogleFonts.urbanist(fontSize: 18.kh))),
                             subtitle: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text(
                                   "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-                                  style: TextStyle(color: Colors.black),
+                                  style: GoogleFonts.urbanist(color: Colors.black),
                                 ))),
                         SizedBox(
-                          height: 24.kh,
+                          height: 8.kh,
                         ),
                         ListTile(
                             leading: SvgPicture.asset(
@@ -1435,16 +1468,16 @@ class HomeView extends GetView<HomeController> {
                                 offset: Offset(-16, 10),
                                 child: Text(
                                   "Feature 2",
-                                  style: TextStyle(fontSize: 18.kh),
+                                  style: GoogleFonts.urbanist(fontSize: 18.kh),
                                 )),
                             subtitle: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text(
                                   "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-                                  style: TextStyle(color: Colors.black),
+                                  style: GoogleFonts.urbanist(color: Colors.black),
                                 ))),
                         SizedBox(
-                          height: 24.kh,
+                          height: 8.kh,
                         ),
                         ListTile(
                             leading: SvgPicture.asset(
@@ -1452,12 +1485,12 @@ class HomeView extends GetView<HomeController> {
                             title: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text("Feature 3",
-                                    style: TextStyle(fontSize: 18.kh))),
+                                    style: GoogleFonts.urbanist(fontSize: 18.kh))),
                             subtitle: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text(
                                   "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-                                  style: TextStyle(color: Colors.black),
+                                  style: GoogleFonts.urbanist(color: Colors.black),
                                 ))),
                         SizedBox(
                           height: 20.kh,
@@ -1481,7 +1514,7 @@ class HomeView extends GetView<HomeController> {
                                   controller.planTapAttention.value=index;
 
                                   if(index==0) {
-
+                                    controller.getCarPricing();
                                     controller.bookingPriceDetails.value = false;
                                     controller.customePrice.value = true;
 
@@ -1509,7 +1542,7 @@ class HomeView extends GetView<HomeController> {
                                         ),
                                         borderRadius: BorderRadius.all(Radius.circular(10))
                                     ),
-                                    child: Center(child: Text("${index==0?"Custom Plan":"Basic Plan"}",style: TextStyle(color: controller.planTapAttention.value==index?Colors.white:Colors.black),)),
+                                    child: Center(child: Text("${index==0?"Custom Plan":"Basic Plan"}",style: GoogleFonts.urbanist(color: controller.planTapAttention.value==index?Colors.white:Colors.black),)),
                                   ),
                                 );
                               }),
@@ -1582,8 +1615,8 @@ class HomeView extends GetView<HomeController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Cars",
-                        style: TextStyle(
+                        "Zone",
+                        style: GoogleFonts.urbanist(
                             fontSize: 24.kh,
                             color: ColorUtil.ZammaBlack,
                             fontWeight: FontWeight.bold),
@@ -1640,7 +1673,7 @@ class HomeView extends GetView<HomeController> {
   //                       children: [
   //                         Text(
   //                           "",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                               // fontSize: 24.kh,
   //                               color: ColorUtil.ZammaBlack,
   //                               fontWeight: FontWeight.bold),
@@ -1660,14 +1693,14 @@ class HomeView extends GetView<HomeController> {
   //                   child: Column(
   //                     children: [
   //                       Text("Free Waitig",
-  //                           style: TextStyle(color: Color(0xFFB4BCE1))),
+  //                           style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
   //                       SizedBox(
   //                         height: 5,
   //                       ),
   //                       Obx(
   //                         () => Text(
   //                           "${controller.minute.value}:${controller.start.value}",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                               fontWeight: FontWeight.bold,
   //                               fontSize: 28.kh,
   //                               color: Colors.white),
@@ -1702,7 +1735,7 @@ class HomeView extends GetView<HomeController> {
   //                           children: [
   //                             Text(
   //                               "",
-  //                               style: TextStyle(
+  //                               style: GoogleFonts.urbanist(
   //                                   fontSize: 24.kh,
   //                                   color: ColorUtil.ZammaBlack,
   //                                   fontWeight: FontWeight.bold),
@@ -1741,7 +1774,7 @@ class HomeView extends GetView<HomeController> {
   //                         child: Center(
   //                             child: Text(
   //                           "${controller.model.value}",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                             color: Colors.white,
   //                           ),
   //                         ))),
@@ -1756,7 +1789,7 @@ class HomeView extends GetView<HomeController> {
   //                             SvgPicture.asset("assets/icons/battery.svg"),
   //                             Text(
   //                               "320 KM%",
-  //                               style: TextStyle(fontSize: 14),
+  //                               style: GoogleFonts.urbanist(fontSize: 14),
   //                             ),
   //                           ],
   //                         ),
@@ -1765,7 +1798,7 @@ class HomeView extends GetView<HomeController> {
   //                             SvgPicture.asset("assets/icons/pepole.svg"),
   //                             Text(
   //                               "${controller.seatCapcity.value}",
-  //                               style: TextStyle(fontSize: 14),
+  //                               style: GoogleFonts.urbanist(fontSize: 14),
   //                             ),
   //                           ],
   //                         ),
@@ -1798,7 +1831,7 @@ class HomeView extends GetView<HomeController> {
   //                                 ),
   //                                 Text(
   //                                   "Control 1",
-  //                                   style: TextStyle(
+  //                                   style: GoogleFonts.urbanist(
   //                                     color: Color(0xFF5F5F5F),
   //                                   ),
   //                                 ),
@@ -1825,7 +1858,7 @@ class HomeView extends GetView<HomeController> {
   //                                 ),
   //                                 Text(
   //                                   "Control 2",
-  //                                   style: TextStyle(
+  //                                   style: GoogleFonts.urbanist(
   //                                     color: Color(0xFF5F5F5F),
   //                                   ),
   //                                 ),
@@ -1870,7 +1903,7 @@ class HomeView extends GetView<HomeController> {
   //                                 width: 1.5, color: ColorUtil.kPrimary),
   //                           ),
   //                           label: Text('Cancel a trip',
-  //                               style: TextStyle(color: ColorUtil.kPrimary)),
+  //                               style: GoogleFonts.urbanist(color: ColorUtil.kPrimary)),
   //                           icon: SvgPicture.asset(
   //                               "assets/icons/canclebuttonicon.svg"),
   //                           onPressed: () {
@@ -1892,7 +1925,7 @@ class HomeView extends GetView<HomeController> {
   //                                         Text(
   //                                           "Are you sure want to cancel this ride?",
   //                                           textAlign: TextAlign.center,
-  //                                           style: TextStyle(
+  //                                           style: GoogleFonts.urbanist(
   //                                               fontWeight: FontWeight.bold,
   //                                               fontSize: 20.kh),
   //                                         ),
@@ -1914,7 +1947,7 @@ class HomeView extends GetView<HomeController> {
   //                                                 child: Center(
   //                                                   child: Text(
   //                                                     "No",
-  //                                                     style: TextStyle(
+  //                                                     style: GoogleFonts.urbanist(
   //                                                         color:
   //                                                             ColorUtil.kPrimary,
   //                                                         fontSize: 16.kh),
@@ -1942,7 +1975,7 @@ class HomeView extends GetView<HomeController> {
   //                                                 child: Center(
   //                                                   child: Text(
   //                                                     "Yes, cancel ride",
-  //                                                     style: TextStyle(
+  //                                                     style: GoogleFonts.urbanist(
   //                                                         color: Colors.white,
   //                                                         fontSize: 16.kh),
   //                                                   ),
@@ -2009,7 +2042,7 @@ class HomeView extends GetView<HomeController> {
   //                       children: [
   //                         Text(
   //                           "",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                               // fontSize: 24.kh,
   //                               color: ColorUtil.ZammaBlack,
   //                               fontWeight: FontWeight.bold),
@@ -2029,14 +2062,14 @@ class HomeView extends GetView<HomeController> {
   //                   child: Column(
   //                     children: [
   //                       Text("Free Waitig",
-  //                           style: TextStyle(color: Color(0xFFB4BCE1))),
+  //                           style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
   //                       SizedBox(
   //                         height: 5,
   //                       ),
   //                       Obx(
   //                         () => Text(
   //                           "${controller.minute.value}:${controller.start.value}",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                               fontWeight: FontWeight.bold,
   //                               fontSize: 28.kh,
   //                               color: Colors.white),
@@ -2069,7 +2102,7 @@ class HomeView extends GetView<HomeController> {
   //                     ),
   //                     Text(
   //                       "Click respective side of images",
-  //                       style: TextStyle(fontSize: 16.kh),
+  //                       style: GoogleFonts.urbanist(fontSize: 16.kh),
   //                     ),
   //                     SizedBox(
   //                       height: 24.kh,
@@ -2121,7 +2154,7 @@ class HomeView extends GetView<HomeController> {
   //                                     children: [
   //                                       Text(
   //                                         "Front hood",
-  //                                         style: TextStyle(
+  //                                         style: GoogleFonts.urbanist(
   //                                           color: Color(0xFF000000),
   //                                         ),
   //                                       ),
@@ -2179,7 +2212,7 @@ class HomeView extends GetView<HomeController> {
   //                                     children: [
   //                                       Text(
   //                                         "Left Side",
-  //                                         style: TextStyle(
+  //                                         style: GoogleFonts.urbanist(
   //                                           color: Color(0xFF000000),
   //                                         ),
   //                                       ),
@@ -2245,7 +2278,7 @@ class HomeView extends GetView<HomeController> {
   //                                     children: [
   //                                       Text(
   //                                         "Right Side",
-  //                                         style: TextStyle(
+  //                                         style: GoogleFonts.urbanist(
   //                                           color: Color(0xFF000000),
   //                                         ),
   //                                       ),
@@ -2303,7 +2336,7 @@ class HomeView extends GetView<HomeController> {
   //                                     children: [
   //                                       Text(
   //                                         "Back Side",
-  //                                         style: TextStyle(
+  //                                         style: GoogleFonts.urbanist(
   //                                           color: Color(0xFF000000),
   //                                         ),
   //                                       ),
@@ -2372,7 +2405,7 @@ class HomeView extends GetView<HomeController> {
   //                                 width: 1.5, color: ColorUtil.kPrimary),
   //                           ),
   //                           label: Text('Cancel a trip',
-  //                               style: TextStyle(color: ColorUtil.kPrimary)),
+  //                               style: GoogleFonts.urbanist(color: ColorUtil.kPrimary)),
   //                           icon: SvgPicture.asset(
   //                               "assets/icons/canclebuttonicon.svg"),
   //                           onPressed: () {
@@ -2394,7 +2427,7 @@ class HomeView extends GetView<HomeController> {
   //                                         Text(
   //                                           "Are you sure want to cancel this ride?",
   //                                           textAlign: TextAlign.center,
-  //                                           style: TextStyle(
+  //                                           style: GoogleFonts.urbanist(
   //                                               fontWeight: FontWeight.bold,
   //                                               fontSize: 20.kh),
   //                                         ),
@@ -2416,7 +2449,7 @@ class HomeView extends GetView<HomeController> {
   //                                                 child: Center(
   //                                                   child: Text(
   //                                                     "No",
-  //                                                     style: TextStyle(
+  //                                                     style: GoogleFonts.urbanist(
   //                                                         color:
   //                                                         ColorUtil.kPrimary,
   //                                                         fontSize: 16.kh),
@@ -2444,7 +2477,7 @@ class HomeView extends GetView<HomeController> {
   //                                                 child: Center(
   //                                                   child: Text(
   //                                                     "Yes, cancel ride",
-  //                                                     style: TextStyle(
+  //                                                     style: GoogleFonts.urbanist(
   //                                                         color: Colors.white,
   //                                                         fontSize: 16.kh),
   //                                                   ),
@@ -2512,7 +2545,7 @@ class HomeView extends GetView<HomeController> {
   //                       children: [
   //                         Text(
   //                           "",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                               // fontSize: 24.kh,
   //                               color: ColorUtil.ZammaBlack,
   //                               fontWeight: FontWeight.bold),
@@ -2532,14 +2565,14 @@ class HomeView extends GetView<HomeController> {
   //                   child: Column(
   //                     children: [
   //                       Text("Onging Trip",
-  //                           style: TextStyle(color: Color(0xFFB4BCE1))),
+  //                           style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
   //                       SizedBox(
   //                         height: 5,
   //                       ),
   //                       Obx(
   //                         () => Text(
   //                           "${controller.ridehour.value < 10 ? "0" + "${controller.ridehour.value}" : controller.ridehour.value}:${controller.rideminute.value < 10 ? "0" + "${controller.rideminute.value}" : controller.rideminute.value}:${controller.ridestart.value < 10 ? "0" + "${controller.ridestart.value}" : controller.ridestart.value}",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                               fontWeight: FontWeight.bold,
   //                               fontSize: 28.kh,
   //                               color: Colors.white),
@@ -2574,7 +2607,7 @@ class HomeView extends GetView<HomeController> {
   //                           children: [
   //                             Text(
   //                               "",
-  //                               style: TextStyle(
+  //                               style: GoogleFonts.urbanist(
   //                                   fontSize: 24.kh,
   //                                   color: ColorUtil.ZammaBlack,
   //                                   fontWeight: FontWeight.bold),
@@ -2613,7 +2646,7 @@ class HomeView extends GetView<HomeController> {
   //                         child: Center(
   //                             child: Text(
   //                           "${controller.model.value}",
-  //                           style: TextStyle(
+  //                           style: GoogleFonts.urbanist(
   //                             color: Colors.white,
   //                           ),
   //                         ))),
@@ -2628,7 +2661,7 @@ class HomeView extends GetView<HomeController> {
   //                             SvgPicture.asset("assets/icons/battery.svg"),
   //                             Text(
   //                               "320 KM%",
-  //                               style: TextStyle(fontSize: 14),
+  //                               style: GoogleFonts.urbanist(fontSize: 14),
   //                             ),
   //                           ],
   //                         ),
@@ -2637,7 +2670,7 @@ class HomeView extends GetView<HomeController> {
   //                             SvgPicture.asset("assets/icons/pepole.svg"),
   //                             Text(
   //                               "${controller.seatCapcity.value}",
-  //                               style: TextStyle(fontSize: 14),
+  //                               style: GoogleFonts.urbanist(fontSize: 14),
   //                             ),
   //                           ],
   //                         ),
@@ -2670,7 +2703,7 @@ class HomeView extends GetView<HomeController> {
   //                                 ),
   //                                 Text(
   //                                   "Report a problem",
-  //                                   style: TextStyle(
+  //                                   style: GoogleFonts.urbanist(
   //                                     color: Color(0xFF5F5F5F),
   //                                   ),
   //                                 ),
@@ -2685,7 +2718,7 @@ class HomeView extends GetView<HomeController> {
   //                     ListTile(
   //                         leading: Text(
   //                           "Order Summary",
-  //                           style: TextStyle(fontSize: 16.kh),
+  //                           style: GoogleFonts.urbanist(fontSize: 16.kh),
   //                         ),
   //                         trailing: Icon(Icons.arrow_forward_ios)),
   //                     SizedBox(
@@ -2711,7 +2744,7 @@ class HomeView extends GetView<HomeController> {
   //                               width: 1.5, color: ColorUtil.kPrimary),
   //                         ),
   //                         label: Text('Complete the trip',
-  //                             style: TextStyle(color: ColorUtil.kPrimary)),
+  //                             style: GoogleFonts.urbanist(color: ColorUtil.kPrimary)),
   //                         icon: SvgPicture.asset("assets/icons/complete.svg"),
   //                         onPressed: () {
   //                           showDialog(
@@ -2732,7 +2765,7 @@ class HomeView extends GetView<HomeController> {
   //                                       Text(
   //                                         "Are you sure want to end this ride?",
   //                                         textAlign: TextAlign.center,
-  //                                         style: TextStyle(
+  //                                         style: GoogleFonts.urbanist(
   //                                             fontWeight: FontWeight.bold,
   //                                             fontSize: 20.kh),
   //                                       ),
@@ -2754,7 +2787,7 @@ class HomeView extends GetView<HomeController> {
   //                                               child: Center(
   //                                                 child: Text(
   //                                                   "No",
-  //                                                   style: TextStyle(
+  //                                                   style: GoogleFonts.urbanist(
   //                                                       color:
   //                                                           ColorUtil.kPrimary,
   //                                                       fontSize: 16.kh),
@@ -2788,7 +2821,7 @@ class HomeView extends GetView<HomeController> {
   //                                               child: Center(
   //                                                 child: Text(
   //                                                   "Yes, End ride",
-  //                                                   style: TextStyle(
+  //                                                   style: GoogleFonts.urbanist(
   //                                                       color: Colors.white,
   //                                                       fontSize: 16.kh),
   //                                                 ),
@@ -2861,7 +2894,7 @@ class HomeView extends GetView<HomeController> {
                             children: [
                               Text(
                                 "Payment Description",
-                                style: TextStyle(
+                                style: GoogleFonts.urbanist(
                                     fontSize: 20.kh,
                                     color: ColorUtil.ZammaBlack,
                                     fontWeight: FontWeight.bold),
@@ -2887,8 +2920,8 @@ class HomeView extends GetView<HomeController> {
                           children: [
                             SizedBox(width: 300.kh,
                               child: Text(
-                                "We’ll transact an amount of ${1} to verify your card details.",
-                                style: TextStyle(
+                                "We’ll transact an amount of \$${1} to verify your card details.",
+                                style: GoogleFonts.urbanist(
                                     fontWeight: FontWeight.w600, fontSize: 16.kh),
                               ),
                             ),
@@ -2916,49 +2949,72 @@ class HomeView extends GetView<HomeController> {
                                       name: "Verify Payment",
                                       onPressed: () {
                                       //  Get.toNamed(Routes.CAMERA_DESIGN);
+
                                         controller.getAddressFromLatLng();
+
                                         controller
                                             .onBoardingStatus()
                                             .then((value) {
 
                                           if (value == 1) {
                                             //   Get.find<GlobalData>().QNR.value=controller.carId.value;
-                                            if (controller.logindetails.value
-                                                    .user?.isSuspended ==
-                                                false)
+                                           controller.getInProcessHistory().then((value) {
+                                             if(value==1){
+                                               showMySnackbar(
+                                                   title: "Error",
+                                                   msg:
+                                                   "Complete inprogress ride before booking new ride");
+                                             }
+                                             else{
+                                               controller.getOnGoingHistory().then((value){
+                                                 if(value==1){
+                                                   showMySnackbar(
+                                                       title: "Error",
+                                                       msg:
+                                                       "Complete your ongoing ride before booking new ride");
+                                                 }
+                                                 else{
+                                                   if (controller.logindetails.value
+                                                       .user?.isSuspended ==
+                                                       false)
 
-                                              controller
-                                                  .createBooking(
-                                                      carId: controller
-                                                          .carId.value,
-                                                      qnr: controller.qnr.value)
-                                                  .then((value) {
-                                                if (value == 1) {
-                                                  Get.toNamed(Routes.SAVED_CARDS,arguments: [
-                                                    (controller
-                                                        .createBookinModel
-                                                        .value
-                                                        .booking
-                                                        ?.Id),
-                                                    (controller
-                                                        .model.value),
-                                                    (controller
-                                                        .seatCapcity.value),
-                                                    true,"basic",1.0,0,0
-                                                  ]);
+                                                     controller
+                                                         .createBooking(
+                                                         carId: controller
+                                                             .carId.value,
+                                                         qnr: controller.qnr.value)
+                                                         .then((value) {
+                                                       if (value == 1) {
+                                                         Get.toNamed(Routes.SAVED_CARDS,arguments: [
+                                                           (controller
+                                                               .createBookinModel
+                                                               .value
+                                                               .booking
+                                                               ?.Id),
+                                                           (controller
+                                                               .model.value),
+                                                           (controller
+                                                               .seatCapcity.value),
+                                                           true,"basic",1.0,0,0
+                                                         ]);
 
-                                                  print(
-                                                      "Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
-                                                  // controller.carBooking.value = true;
-                                                  controller.bookingPriceDetails
-                                                      .value = false;
-                                                }
-                                              });
-                                            else
-                                              showMySnackbar(
-                                                  title: "Error",
-                                                  msg:
-                                                      "User blocked by the admin");
+                                                         print(
+                                                             "Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
+                                                         // controller.carBooking.value = true;
+                                                         controller.bookingPriceDetails
+                                                             .value = false;
+                                                       }
+                                                     });
+                                                   else
+                                                     showMySnackbar(
+                                                         title: "Error",
+                                                         msg:
+                                                         "User blocked by the admin");
+                                                 }
+                                               });
+                                             }
+                                           });
+
                                           }
                                           else {
                                             if (controller.logindetails.value.user?.isApproved == false){
@@ -3034,7 +3090,7 @@ class HomeView extends GetView<HomeController> {
 //                       children: [
 //                         Text(
 //                           "",
-//                           style: TextStyle(
+//                           style: GoogleFonts.urbanist(
 //                             // fontSize: 24.kh,
 //                               color: ColorUtil.ZammaBlack,
 //                               fontWeight: FontWeight.bold),
@@ -3054,14 +3110,14 @@ class HomeView extends GetView<HomeController> {
 //                   child: Column(
 //                     children: [
 //                       Text("Onging Trip",
-//                           style: TextStyle(color: Color(0xFFB4BCE1))),
+//                           style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
 //                       SizedBox(
 //                         height: 5,
 //                       ),
 //                       Obx(
 //                             () => Text(
 //                               "${controller.ridehour.value < 10 ? "0" + "${controller.ridehour.value}" : controller.ridehour.value}:${controller.rideminute.value < 10 ? "0" + "${controller.rideminute.value}" : controller.rideminute.value}:${controller.ridestart.value < 10 ? "0" + "${controller.ridestart.value}" : controller.ridestart.value}",
-//                           style: TextStyle(
+//                           style: GoogleFonts.urbanist(
 //                               fontWeight: FontWeight.bold,
 //                               fontSize: 28.kh,
 //                               color: Colors.white),
@@ -3094,7 +3150,7 @@ class HomeView extends GetView<HomeController> {
 //                     ),
 //                     Text(
 //                       "Click respective side of images",
-//                       style: TextStyle(fontSize: 16.kh),
+//                       style: GoogleFonts.urbanist(fontSize: 16.kh),
 //                     ),
 //                     SizedBox(
 //                       height: 24.kh,
@@ -3146,7 +3202,7 @@ class HomeView extends GetView<HomeController> {
 //                                     children: [
 //                                       Text(
 //                                         "Front hood",
-//                                         style: TextStyle(
+//                                         style: GoogleFonts.urbanist(
 //                                           color: Color(0xFF000000),
 //                                         ),
 //                                       ),
@@ -3204,7 +3260,7 @@ class HomeView extends GetView<HomeController> {
 //                                     children: [
 //                                       Text(
 //                                         "Left Side",
-//                                         style: TextStyle(
+//                                         style: GoogleFonts.urbanist(
 //                                           color: Color(0xFF000000),
 //                                         ),
 //                                       ),
@@ -3270,7 +3326,7 @@ class HomeView extends GetView<HomeController> {
 //                                     children: [
 //                                       Text(
 //                                         "Right Side",
-//                                         style: TextStyle(
+//                                         style: GoogleFonts.urbanist(
 //                                           color: Color(0xFF000000),
 //                                         ),
 //                                       ),
@@ -3328,7 +3384,7 @@ class HomeView extends GetView<HomeController> {
 //                                     children: [
 //                                       Text(
 //                                         "Back Side",
-//                                         style: TextStyle(
+//                                         style: GoogleFonts.urbanist(
 //                                           color: Color(0xFF000000),
 //                                         ),
 //                                       ),
@@ -3416,116 +3472,72 @@ class HomeView extends GetView<HomeController> {
                       topRight: Radius.circular(20.0),
                       topLeft: Radius.circular(20.0)),
                 ),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                          child: Container(
-                            height: 2,
-                            width: 100.kw,
-                            color: ColorUtil.kPrimary,
-                          )),
-                      Container(
-                        height: 30.kh,
-                        margin: EdgeInsets.fromLTRB(16.kw, 24.kh, 16.kw, 0),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Payment Description",
-                                style: TextStyle(
-                                    fontSize: 20.kh,
-                                    color: ColorUtil.ZammaBlack,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  controller.customePrice.value = false;
-                                  Scaffold.of(context)
-                                      .showBodyScrim(false, 0.0);
-                                },
-                                child:
-                                SvgPicture.asset("assets/icons/cross.svg"),
-                              ),
-                            ]),
-                      ),
-                      SizedBox(
-                        height: 16.kh,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-
-                        child: Obx(()=> Text("Amount: \$ ${controller.finalAmount.value} ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-
-                      ),
-                      SizedBox(
-                        height: 16.kh,
-                      ),
-                      Padding(
-                        padding:  EdgeInsets.fromLTRB(16,0,16,0),
-
-                        child: Text("Time ",style: TextStyle(fontWeight: FontWeight.bold),),
-
-                      ),
-
-                      Container(
-                        height: 80.kh,
-                        width: double.infinity,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-
-                            itemBuilder: (context, index) {
-                              return Obx(()=>
-                                 InkWell(onTap: (){
-                                  controller.timeTapAttention.value=index;
-                                  controller.calculateCharges();
-                                },
-                                  child: Container(
-                                    margin: EdgeInsets.fromLTRB(16,16,0,16),
-                                    height: 50.kh,
-                                    width: 50.kw,
-
-                                    decoration: BoxDecoration(
-                                       color: controller.timeTapAttention.value==index?Colors.indigo:Colors.white,
-                                        border: Border.all(
-                                          color: ColorUtil.kPrimary,
-                                        ),
-                                        borderRadius: BorderRadius.all(Radius.circular(10))
-                                    ),
-                                    child: Center(child: Text("${index+1} \n hour",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: controller.timeTapAttention.value==index?Colors.white:Colors.black),)),
-                                  ),
+                child: Obx(()=>
+                   Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                            child: Container(
+                              height: 2,
+                              width: 100.kw,
+                              color: ColorUtil.kPrimary,
+                            )),
+                        Container(
+                          height: 30.kh,
+                          margin: EdgeInsets.fromLTRB(16.kw, 24.kh, 16.kw, 0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Payment Description",
+                                  style: GoogleFonts.urbanist(
+                                      fontSize: 20.kh,
+                                      color: ColorUtil.ZammaBlack,
+                                      fontWeight: FontWeight.bold),
                                 ),
-                              );
-                            }),
-                      ),
-                      Padding(
-                        padding:  EdgeInsets.fromLTRB(16,0,16,0),
+                                InkWell(
+                                  onTap: () {
+                                    controller.customePrice.value = false;
+                                    Scaffold.of(context)
+                                        .showBodyScrim(false, 0.0);
+                                  },
+                                  child:
+                                  SvgPicture.asset("assets/icons/cross.svg"),
+                                ),
+                              ]),
+                        ),
+                        SizedBox(
+                          height: 16.kh,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
 
-                        child: Text("Extra charges \$0.19/minute ",),
+                          child: Obx(()=> Text("Amount: \$ ${controller.finalAmount.value} ",style: GoogleFonts.urbanist(fontSize: 20,fontWeight: FontWeight.bold),)),
 
-                      ),
-                      SizedBox(
-                        height: 16.kh,
-                      ),
-                      Padding(
-                        padding:  EdgeInsets.fromLTRB(16,0,16,0),
+                        ),
+                        SizedBox(
+                          height: 16.kh,
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
 
-                        child: Text("Distance ",style: TextStyle(fontWeight: FontWeight.bold),),
+                          child: Text("Time ",style: GoogleFonts.urbanist(fontWeight: FontWeight.bold),),
 
-                      ),
+                        ),
 
-                      Container(
-                        height: 80.kh,
-                        width: double.infinity,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
+                        Container(
+                          height: 80.kh,
+                          width: double.infinity,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+itemCount: controller.timeLength.value,
+                              itemBuilder: (context, index) {
+                                return Obx(()=>
+                                   InkWell(onTap: (){
 
-                            itemBuilder: (context, index) {
-                              return Obx(()=>
-                                  InkWell(onTap: (){
-                                    controller.distanceTapAttention.value=index;
+                                       controller.timeTapAttention.value = index;
+
                                     controller.calculateCharges();
                                   },
                                     child: Container(
@@ -3534,113 +3546,183 @@ class HomeView extends GetView<HomeController> {
                                       width: 50.kw,
 
                                       decoration: BoxDecoration(
-                                          color: controller.distanceTapAttention.value==index?Colors.indigo:Colors.white,
+                                         color: controller.timeTapAttention.value==index?Colors.indigo:Colors.white,
                                           border: Border.all(
                                             color: ColorUtil.kPrimary,
                                           ),
                                           borderRadius: BorderRadius.all(Radius.circular(10))
                                       ),
-                                      child: Center(child: Text("${index*10} \n miles",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: controller.distanceTapAttention.value==index?Colors.white:Colors.black),)),
+                                      child: Center(child: Text("${(controller.carPriceById.value.carPricing?.pricingRules?[index]?.hours)} \nhour",textAlign: TextAlign.center,style: GoogleFonts.urbanist(fontWeight: FontWeight.bold,color: controller.timeTapAttention.value==index?Colors.white:Colors.black),)),
                                     ),
                                   ),
-                              );
-                            }),
-                      ),
+                                );
+                              }),
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
 
-                      Padding(
-                        padding:  EdgeInsets.fromLTRB(16,0,16,0),
+                          child: Obx(()=> Text("Extra charges \$${controller.extraMinuteCharges.value}/minute ",)),
 
-                        child: Text("Extra charges \$0.33/mile",),
+                        ),
+                        SizedBox(
+                          height: 16.kh,
+                        ),
+                        Padding(
+                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
 
-                      ),
-                      SizedBox(
-                        height: 24.kh,
-                      ),
-                      Center(
-                        child: Obx(
-                              () => controller.instanceOfGlobalData.loader.value ==
-                              true
-                              ? Center(
-                            child: SizedBox(
-                                width: 200.kh,
-                                height: 100.kh,
-                                child: Lottie.asset(
-                                    'assets/json/car_loader.json')),
-                          )
-                              : Container(
-                            child: ButtonDesign(
-                                name: "Book",
-                                onPressed: () {
-                                  controller.getAddressFromLatLng();
-                                  controller
-                                      .onBoardingStatus()
-                                      .then((value) {
+                          child: Text("Distance ",style: GoogleFonts.urbanist(fontWeight: FontWeight.bold),),
 
-                                    if (value == 1) {
-                                      //   Get.find<GlobalData>().QNR.value=controller.carId.value;
-                                      if (controller.logindetails.value
-                                          .user?.isSuspended ==
-                                          false)
-                                        controller
-                                            .createBooking(
-                                            carId: controller
-                                                .carId.value,
-                                            qnr: controller.qnr.value)
-                                            .then((value) {
-                                          if (value == 1) {
-                                            Get.toNamed(Routes.SAVED_CARDS,arguments: [
-                                              (controller
-                                                  .createBookinModel
-                                                  .value
-                                                  .booking
-                                                  ?.Id),
-                                              (controller
-                                                  .model.value),
-                                              (controller
-                                                  .seatCapcity.value),
-                                              true,"custom",(controller.finalAmount.value),(controller.distanceTapAttention.value*10),(controller.timeTapAttention.value+1)
-                                            ]);
-                                            // Get.toNamed(Routes.BOOKING,
-                                            //     arguments: [
-                                            //       (controller
-                                            //           .createBookinModel
-                                            //           .value
-                                            //           .booking
-                                            //           ?.Id),
-                                            //       (controller
-                                            //           .model.value),
-                                            //       (controller
-                                            //           .seatCapcity.value),
-                                            //       true
-                                            //     ]);
-                                            print(
-                                                "Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
-                                            // controller.carBooking.value = true;
-                                            controller.bookingPriceDetails
-                                                .value = false;
+                        ),
+
+                        Container(
+                          height: 80.kh,
+                          width: double.infinity,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+itemCount: controller.milesLength.value,
+                              itemBuilder: (context, index) {
+                                return Obx(()=>
+                                    InkWell(onTap: (){
+                                      controller.distanceTapAttention.value=index;
+                                      controller.calculateCharges();
+                                    },
+                                      child: Container(
+                                        margin: EdgeInsets.fromLTRB(16,16,0,16),
+                                        height: 50.kh,
+                                        width: 50.kw,
+
+                                        decoration: BoxDecoration(
+                                            color: controller.distanceTapAttention.value==index?Colors.indigo:Colors.white,
+                                            border: Border.all(
+                                              color: ColorUtil.kPrimary,
+                                            ),
+                                            borderRadius: BorderRadius.all(Radius.circular(10))
+                                        ),
+                                        child: Center(child: Text("${(controller.carPriceById.value.carPricing?.mileageRates?[index]?.miles)!} \n miles",textAlign: TextAlign.center,style: GoogleFonts.urbanist(fontWeight: FontWeight.bold,color: controller.distanceTapAttention.value==index?Colors.white:Colors.black),)),
+                                      ),
+                                    ),
+                                );
+                              }),
+                        ),
+
+                        Padding(
+                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
+
+                          child: Obx(()=> Text("Extra charges \$${controller.extraMilesCharges.value}/mile",)),
+
+                        ),
+                        SizedBox(
+                          height: 24.kh,
+                        ),
+                        Center(
+                          child: Obx(
+                                () => controller.instanceOfGlobalData.loader.value ==
+                                true
+                                ? Center(
+                              child: SizedBox(
+                                  width: 200.kh,
+                                  height: 100.kh,
+                                  child: Lottie.asset(
+                                      'assets/json/car_loader.json')),
+                            )
+                                : Container(
+                              child: ButtonDesign(
+                                  name: "Book",
+                                  onPressed: () {
+                                    controller.getAddressFromLatLng();
+                                    controller
+                                        .onBoardingStatus()
+                                        .then((value) {
+
+                                      if (value == 1) {
+                                        //   Get.find<GlobalData>().QNR.value=controller.carId.value;
+                                        controller.getInProcessHistory().then((value) {
+                                          if(value==1){
+                                            showMySnackbar(
+                                                title: "Error",
+                                                msg:
+                                                "Complete inprogress ride before booking new ride");
+                                          }
+                                          else{
+                                            controller.getOnGoingHistory().then((value){
+                                              if(value==1){
+                                                showMySnackbar(
+                                                    title: "Error",
+                                                    msg:
+                                                    "Complete your ongoing ride before booking new ride");
+                                              }
+                                              else{
+                                                if (controller.logindetails.value
+                                                    .user?.isSuspended ==
+                                                    false)
+                                                  controller
+                                                      .createBooking(
+                                                      carId: controller
+                                                          .carId.value,
+                                                      qnr: controller.qnr.value)
+                                                      .then((value) {
+                                                    if (value == 1) {
+                                                      Get.toNamed(Routes.SAVED_CARDS,arguments: [
+                                                        (controller
+                                                            .createBookinModel
+                                                            .value
+                                                            .booking
+                                                            ?.Id),
+                                                        (controller
+                                                            .model.value),
+                                                        (controller
+                                                            .seatCapcity.value),
+                                                        true,"custom",(controller.finalAmount.value),(controller.carPriceById.value.carPricing?.mileageRates?[controller.distanceTapAttention.value]?.miles),(controller.carPriceById.value.carPricing?.pricingRules?[controller.timeTapAttention.value]?.hours)
+                                                      ]);
+                                                      // Get.toNamed(Routes.BOOKING,
+                                                      //     arguments: [
+                                                      //       (controller
+                                                      //           .createBookinModel
+                                                      //           .value
+                                                      //           .booking
+                                                      //           ?.Id),
+                                                      //       (controller
+                                                      //           .model.value),
+                                                      //       (controller
+                                                      //           .seatCapcity.value),
+                                                      //       true
+                                                      //     ]);
+                                                      print(
+                                                          "Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
+                                                      // controller.carBooking.value = true;
+                                                      controller.customePrice.value = false;
+                                                    }
+                                                  });
+                                                else
+                                                  showMySnackbar(
+                                                      title: "Error",
+                                                      msg:
+                                                      "User blocked or approval pending");
+                                              }
+                                            });
                                           }
                                         });
-                                      else
-                                        showMySnackbar(
-                                            title: "Error",
-                                            msg:
-                                            "User blocked or approval pending");
-                                    } else {
-                                      showMySnackbar(title: "Error", msg: "You Need To Login First");
-                                    }
-                                  });
-                                }),
+
+
+
+                                      } else {
+                                        showMySnackbar(title: "Error", msg: "You Need To Login First");
+                                      }
+                                    });
+                                  }),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10.kh,
-                      ),
+                        SizedBox(
+                          height: 10.kh,
+                        ),
 
-                      // SizedBox(
-                      //   height: 10.kh,
-                      // ),
-                    ]),
+                        // SizedBox(
+                        //   height: 10.kh,
+                        // ),
+                      ]),
+                ),
               ),
             ),
           ],

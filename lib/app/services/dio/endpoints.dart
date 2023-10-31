@@ -24,6 +24,10 @@ class Endpoints {
   static const String reportIssue = baseUrl+"report-issue";
   static const String savedCards = baseUrl+"user/stripe/cards";
   static const String addCardDetails = baseUrl+"user/stripe/add-card";
+  static const String getCoordinates = baseUrl+"zone/parking";
+  static const String totalPayments = baseUrl+"transactions/user";
+  static const String getcarPricing = baseUrl+"car-pricing/car/";
+
   //static const String payment = baseUrl+"user/stripe/add-card";
 
   //Poc Api Call

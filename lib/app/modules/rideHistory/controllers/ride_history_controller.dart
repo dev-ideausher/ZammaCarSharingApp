@@ -16,10 +16,12 @@ class RideHistoryController extends GetxController {
    @override
   void onInit() {
     super.onInit();
-    getrideHistory();
 
+    collectRideHistory();
   }
-
+collectRideHistory(){
+  getrideHistory();
+}
   @override
   void onReady() {
     super.onReady();
@@ -35,6 +37,7 @@ class RideHistoryController extends GetxController {
     try {
       loader.value=true;
       final response = await APIManager.getRideHistory();
+      print("");
       rideHistory.value = RideHistory.fromJson(jsonDecode(response.toString()));
       loader.value=false;
     }catch(e){

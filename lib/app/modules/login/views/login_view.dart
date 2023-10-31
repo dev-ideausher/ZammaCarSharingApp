@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
@@ -33,14 +34,14 @@ class LoginView extends GetView<LoginController> {
 
                     Text(
                       "My phone number is",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.kh),
+                      style: GoogleFonts.urbanist(fontWeight: FontWeight.bold, fontSize: 24.kh),
                     ),
                     SizedBox(
                       height: 10.kh,
                     ),
                     Text(
                       "we will text a code to verify your number",
-                      style: TextStyle(color: Colors.grey),
+                      style: GoogleFonts.urbanist(color: Colors.grey),
                     ),
                     SizedBox(
                       height: 27.kh,
@@ -51,15 +52,15 @@ class LoginView extends GetView<LoginController> {
                       child: Theme(
                         data: Theme.of(context).copyWith(splashColor: Colors.white),
                         child: IntlPhoneField(
-                          dropdownTextStyle: TextStyle(color: Colors.black),
+                          dropdownTextStyle: GoogleFonts.urbanist(color: Colors.black),
                           cursorColor: Colors.white,
-                          style: TextStyle(
+                          style: GoogleFonts.urbanist(
                             //fontFamily: 'Montserrat-Regular',
                             //fontSize: 1.kh,
                             color: Colors.black,
                           ),
                           //autofocus: false,
-                          // style: TextStyle(color: Colors.white),
+                          // style: GoogleFonts.urbanist(color: Colors.white),
                           //   controller:controller.textEditingController.value,
                           flagsButtonPadding: EdgeInsets.only(top: 10, bottom: 10, left: 12),
                           decoration: InputDecoration(
@@ -67,7 +68,7 @@ class LoginView extends GetView<LoginController> {
                             filled: true,
                             fillColor: Colors.white,
                            // hintText: 'Mobile Number',
-                            hintStyle: TextStyle(color: Colors.black),
+                            hintStyle: GoogleFonts.urbanist(color: Colors.black),
                             contentPadding: EdgeInsets.only(left: 14.0, bottom: 14.0, top: 18.0),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(width: 2, color: ColorUtil.ZammaGrey),
@@ -94,15 +95,15 @@ class LoginView extends GetView<LoginController> {
                       text: new TextSpan(
                         // Note: Styles for TextSpans must be explicitly defined.
                         // Child text spans will inherit styles from parent
-                        style: new TextStyle(
+                        style:  GoogleFonts.urbanist(
                           fontSize: 14.0,
                           color: Colors.black,
                         ),
                         children: <TextSpan>[
-                          new TextSpan(text: 'By continuing you agree to our ',style: TextStyle(color: Colors.grey)),
-                          new TextSpan(text: 'Terms of Service ', style: new TextStyle(color: ColorUtil.kPrimary,decoration: TextDecoration.underline,fontWeight: FontWeight.bold)),
-                          new TextSpan(text: 'and ',style: TextStyle(color: Colors.grey)),
-                          new TextSpan(text: 'Privacy Policy', style: new TextStyle(color: ColorUtil.kPrimary,decoration: TextDecoration.underline,fontWeight: FontWeight.bold)),
+                          new TextSpan(text: 'By continuing you agree to our ',style: GoogleFonts.urbanist(color: Colors.grey)),
+                          new TextSpan(text: 'Terms of Service ', style: GoogleFonts.urbanist(color: ColorUtil.kPrimary,decoration: TextDecoration.underline,fontWeight: FontWeight.bold)),
+                          new TextSpan(text: 'and ',style: GoogleFonts.urbanist(color: Colors.grey)),
+                          new TextSpan(text: 'Privacy Policy', style:  GoogleFonts.urbanist(color: ColorUtil.kPrimary,decoration: TextDecoration.underline,fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),

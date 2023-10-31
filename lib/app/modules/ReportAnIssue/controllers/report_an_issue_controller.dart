@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zammacarsharing/app/modules/models/image_response_model.dart';
+import 'package:zammacarsharing/app/modules/widgets/custom_camera.dart';
 import 'package:zammacarsharing/app/services/dio/api_service.dart';
 import 'package:zammacarsharing/app/services/dio/endpoints.dart';
 import 'package:zammacarsharing/app/services/globalData.dart';
@@ -23,6 +24,7 @@ class ReportAnIssueController extends GetxController {
   Rx<ImageUpload> imageUpload = ImageUpload().obs;
   Rx<TextEditingController> textEditingController=TextEditingController().obs;
   final bookingId=Get.arguments[0];
+  var issuepic = File("").obs;
   @override
   void onInit() {
     super.onInit();
@@ -37,13 +39,65 @@ class ReportAnIssueController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
   Future<void> pickFromCamera() async {
+    // final ImagePicker picker = ImagePicker();
+    // print("pickedImage path before ${frontHood.value.path}");
+
+    /* final picker = ImagePicker();
+    PickedFile? pickedImage;
+    pickedImage = await picker.getImage(source: ImageSource.camera);*/
+    GenralCamera.openCamera(onCapture: (pickedImage) {
+      if (pickedImage != null) {
+
+          issuepic.value = pickedImage;
+          selectedFile.value=issuepic.value.path;
+          String basenamed = basename(issuepic.value.path);
+          filename.value = basenamed;
+
+
+      }
+    });
+    //  File pickedImage= await takePhoto();
+
+    /*   try {
+      await ImageHandler.getImage(fromGallery: false, pickedImage: (file){
+        if(file!=null){
+          if (selectedSideFoto == "front") {
+            frontImageStatus.value = 1;
+            frontHood.value = file;
+          }
+          else if (selectedSideFoto == "leftside") {
+            leftImageStatus.value = 1;
+            leftSide.value =file;
+          }
+          else if (selectedSideFoto == "rightside") {
+            rightImageStatus.value = 1;
+            rightSide.value = file;
+          }
+          else {
+            backImageStatus.value = 1;
+            backSide.value = file;
+          }
+
+
+          print("pickedImage path after ${frontHood.value.path}");
+        }else{
+          print("image not picked");
+        }
+      });
+     // final XFile? image = await picker.pickImage(source: ImageSource.camera);
+
+    } catch (e) {
+      throw Exception(e);
+    }*/
+  }
+  /*Future<void> pickFromCamera() async {
     final ImagePicker picker = ImagePicker();
     //print("pickedImage path before ${frontHood.value.path}");
     try {
       await ImageHandler.getImage(
           fromGallery: true,
+
           pickedImage: (file) {
             String basenamed = basename(file!.path);
             selectedFile.value = file.path;
@@ -54,7 +108,7 @@ class ReportAnIssueController extends GetxController {
     } catch (e) {
       throw Exception(e);
     }
-  }
+  }*/
 
   Future<dynamic> uploadImage(String path) async {
     String token = Get.find<GetStorageService>().jwToken;

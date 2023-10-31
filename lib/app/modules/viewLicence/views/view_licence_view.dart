@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
@@ -21,9 +22,9 @@ class ViewLicenceView extends GetView<ViewLicenceController> {
         elevation: 1,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title: const Text(
+        title:  Text(
           'Licence details',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.urbanist(color: Colors.black),
         ),
         centerTitle: true,
       ),
@@ -36,7 +37,7 @@ class ViewLicenceView extends GetView<ViewLicenceController> {
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 "Licence Number",
-                style: TextStyle(fontSize: 14.kh, fontWeight: FontWeight.bold),
+                style: GoogleFonts.urbanist(fontSize: 14.kh, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 8.kh,
@@ -49,7 +50,7 @@ class ViewLicenceView extends GetView<ViewLicenceController> {
               ),
               Text(
                 "Valid till",
-                style: TextStyle(fontSize: 14.kh, fontWeight: FontWeight.bold),
+                style: GoogleFonts.urbanist(fontSize: 14.kh, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 8.kh,
@@ -63,7 +64,7 @@ class ViewLicenceView extends GetView<ViewLicenceController> {
               ),
               Text(
                 "Upload Licence",
-                style: TextStyle(fontSize: 14.kh, fontWeight: FontWeight.bold),
+                style: GoogleFonts.urbanist(fontSize: 14.kh, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 12.kh,

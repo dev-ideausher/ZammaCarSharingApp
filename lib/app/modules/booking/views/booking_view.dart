@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
@@ -12,6 +15,7 @@ import 'package:zammacarsharing/app/services/colors.dart';
 import 'package:zammacarsharing/app/services/globalData.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
 import 'package:zammacarsharing/app/services/snackbar.dart';
+import 'package:zammacarsharing/app/services/storage.dart';
 
 import '../controllers/booking_controller.dart';
 
@@ -30,7 +34,7 @@ class BookingView extends GetView<BookingController> {
           width: 250.kw,
           child: Row(children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.fromLTRB(8.0,8,0,8),
               child:
                   SizedBox(child: Lottie.asset('assets/json/car_loader.json')),
             ),
@@ -40,7 +44,7 @@ class BookingView extends GetView<BookingController> {
              Obx(()=>
                 Text(
                 "${controller.lodingMsg.value}",
-                style: TextStyle(fontSize: 16),
+                style:  GoogleFonts.urbanist(fontSize: 16),
             ),
              ),
           ]),
@@ -88,7 +92,7 @@ class BookingView extends GetView<BookingController> {
                       )),
                 ),
                 controller.carBooking.value == true
-                    ? carBooking(0.7)
+                    ? carBooking(0.6)
                     : SizedBox(),
                 controller.carInspection.value == true
                     ? carInspection(0.9)
@@ -112,12 +116,12 @@ class BookingView extends GetView<BookingController> {
 
   Widget carBooking(double initialVal) {
     /*  if (!controller.checkTimer.value) controller.startTimer();*/
-    if (!Get.find<GlobalData>().checkTimer.value)
-      Get.find<GlobalData>().startTimer();
+  /*  if (!Get.find<GlobalData>().checkTimer.value)
+      Get.find<GlobalData>().startTimer();*/
     return DraggableScrollableSheet(
       initialChildSize: initialVal,
       minChildSize: 0.1,
-      maxChildSize: 0.7,
+      maxChildSize: 0.6,
       builder: (BuildContext context, ScrollController scrollController) {
         return SingleChildScrollView(
           controller: scrollController,
@@ -132,7 +136,7 @@ class BookingView extends GetView<BookingController> {
                       topLeft: Radius.circular(20.0)),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                         child: Container(
@@ -141,22 +145,23 @@ class BookingView extends GetView<BookingController> {
                       color: Colors.white,
                     )),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 24, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(16.0, 24, 16, 0),
                       child: Column(
                         children: [
                           Text("Free Waiting",
-                              style: TextStyle(color: Color(0xFFB4BCE1))),
+                              style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))
+                          ),
                           SizedBox(
                             height: 5,
                           ),
                           Obx(
-                            () => Text(
+                            () => controller.loader.value==true?CircularProgressIndicator(color: Colors.white): Text(
                               //  "${controller.minute.value}:${controller.start.value}",
-                              "${Get.find<GlobalData>().minute.value}:${Get.find<GlobalData>().start.value}",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 28.kh,
-                                  color: Colors.white),
+                              "${controller.instanceOfGlobalData.waitingRideTime.value}",// "${Get.find<GlobalData>().minute.value}:${Get.find<GlobalData>().start.value}",
+                              style: GoogleFonts.urbanist(fontWeight: FontWeight.bold,
+                                fontSize: 28.kh,
+                                color: controller.instanceOfGlobalData.extraWaiting.value==true?Colors.red:Colors.white,)
+
                             ),
                           )
                         ],
@@ -183,13 +188,54 @@ class BookingView extends GetView<BookingController> {
                         SizedBox(
                           height: 30.kh,
                         ),
-                        Container(
-                          height: 100.kh,
-                          width: 260.kw,
-                          child: Center(
-                            child: Image.asset("assets/images/bigCars.png"),
+                        Obx(()=>CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl:
+                          "${controller.getBookingDetailsModel.value.data?.car?.images?[0]}",
+                          imageBuilder:
+                              (context, imageProvider) =>
+                              Container(
+
+                                margin: EdgeInsets.fromLTRB(
+                                    0, 10, 10, 10),
+                                height: 140.kh,
+                                width: 260.kw,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+
+                                  ),
+
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                ),
+                              ),
+                          progressIndicatorBuilder: (context,
+                              url, downloadProgress) =>
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor:
+                                Colors.grey.shade100,
+                                child: Container(
+                                  height: 100.kh,
+                                  width: 260.kw,
+
+                                ),
+                              ),
+
+                          errorWidget: (context, url, error) => Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor:
+                            Colors.grey.shade100,
+                            child: Container(
+                              height: 100.kh,
+                              width: 260.kw,
+
+                            ),
                           ),
-                        ),
+                        ),),
                         SizedBox(
                           height: 30.kh,
                         ),
@@ -204,9 +250,8 @@ class BookingView extends GetView<BookingController> {
                             child: Center(
                                 child: Text(
                               "${controller.model}",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                              style: GoogleFonts.urbanist(color: Colors.white,)
+
                             ))),
                         SizedBox(
                           height: 20.kh,
@@ -217,9 +262,12 @@ class BookingView extends GetView<BookingController> {
                             Column(
                               children: [
                                 SvgPicture.asset("assets/icons/battery.svg"),
-                                Text(
-                                  "320 KM%",
-                                  style: TextStyle(fontSize: 14),
+                                Obx(()=>
+                                  Text(
+                                    "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType=="fule"?"Liter":"%"}",
+                                    style: GoogleFonts.urbanist(fontSize: 14),
+
+                                  ),
                                 ),
                               ],
                             ),
@@ -228,7 +276,8 @@ class BookingView extends GetView<BookingController> {
                                 SvgPicture.asset("assets/icons/pepole.svg"),
                                 Text(
                                   "${controller.seatCapcity}",
-                                  style: TextStyle(fontSize: 14),
+                                  style: GoogleFonts.urbanist(fontSize: 14),
+
                                 ),
                               ],
                             ),
@@ -242,7 +291,7 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Container(
                                 height: 35.kh,
-                                width: 100.kw,
+                                width: 120.kw,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius:
@@ -252,53 +301,53 @@ class BookingView extends GetView<BookingController> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/controlone.svg",
-                                      color: Color(0xFF5F5F5F),
-                                    ),
+                                    Icon(Icons.speed),
                                     SizedBox(
                                       width: 5.kh,
                                     ),
-                                    Text(
-                                      "Control 1",
-                                      style: TextStyle(
-                                        color: Color(0xFF5F5F5F),
+                                    Obx(()=>
+                                       Text(
+                                        "Mileage : ${controller.getBookingDetailsModel.value.data?.car?.mileage}",
+                                        style: GoogleFonts.urbanist(
+                                          color: Color(0xFF5F5F5F),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 )),
-                            Container(
-                                height: 35.kh,
-                                width: 100.kw,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
-                                    border: Border.all(
-                                        width: 0.5, color: Color(0xFF5F5F5F))),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      "assets/icons/controltwo.svg",
-                                      color: Color(0xFF5F5F5F),
-                                    ),
-                                    SizedBox(
-                                      width: 5.kh,
-                                    ),
-                                    Text(
-                                      "Control 2",
-                                      style: TextStyle(
-                                        color: Color(0xFF5F5F5F),
+                            InkWell(onTap: (){
+                              controller.openMap();
+                            },
+                              child: Container(
+                                  height: 35.kh,
+                                  width: 120.kw,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      border: Border.all(
+                                          width: 0.5, color: Color(0xFF5F5F5F))),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.map_outlined),
+                                      SizedBox(
+                                        width: 5.kh,
                                       ),
-                                    ),
-                                  ],
-                                )),
+                                      Text(
+                                        "Map view",
+                                        style: GoogleFonts.urbanist(
+                                          color: Color(0xFF5F5F5F),
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                            ),
                           ],
                         ),
 
                         SizedBox(
-                          height: 44.kh,
+                          height: 10.kh,
                         ),
 
                         Obx(
@@ -310,7 +359,9 @@ class BookingView extends GetView<BookingController> {
                               : ButtonDesign(
                                   name: "Verify and Inspect",
                                   onPressed: () {
-                                    controller
+                               //     controller.openMap();
+
+                                   /* controller
                                         .qrBarCodeScannerDialogPlugin.value
                                         .getScannedQrBarCode(
                                             context: context,
@@ -319,7 +370,7 @@ class BookingView extends GetView<BookingController> {
                                                   code.toString();
                                               print("qr code: ${controller.code.value}");
                                               if (controller.code.value ==
-                                                  controller.instanceOfGlobalData.QNR.value) {
+                                                  Get.find<GetStorageService>().getQNR) {
                                                 showMySnackbar(title: "Symbol Drive", msg: "Verified successfully");
                                                 print("if qr code: ${controller.code.value} || ${controller.instanceOfGlobalData.QNR.value}");
                                                 controller.carInspection.value = true;
@@ -328,9 +379,11 @@ class BookingView extends GetView<BookingController> {
                                                 showMySnackbar(title: "Error", msg: "You have not booked this car");
                                                 print("else qr code: ${controller.code.value} || ${controller.instanceOfGlobalData.QNR.value}");
 
-                                                //   controller.carInspection.value = true;
+
                                               }
-                                            });
+
+                                            });*/
+                                    controller.carInspection.value = true;
 
                                   }),
                         ),
@@ -359,7 +412,7 @@ class BookingView extends GetView<BookingController> {
                                           color: ColorUtil.kPrimary),
                                     ),
                                     label: Text('Cancel a trip',
-                                        style: TextStyle(
+                                        style: GoogleFonts.urbanist(
                                             color: ColorUtil.kPrimary)),
                                     icon: SvgPicture.asset(
                                         "assets/icons/canclebuttonicon.svg"),
@@ -384,7 +437,7 @@ class BookingView extends GetView<BookingController> {
                                                   Text(
                                                     "Are you sure want to cancel this ride?",
                                                     textAlign: TextAlign.center,
-                                                    style: TextStyle(
+                                                    style: GoogleFonts.urbanist(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 20.kh),
@@ -409,7 +462,7 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "No",
-                                                              style: TextStyle(
+                                                              style: GoogleFonts.urbanist(
                                                                   color: ColorUtil
                                                                       .kPrimary,
                                                                   fontSize:
@@ -447,7 +500,7 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "Yes, cancel ride",
-                                                              style: TextStyle(
+                                                              style: GoogleFonts.urbanist(
                                                                   color: Colors
                                                                       .white,
                                                                   fontSize:
@@ -504,7 +557,7 @@ class BookingView extends GetView<BookingController> {
                       topLeft: Radius.circular(20.0)),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                 // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                         child: Container(
@@ -519,7 +572,7 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   // fontSize: 24.kh,
                                   color: ColorUtil.ZammaBlack,
                                   fontWeight: FontWeight.bold),
@@ -535,11 +588,11 @@ class BookingView extends GetView<BookingController> {
                           ]),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16.0, 0, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
                       child: Column(
                         children: [
-                          Text("Free Waitig",
-                              style: TextStyle(color: Color(0xFFB4BCE1))),
+                           Text("Free Waiting",
+                              style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
                           SizedBox(
                             height: 5,
                           ),
@@ -547,11 +600,11 @@ class BookingView extends GetView<BookingController> {
                             () => controller.loader.value == true
                                 ? CircularProgressIndicator()
                                 : Text(
-                                    "${controller.instanceOfGlobalData.minute.value}:${controller.instanceOfGlobalData.start.value}",
-                                    style: TextStyle(
+                              "${controller.instanceOfGlobalData.waitingRideTime.value}", // "${controller.instanceOfGlobalData.minute.value}:${controller.instanceOfGlobalData.start.value}",
+                                    style: GoogleFonts.urbanist(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 28.kh,
-                                        color: Colors.white),
+                                        color: controller.instanceOfGlobalData.extraWaiting.value==true?Colors.red:Colors.white),
                                   ),
                           )
                         ],
@@ -581,7 +634,7 @@ class BookingView extends GetView<BookingController> {
                         ),
                         Text(
                           "Click respective side of images",
-                          style: TextStyle(fontSize: 16.kh),
+                          style: GoogleFonts.urbanist(fontSize: 16.kh),
                         ),
                         SizedBox(
                           height: 24.kh,
@@ -634,7 +687,7 @@ class BookingView extends GetView<BookingController> {
                                         children: [
                                           Text(
                                             "Front hood",
-                                            style: TextStyle(
+                                            style: GoogleFonts.urbanist(
                                               color: Color(0xFF000000),
                                             ),
                                           ),
@@ -692,7 +745,7 @@ class BookingView extends GetView<BookingController> {
                                         children: [
                                           Text(
                                             "Left Side",
-                                            style: TextStyle(
+                                            style: GoogleFonts.urbanist(
                                               color: Color(0xFF000000),
                                             ),
                                           ),
@@ -758,7 +811,7 @@ class BookingView extends GetView<BookingController> {
                                         children: [
                                           Text(
                                             "Right Side",
-                                            style: TextStyle(
+                                            style: GoogleFonts.urbanist(
                                               color: Color(0xFF000000),
                                             ),
                                           ),
@@ -816,7 +869,7 @@ class BookingView extends GetView<BookingController> {
                                         children: [
                                           Text(
                                             "Back Side",
-                                            style: TextStyle(
+                                            style: GoogleFonts.urbanist(
                                               color: Color(0xFF000000),
                                             ),
                                           ),
@@ -851,30 +904,45 @@ class BookingView extends GetView<BookingController> {
                               : ButtonDesign(
                                   name: "Done",
                                   onPressed: () {
+                                    if (controller.frontImageStatus.value == 0 || controller.leftImageStatus.value == 0 ||
+                                        controller.rightImageStatus.value == 0 || controller.backImageStatus == 0) {
+                                      showMySnackbar(title: "Error",
+                                          msg: "All image mandatory");
+                                    }
+
+                                 else{
+                                      controller.lodingMsg.value =
+                                      "Uploading image";
+                                      context.loaderOverlay.show();
                                     controller
                                         .uploadInspectionImage("S")
                                         .then((value) {
-                                      if (value == 1) {
-                                        context.loaderOverlay.show();
-                                        controller
-                                            .putImoblizerUnlock("unlocked")
-                                            .then((value) {
-                                          if (value != "locked") {
-                                            Future.delayed(
-                                                const Duration(seconds: 1), () {
-                                              context.loaderOverlay.hide();
-                                              controller.rideStart.value = true;
-                                              controller.carInspection.value =
-                                                  false;
-                                            });
-                                          }
-                                        });
-                                      } else {
-                                        showMySnackbar(
-                                            title: "Error",
-                                            msg: "Error while inspection");
-                                      }
+                                    if (value == 1) {
+
+                                    controller
+                                        .putImoblizerUnlock("unlocked")
+                                        .then((value) {
+                                    if (value != "locked") {
+                                    Future.delayed(
+                                    const Duration(seconds: 1), () {
+                                    context.loaderOverlay.hide();
+                                    controller.rideStart.value = true;
+                                    controller.carInspection.value =
+                                    false;
                                     });
+                                    }else{
+                                      showMySnackbar(
+                                          title: "Error",
+                                          msg: "Error unlocking imoblizer");
+                                    }
+                                    });
+                                    } else {
+                                    showMySnackbar(
+                                    title: "Error",
+                                    msg: "Error while inspection");
+                                    }
+                                    });
+                                    }
                                     //controller.rideStart.value = true;
                                   }),
                         ),
@@ -899,7 +967,7 @@ class BookingView extends GetView<BookingController> {
                                           color: ColorUtil.kPrimary),
                                     ),
                                     label: Text('Cancel a trip',
-                                        style: TextStyle(
+                                        style: GoogleFonts.urbanist(
                                             color: ColorUtil.kPrimary)),
                                     icon: SvgPicture.asset(
                                         "assets/icons/canclebuttonicon.svg"),
@@ -924,7 +992,7 @@ class BookingView extends GetView<BookingController> {
                                                   Text(
                                                     "Are you sure want to cancel this ride?",
                                                     textAlign: TextAlign.center,
-                                                    style: TextStyle(
+                                                    style: GoogleFonts.urbanist(
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 20.kh),
@@ -949,7 +1017,7 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "No",
-                                                              style: TextStyle(
+                                                              style: GoogleFonts.urbanist(
                                                                   color: ColorUtil
                                                                       .kPrimary,
                                                                   fontSize:
@@ -987,7 +1055,7 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "Yes, cancel ride",
-                                                              style: TextStyle(
+                                                              style: GoogleFonts.urbanist(
                                                                   color: Colors
                                                                       .white,
                                                                   fontSize:
@@ -1026,8 +1094,8 @@ class BookingView extends GetView<BookingController> {
   }
 
   Widget rideStart(double initialVal) {
-    if (!controller.instanceOfGlobalData.checkRideTimer.value)
-      controller.instanceOfGlobalData.rideTimer();
+    if (!controller.instanceOfGlobalData.checkRideTicker.value)
+      controller.getOnGoingHistory();
     return DraggableScrollableSheet(
       initialChildSize: initialVal,
       minChildSize: 0.7,
@@ -1046,7 +1114,7 @@ class BookingView extends GetView<BookingController> {
                       topLeft: Radius.circular(20.0)),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+             //     crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                         child: Container(
@@ -1054,41 +1122,20 @@ class BookingView extends GetView<BookingController> {
                       width: 100.kw,
                       color: Colors.white,
                     )),
-                    /*Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "",
-                              style: TextStyle(
-                                // fontSize: 24.kh,
-                                  color: ColorUtil.ZammaBlack,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            InkWell(
-                              onTap: () {
-                               // controller.rideStart.value = false;
-                                Scaffold.of(context).showBodyScrim(false, 0.0);
-                              },
-                              child: SvgPicture.asset("assets/icons/cross.svg",
-                                  color: Colors.white),
-                            ),
-                          ]),
-                    ),*/
+
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.0, 24, 0, 0),
                       child: Column(
                         children: [
                           Text("Onging Trip",
-                              style: TextStyle(color: Color(0xFFB4BCE1))),
+                              style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
                           SizedBox(
                             height: 5,
                           ),
                           Obx(
-                            () => Text(
-                              "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",
-                              style: TextStyle(
+                            () =>controller.loader.value==true? CircularProgressIndicator(color: Colors.white) : Text(
+                                "${controller.instanceOfGlobalData.rideTime.value}", /* "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 28.kh,
                                   color: Colors.white),
@@ -1118,13 +1165,54 @@ class BookingView extends GetView<BookingController> {
                         SizedBox(
                           height: 30.kh,
                         ),
-                        Container(
-                          height: 100.kh,
-                          width: 260.kw,
-                          child: Center(
-                            child: Image.asset("assets/images/bigCars.png"),
+                        Obx(()=>CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          imageUrl:
+                          "${controller.getBookingDetailsModel.value.data?.car?.images?[0]}",
+                          imageBuilder:
+                              (context, imageProvider) =>
+                              Container(
+
+                                margin: EdgeInsets.fromLTRB(
+                                    0, 10, 10, 10),
+                                height: 140.kh,
+                                width: 260.kw,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+
+                                  ),
+
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
+                                  ),
+                                ),
+                              ),
+                          progressIndicatorBuilder: (context,
+                              url, downloadProgress) =>
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor:
+                                Colors.grey.shade100,
+                                child: Container(
+                                  height: 100.kh,
+                                  width: 260.kw,
+
+                                ),
+                              ),
+
+                          errorWidget: (context, url, error) => Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor:
+                            Colors.grey.shade100,
+                            child: Container(
+                              height: 100.kh,
+                              width: 260.kw,
+
+                            ),
                           ),
-                        ),
+                        ),),
                         SizedBox(
                           height: 30.kh,
                         ),
@@ -1139,7 +1227,7 @@ class BookingView extends GetView<BookingController> {
                             child: Center(
                                 child: Text(
                               "${controller.model}",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                 color: Colors.white,
                               ),
                             ))),
@@ -1152,9 +1240,11 @@ class BookingView extends GetView<BookingController> {
                             Column(
                               children: [
                                 SvgPicture.asset("assets/icons/battery.svg"),
-                                Text(
-                                  "320 KM%",
-                                  style: TextStyle(fontSize: 14),
+                                Obx(()=>
+                                   Text(
+                                     "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType=="fule"?"Liter":"%"}",
+                                    style: GoogleFonts.urbanist(fontSize: 14),
+                                  ),
                                 ),
                               ],
                             ),
@@ -1163,7 +1253,7 @@ class BookingView extends GetView<BookingController> {
                                 SvgPicture.asset("assets/icons/pepole.svg"),
                                 Text(
                                   "${controller.seatCapcity}",
-                                  style: TextStyle(fontSize: 14),
+                                  style: GoogleFonts.urbanist(fontSize: 14),
                                 ),
                               ],
                             ),
@@ -1230,7 +1320,7 @@ class BookingView extends GetView<BookingController> {
                                                     .putUnlock("unlocked");
                                               } else {
                                                 showMySnackbar(
-                                                    title: "Msg",
+                                                    title: "Message",
                                                     msg:
                                                         "Already Unlocked Central Lock");
                                               }
@@ -1263,7 +1353,7 @@ class BookingView extends GetView<BookingController> {
                                                       .lockModel.value.state ==
                                                   "locked") {
                                                 showMySnackbar(
-                                                    title: "Msg",
+                                                    title: "Message",
                                                     msg:
                                                         "Already locked Central Lock");
                                               } else {
@@ -1314,7 +1404,7 @@ class BookingView extends GetView<BookingController> {
                                     } ,
                                       child: Text(
                                         "Report a problem",
-                                        style: TextStyle(
+                                        style: GoogleFonts.urbanist(
                                           color: Color(0xFF5F5F5F),
                                         ),
                                       ),
@@ -1324,25 +1414,33 @@ class BookingView extends GetView<BookingController> {
                           ],
                         ),
 
-                        SizedBox(
+                       /* SizedBox(
                           height: 10.kh,
                         ),
                         ListTile(
                             leading: Text(
                               "Order Summary",
-                              style: TextStyle(fontSize: 16.kh),
+                              style: GoogleFonts.urbanist(fontSize: 16.kh),
                             ),
-                            trailing: Icon(Icons.arrow_forward_ios)),
+                            trailing: Icon(Icons.arrow_forward_ios)),*/
                         SizedBox(
                           height: 10.kh,
                         ),
 
-                        ButtonDesign(
-                            name: "Pause and close the door",
-                            onPressed: () {
-                              //controller.carBooking.value = false;
-                              // Get.toNamed(Routes.LOGIN);
-                            }),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey,
+                            fixedSize: Size(344.kw, 56.kh),
+                          ),
+                          onPressed: (){},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("Pause"), // <-- Text
+                            ],
+                          ),
+                        ),
+
                         SizedBox(
                           height: 10.kh,
                         ),
@@ -1356,7 +1454,7 @@ class BookingView extends GetView<BookingController> {
                                   width: 1.5, color: ColorUtil.kPrimary),
                             ),
                             label: Text('Complete the trip',
-                                style: TextStyle(color: ColorUtil.kPrimary)),
+                                style: GoogleFonts.urbanist(color: ColorUtil.kPrimary)),
                             icon: SvgPicture.asset("assets/icons/complete.svg"),
                             onPressed: () {
                               showDialog(
@@ -1378,7 +1476,7 @@ class BookingView extends GetView<BookingController> {
                                           Text(
                                             "Are you sure want to end this ride?",
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: GoogleFonts.urbanist(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20.kh),
                                           ),
@@ -1400,7 +1498,7 @@ class BookingView extends GetView<BookingController> {
                                                   child: Center(
                                                     child: Text(
                                                       "No",
-                                                      style: TextStyle(
+                                                      style: GoogleFonts.urbanist(
                                                           color: ColorUtil
                                                               .kPrimary,
                                                           fontSize: 16.kh),
@@ -1437,7 +1535,7 @@ class BookingView extends GetView<BookingController> {
                                                   child: Center(
                                                     child: Text(
                                                       "Yes, End ride",
-                                                      style: TextStyle(
+                                                      style: GoogleFonts.urbanist(
                                                           color: Colors.white,
                                                           fontSize: 16.kh),
                                                     ),
@@ -1483,7 +1581,7 @@ class BookingView extends GetView<BookingController> {
                     topLeft: Radius.circular(20.0)),
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                       child: Container(
@@ -1499,7 +1597,7 @@ class BookingView extends GetView<BookingController> {
                           Transform.translate(offset:Offset(0,-50),
                             child: Text(
                               "",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                 // fontSize: 24.kh,
                                   color: ColorUtil.ZammaBlack,
                                   fontWeight: FontWeight.bold),
@@ -1518,18 +1616,18 @@ class BookingView extends GetView<BookingController> {
                         ]),
                   ),*/
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 34, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(16.0, 34, 16, 0),
                     child: Column(
                       children: [
                         Text("Onging Trip",
-                            style: TextStyle(color: Color(0xFFB4BCE1))),
+                            style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
                         SizedBox(
                           height: 5,
                         ),
                         Obx(
                           () => Text(
-                            "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",
-                            style: TextStyle(
+                              "${controller.instanceOfGlobalData.rideTime.value}",   /*  "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
+                            style: GoogleFonts.urbanist(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 28.kh,
                                 color: Colors.white),
@@ -1562,7 +1660,7 @@ class BookingView extends GetView<BookingController> {
                       ),
                       Text(
                         "Click respective side of images",
-                        style: TextStyle(fontSize: 16.kh),
+                        style: GoogleFonts.urbanist(fontSize: 16.kh),
                       ),
                       SizedBox(
                         height: 24.kh,
@@ -1614,7 +1712,7 @@ class BookingView extends GetView<BookingController> {
                                       children: [
                                         Text(
                                           "Front hood",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                             color: Color(0xFF000000),
                                           ),
                                         ),
@@ -1672,7 +1770,7 @@ class BookingView extends GetView<BookingController> {
                                       children: [
                                         Text(
                                           "Left Side",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                             color: Color(0xFF000000),
                                           ),
                                         ),
@@ -1738,7 +1836,7 @@ class BookingView extends GetView<BookingController> {
                                       children: [
                                         Text(
                                           "Right Side",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                             color: Color(0xFF000000),
                                           ),
                                         ),
@@ -1796,7 +1894,7 @@ class BookingView extends GetView<BookingController> {
                                       children: [
                                         Text(
                                           "Back Side",
-                                          style: TextStyle(
+                                          style: GoogleFonts.urbanist(
                                             color: Color(0xFF000000),
                                           ),
                                         ),
@@ -1835,9 +1933,10 @@ class BookingView extends GetView<BookingController> {
                                       controller.rightImageStatus.value == 0 || controller.backImageStatus == 0) {
                                     showMySnackbar(title: "Error",
                                         msg: "All image mandatory");
-                                  }else {
+                                  }
+                                  else {
                                     controller.lodingMsg.value =
-                                    "Checking central lock";
+                                    "Updating central lock";
                                     context.loaderOverlay.show();
                                     controller.putAutoCentralLock("locked")
                                         .then((value) {
@@ -1845,7 +1944,7 @@ class BookingView extends GetView<BookingController> {
                                         Future.delayed(
                                             const Duration(seconds: 1), () {
                                           controller.lodingMsg.value =
-                                          "Checking immobilizer lock";
+                                          "Updating immobilizer lock";
                                           controller
                                               .putImoblizerLock("locked").then((
                                               value) {
@@ -1853,7 +1952,9 @@ class BookingView extends GetView<BookingController> {
                                               Future.delayed(
                                                   const Duration(
                                                       seconds: 1), () {
-                                                context.loaderOverlay.hide();
+                                                controller.lodingMsg.value =
+                                                "Uploading image";
+
                                                 controller
                                                     .uploadInspectionImage("E")
                                                     .then((value) {
@@ -1866,9 +1967,12 @@ class BookingView extends GetView<BookingController> {
                                                     false;
                                                     controller.rideStart.value =
                                                     false;
+                                                    context.loaderOverlay.hide();
                                                     controller.carBooking
                                                         .value = false;
+
                                                   } else {
+                                                    context.loaderOverlay.hide();
                                                     showMySnackbar(
                                                         title: "Error",
                                                         msg: "Error while inspection");
@@ -1982,12 +2086,12 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "Total Travel Time",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.w600, fontSize: 16.kh),
                             ),
                             Text(
                               "${controller.finalTralvelTime.value} min",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Color(0xff008000) ,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.kh),
@@ -1995,6 +2099,29 @@ class BookingView extends GetView<BookingController> {
                           ],
                         ),
                       ),
+                     /* SizedBox(
+                        height: 16.kh,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(32.0.kh, 0, 32.0.kh, 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Milage",
+                              style: GoogleFonts.urbanist(
+                                  fontWeight: FontWeight.w600, fontSize: 16.kh),
+                            ),
+                            Text(
+                              "${controller.milage.value} ",
+                              style: GoogleFonts.urbanist(
+                                  color: Color(0xff008000) ,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.kh),
+                            ),
+                          ],
+                        ),
+                      ),*/
                       SizedBox(
                         height: 16.kh,
                       ),
@@ -2005,12 +2132,12 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "Total Distance",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.w600, fontSize: 16.kh),
                             ),
                             Text(
                               "0 miles",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Color(0xff008000),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.kh),
@@ -2028,12 +2155,12 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "Paid Amount",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.w600, fontSize: 16.kh),
                             ),
                             Text(
                               "\$${controller.paidAmount.value}",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Color(0xff008000),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.kh),
@@ -2051,12 +2178,12 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "Total Amount",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.w600, fontSize: 16.kh),
                             ),
                             Text(
                               "\$${controller.finalTotalAmount.value}",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Color(0xff008000),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.kh),
@@ -2074,12 +2201,12 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "Waiting Charges",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.w600, fontSize: 16.kh),
                             ),
                             Text(
                               "\$${controller.extraWaitingCharge.value}",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Color(0xff008000),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.kh),
@@ -2097,12 +2224,12 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "Extra Travel Charges",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.w600, fontSize: 16.kh),
                             ),
                             Text(
                               "\$${controller.extraTravelTimeCharge.value}",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Color(0xff008000),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.kh),
@@ -2121,14 +2248,14 @@ class BookingView extends GetView<BookingController> {
                           children: [
                             Text(
                               "Total payble then ",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 16.kh,
                               ),
                             ),
                             Text(
                               "\$${double.parse((controller.totalFare.value).toStringAsFixed(3))}",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Color(0xffFF0000),
                                   fontWeight: FontWeight.w700,
                                   fontSize: 20.kh),
@@ -2169,7 +2296,7 @@ class BookingView extends GetView<BookingController> {
                                         else{
                                           Get.offAllNamed(Routes.HOME);
                                           showMySnackbar(
-                                              title: "Msg",
+                                              title: "Message",
                                               msg: "Payment Successful");
                                         }
                                       }),

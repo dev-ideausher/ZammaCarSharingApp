@@ -3,7 +3,9 @@ import 'package:flutter_credit_card/credit_card_brand.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
 
@@ -74,10 +76,11 @@ class InputCardDetailsView extends GetView<InputCardDetailsController> {
                           labelText: 'Number',
                           hintText: 'XXXX XXXX XXXX XXXX',
                           border: OutlineInputBorder(),
-                          floatingLabelStyle: TextStyle(color: ColorUtil.kPrimary),
+                          floatingLabelStyle: GoogleFonts.urbanist(color: ColorUtil.kPrimary),
                           alignLabelWithHint: true,
                           enabled: true,
-                          labelStyle: TextStyle(color: Colors.grey),
+                          labelStyle: GoogleFonts.urbanist(color: Colors.grey),
+
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                             BorderSide(color: ColorUtil.kPrimary, width: 2),
@@ -85,10 +88,12 @@ class InputCardDetailsView extends GetView<InputCardDetailsController> {
                         ),
                         expiryDateDecoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          floatingLabelStyle: TextStyle(color: ColorUtil.kPrimary),
+                          floatingLabelStyle:GoogleFonts.urbanist(color: ColorUtil.kPrimary) ,
+
                           alignLabelWithHint: true,
                           enabled: true,
-                          labelStyle: TextStyle(color: Colors.grey),
+                          labelStyle: GoogleFonts.urbanist(color: Colors.grey) ,
+
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                             BorderSide(color: ColorUtil.kPrimary, width: 2),
@@ -98,10 +103,11 @@ class InputCardDetailsView extends GetView<InputCardDetailsController> {
                         ),
                         cvvCodeDecoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          floatingLabelStyle: TextStyle(color: ColorUtil.kPrimary),
+                          floatingLabelStyle: GoogleFonts.urbanist(color: ColorUtil.kPrimary) ,
+
                           alignLabelWithHint: true,
                           enabled: true,
-                          labelStyle: TextStyle(color: Colors.grey),
+                          labelStyle: GoogleFonts.urbanist(color: Colors.grey) ,
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                             BorderSide(color: ColorUtil.kPrimary, width: 2),
@@ -111,10 +117,12 @@ class InputCardDetailsView extends GetView<InputCardDetailsController> {
                         ),
                         cardHolderDecoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          floatingLabelStyle: TextStyle(color: ColorUtil.kPrimary),
+                          floatingLabelStyle: GoogleFonts.urbanist(color: ColorUtil.kPrimary) ,
+
                           alignLabelWithHint: true,
                           enabled: true,
-                          labelStyle: TextStyle(color: Colors.grey),
+                          labelStyle: GoogleFonts.urbanist(color: Colors.grey),
+
                           focusedBorder: OutlineInputBorder(
                             borderSide:
                             BorderSide(color: ColorUtil.kPrimary, width: 2),
@@ -134,7 +142,25 @@ class InputCardDetailsView extends GetView<InputCardDetailsController> {
                             height: 100.kh,
                             child: Lottie.asset('assets/json/car_loader.json'),
                           ),
-                        ),):Padding(
+                        ),):
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: ButtonDesign(
+                              name: "Add Card",
+                              onPressed: () {
+                                if (controller.formKey.currentState!.validate()) {
+                                  print('valid!');
+                                  controller.addCard();
+                                } else {
+                                  print('invalid!');
+                                }
+                              }),
+                        ),
+
+                     ),
+
+
+                       /* Padding(
                           padding: const EdgeInsets.fromLTRB(16,16,16,0),
                           child: ElevatedButton(style: ElevatedButton.styleFrom(
                             primary: ColorUtil.kPrimary, // background
@@ -142,7 +168,8 @@ class InputCardDetailsView extends GetView<InputCardDetailsController> {
                           ),
                             child:  Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('ADD CARD'),
+                              child: Text('ADD CARD',style: GoogleFonts.urbanist(color: ColorUtil.kPrimary) ,
+                               ),
                             ),
                             onPressed: () {
                               if (controller.formKey.currentState!.validate()) {
@@ -154,7 +181,7 @@ class InputCardDetailsView extends GetView<InputCardDetailsController> {
                             },
                           ),
                         ),
-                      ),
+                      ),*/
                       /* Padding(
                         padding: const EdgeInsets.only(left: 16.0, right: 16),
                         child: controller.loader.value == true

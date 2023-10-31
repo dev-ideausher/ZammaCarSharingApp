@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:zammacarsharing/app/services/FirebaseMessagingUtils.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
 import 'package:zammacarsharing/app/services/super_controller.dart';
 import 'package:zammacarsharing/app/services/tokenCreatorAndValidator.dart';
@@ -15,7 +16,8 @@ Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     systemNavigationBarColor: Colors.black, // navigation bar color
     statusBarColor: ColorUtil.kPrimary, // status bar color
-    statusBarBrightness:Brightness.light
+    statusBarBrightness:Brightness.light,
+
   ));
   Get.put(UserStatusController());
   await Firebase.initializeApp();
@@ -25,7 +27,7 @@ Future<void> main() async {
       DeviceOrientation.portraitUp,
     ],
   );
-
+  await FirebaseMessagingUtils.firebaseMessagingUtils.initFirebaseMessaging();
   return runApp(GetMaterialApp(
     defaultTransition: Transition.fade,
     smartManagement: SmartManagement.full,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
 
@@ -15,9 +16,9 @@ class DocumentTypeListView extends GetView<DocumentTypeListController> {
           elevation: 0.1,
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
-          title: const Text(
+          title:  Text(
             'Documents',
-            style: TextStyle(color: Colors.black),
+            style: GoogleFonts.urbanist(color: Colors.black),
           ),
           centerTitle: true,
 
@@ -35,7 +36,7 @@ class DocumentTypeListView extends GetView<DocumentTypeListController> {
                     offset: Offset(-16, 0),
                     child: Text(
                       "Licence",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.kh,
@@ -54,7 +55,7 @@ class DocumentTypeListView extends GetView<DocumentTypeListController> {
                     offset: Offset(-16, 0),
                     child: Text(
                       "Insurance",
-                      style: TextStyle(
+                      style: GoogleFonts.urbanist(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 18.kh,

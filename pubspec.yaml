@@ -18,6 +18,9 @@ dependencies:
   flutter_credit_card: ^3.0.6
   camera: ^0.10.5
   path_provider: ^2.0.15
+  url_launcher: ^6.0.0
+  flutter_local_notifications: ^15.1.0+1
+  firebase_messaging: ^14.6.4
 
 
   get: 4.6.5
@@ -46,6 +49,8 @@ dependencies:
   qr_bar_code_scanner_dialog: ^0.0.5
   path: ^1.8.2
   geocoding: ^2.1.0
+
+
 
 dev_dependencies: 
   flutter_lints: ^2.0.0

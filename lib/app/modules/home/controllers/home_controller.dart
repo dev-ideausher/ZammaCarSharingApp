@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:zammacarsharing/app/modules/models/booking_ongoing_model.dart';
+import 'package:zammacarsharing/app/modules/models/car_pricing_model.dart';
 import 'package:zammacarsharing/app/modules/models/categories_model.dart';
 import 'package:zammacarsharing/app/modules/models/create_bookin_model.dart';
 import 'package:zammacarsharing/app/modules/models/get_cars_model.dart';
@@ -19,6 +20,8 @@ import 'package:zammacarsharing/app/modules/models/image_response_model.dart';
 import 'package:zammacarsharing/app/modules/models/imspection_model.dart';
 import 'package:zammacarsharing/app/modules/models/login_details_model.dart';
 import 'package:zammacarsharing/app/modules/models/ride_history_model.dart';
+import 'package:zammacarsharing/app/routes/app_pages.dart';
+import 'package:zammacarsharing/app/services/FirebaseMessagingUtils.dart';
 import 'package:zammacarsharing/app/services/checkLocationPermission.dart';
 import 'package:zammacarsharing/app/services/dio/api_service.dart';
 import 'package:zammacarsharing/app/services/dio/endpoints.dart';
@@ -48,13 +51,14 @@ class HomeController extends GetxController {
   RxInt timeTapAttention = 0.obs;
   RxInt distanceTapAttention = 0.obs;
   RxInt planTapAttention = 100.obs;
-   RxDouble finalAmount = 10.0.obs;
+   RxDouble finalAmount = 0.0.obs;
   Rx<CategoriesModels> categoriesModels = CategoriesModels().obs;
   Rx<GetCars> carsModel = GetCars().obs;
   final imageUpload = ImageUpload().obs;
   Rx<logedInDetails> logindetails = logedInDetails().obs;
   Rx<BookingOngoing> bookingOngoing = BookingOngoing().obs;
   Rx<RideHistory> rideHistory = RideHistory().obs;
+  Rx<CarPriceById> carPriceById = CarPriceById().obs;
 
   Rx<CreateBookinModel> createBookinModel = CreateBookinModel().obs;
   Rx<InspectionModel> inspectionModel = InspectionModel().obs;
@@ -62,6 +66,9 @@ class HomeController extends GetxController {
   RxString model = "".obs;
   RxString carImage = "".obs;
   RxString seatCapcity = "".obs;
+  RxString milage = "0".obs;
+  RxString fuelType = "".obs;
+  RxString fuelLavel = "".obs;
   RxString carId = "".obs;
   RxString qnr = "".obs;
   RxDouble selectedCarLatitude = 0.0.obs;
@@ -76,6 +83,8 @@ class HomeController extends GetxController {
   final backImageStatus = 0.obs;
   final leftImageStatus = 0.obs;
   final rightImageStatus = 0.obs;
+  final extraMinuteCharges =0.0.obs;
+  final extraMilesCharges =0.0.obs;
   final Completer<GoogleMapController> mapCompleter = Completer();
 
   // RxDouble lng=(-122.677433.obs) ;
@@ -91,6 +100,8 @@ class HomeController extends GetxController {
   final Completer<GoogleMapController> controllerr = Completer();
 RxBool mapLoader = true.obs;
 RxBool isMapLoaded = false.obs;
+  RxInt timeLength = 0.obs;
+  RxInt milesLength = 0.obs;
   // List<Marker> marker = [];
 
   // on below line we are specifying our camera position
@@ -99,24 +110,38 @@ RxBool isMapLoaded = false.obs;
   @override
   Future<void> onInit() async {
     super.onInit();
-   /* listOfMarker.value.add(
-      Marker(
-        markerId: const MarkerId("source"),
-        position: center,
-        icon: sourceMark,
-      ),
-    );*/
-
 
     final User? user = await firebaseAuth.currentUser;
-    if (user != null)
+    if (user != null) {
+
       await Get.find<TokenCreateGenrate>().validateCreatetoken(user);
+      fcmSubscribe();
+    }
 
     instanceOfGlobalData.isloginStatusGlobal.value =
         Get.find<GetStorageService>().getisLoggedIn;
   await  getCarsAndCategories();
+    await  getInProcessOrOngoingRide();
   }
 
+  fcmSubscribe(){
+    if(Get.find<GetStorageService>().getCustomUserId.isNotEmpty)
+      FirebaseMessagingUtils.firebaseMessagingUtils
+          .subFcm(Get
+          .find<GetStorageService>()
+          .getCustomUserId);
+
+
+   // print("fcm subscribe in nav bar ${Get.find<GetStorageService>().getUserId}");
+  }
+
+getInProcessOrOngoingRide() async {
+  final User? user = await firebaseAuth.currentUser;
+  if (user != null) {
+    getOnGoingHistory();
+    getInProcessHistory();
+  }
+}
   Future<void> getCarsAndCategories() async {
     await  getCurrentPosition();
    await getCars();
@@ -214,6 +239,10 @@ print("");
                 .cars?[i]
                 ?.seatCapacity)
                 .toString();
+            milage.value=(carsModel
+                .value
+                 .cars?[i]?.mileage)
+                .toString();
             carId.value = (carsModel.value.cars?[i]?.Id)
                 .toString();
            qnr.value = (carsModel.value.cars?[i]?.qnr)
@@ -276,6 +305,7 @@ print("");
     print(
         "position lat  : ${position.latitude}, long : ${position.longitude}");
   }
+
   Future<String> getAddressFromLatLng() async {
     String address="";
     placemarkFromCoordinates(selectedCarLatitude.value,selectedCarLongitude.value)
@@ -299,12 +329,6 @@ print("");
     });
     return address;
   }
-
-
-
-
-
-
 
 
   Future<int> createBooking({required String carId, required String qnr}
@@ -363,8 +387,25 @@ print("");
     }
   }
 
+  Future<void> getCarPricing() async {
 
+    try {
+      final response = await APIManager.getCarPricingById(carId: carId.value);
+    carPriceById.value =
+      CarPriceById.fromJson(jsonDecode(response.toString()));
+    timeLength.value=(carPriceById.value.carPricing?.pricingRules?.length)!;
+    milesLength.value=(carPriceById.value.carPricing?.mileageRates?.length)!;
+      extraMinuteCharges.value=double.parse("${carPriceById.value.carPricing?.extraMinuteRate}");
+      extraMilesCharges.value=double.parse("${carPriceById.value.carPricing?.extraMileRate}");
+      final tPrice=carPriceById.value.carPricing?.pricingRules?[0]?.price;
+      final dPrice=carPriceById.value.carPricing?.mileageRates?[0]?.price;
+      finalAmount.value=(tPrice!+dPrice!);
+    } catch (e) {
 
+      debugPrint("error while fetching car pricing");
+
+    }
+  }
 
   Future<Uint8List> getBytesFromAsset({required String path,required int width})async {
     ByteData data = await rootBundle.load(path);
@@ -377,28 +418,75 @@ print("");
         format: ui.ImageByteFormat.png))!
         .buffer.asUint8List();
   }
+RxBool statusCheck=false.obs;
+  RxBool statusCheckTwo=false.obs;
+
+  Future<int> getInProcessHistory() async {
+    try {
+
+      statusCheck.value=true;
+        final response = await APIManager.getinProcessRideHistory();
+        rideHistory.value =
+            RideHistory.fromJson(jsonDecode(response.toString()));
+        /*instanceOfGlobalData.waitingLastStampToseconds(
+            startTime: DateTime.parse(
+                (rideHistory.value.data?[0]?.createdAt).toString()));*/
+        Get.toNamed(Routes.BOOKING, arguments: [
+          (rideHistory.value.data?[0]?.Id),
+          ("${rideHistory.value.data?[0]?.car?.brand} ${rideHistory.value.data?[0]?.car?.model}"),
+          (rideHistory.value.data?[0]?.car
+              ?.seatCapacity),true
+        ]);
+      Get.find<GetStorageService>().setQNR=(rideHistory.value.data?[0]?.qnr).toString();
+      statusCheck.value=false;
+      return 1;
+    } catch (e) {
+      statusCheck.value=false;
+    print("eroor while fetching inProcessRide : $e");
+      return 0;
+    }
+  }
+
+  Future<int> getOnGoingHistory() async {
+    try {
+      statusCheckTwo.value=true;
+
+        final response = await APIManager.getOnGoingRideHistory();
+        rideHistory.value =
+            RideHistory.fromJson(jsonDecode(response.toString()));
+       /* instanceOfGlobalData.lastStampToseconds(
+            startTime: DateTime.parse(
+                (rideHistory.value.data?[0]?.pickupTime).toString()));*/
+        Get.toNamed(Routes.BOOKING, arguments: [
+          (rideHistory.value.data?[0]?.Id),
+          ("${rideHistory.value.data?[0]?.car?.brand} ${rideHistory.value.data?[0]?.car?.model}"),
+          (rideHistory.value.data?[0]?.car
+              ?.seatCapacity),false
+        ]);
+      Get.find<GetStorageService>().setQNR=(rideHistory.value.data?[0]?.qnr).toString();
+      statusCheckTwo.value=false;
+      return 1;
+    } catch (e) {
+      statusCheckTwo.value=false;
+      print("eroor while fetching ongoingRide : $e");
+      return 0;
+    }
+  }
+
+
 
   calculateCharges(){
+
+    final tPrice=carPriceById.value.carPricing?.pricingRules?[timeTapAttention.value]?.price;
+    final dPrice=carPriceById.value.carPricing?.mileageRates?[distanceTapAttention.value]?.price;
+
     double timeCharges=0;
     double distanceCharge=0;
-    if((timeTapAttention.value+1)>1){
 
-      timeCharges=(((timeTapAttention.value+1)*10)-(timeTapAttention.value*2));
-    }else{
-      timeCharges=10;
-    }
-if((distanceTapAttention.value*10)>10){
-  distanceCharge=double.parse((((distanceTapAttention.value)*3)-((distanceTapAttention.value-1)*0.25)).toStringAsFixed(3));
-
-
-}else{
-  if(distanceTapAttention.value==1)
-    distanceCharge=3;
-  else
-    distanceCharge=0;
-}
   //  final timeCharges=(timeTapAttention.value+1)*10;
     //final distanceCharge=(distanceTapAttention.value*10)*10;
-     finalAmount.value=timeCharges+distanceCharge;
+     finalAmount.value=(tPrice!+dPrice!);
   }
+
+
 }

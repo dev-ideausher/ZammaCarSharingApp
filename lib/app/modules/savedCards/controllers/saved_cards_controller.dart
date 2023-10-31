@@ -54,6 +54,7 @@ class SavedCardsController extends GetxController {
     try {
       print("ride Start");
       loader.value = true;
+      cardList.value.clear();
       final response = await APIManager.getSavedCards();
       savedCardsresponse.value = savedCardsModel.fromJson(
         jsonDecode(

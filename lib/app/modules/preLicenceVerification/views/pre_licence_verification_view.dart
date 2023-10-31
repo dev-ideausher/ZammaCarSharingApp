@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
@@ -20,9 +21,9 @@ class PreLicenceVerificationView
           elevation: 1,
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
-          title: const Text(
+          title:  Text(
             'Licence Verification',
-            style: TextStyle(color: Colors.black),
+            style: GoogleFonts.urbanist(color: Colors.black),
           ),
           centerTitle: true,
         ),
@@ -38,9 +39,9 @@ class PreLicenceVerificationView
               child: Image.asset("assets/images/poster.png",fit: BoxFit.cover),
             ),
             SizedBox(height: 24.kh,),
-            Text("Driver’s licence verification",style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),),
+            Text("Driver’s licence verification",style: GoogleFonts.urbanist(fontSize: 24,fontWeight: FontWeight.bold),),
                 SizedBox(height: 8.kh,),
-                Text("To start using Zamma Cars, your city requires us to verify your driver’s licence. Please scan your valid driver’s licence to proceed",style: TextStyle(color: ColorUtil.ZammaGrey),),
+                Text("To start using Zamma Cars, your city requires us to verify your driver’s licence. Please scan your valid driver’s licence to proceed",style: GoogleFonts.urbanist(color: ColorUtil.ZammaGrey),),
                 Spacer(),
                 ButtonDesign(name: "Next",onPressed: (){
                   Get.toNamed(Routes.LICENCE_VERIFICATION_FORM);

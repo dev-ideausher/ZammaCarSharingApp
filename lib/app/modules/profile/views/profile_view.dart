@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zammacarsharing/app/modules/settings/controllers/settings_controller.dart';
@@ -20,7 +19,6 @@ class ProfileView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -55,7 +53,7 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                       Text(
                         "My details are",
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontWeight: FontWeight.bold, fontSize: 24.kh),
                       ),
                       SizedBox(
@@ -63,7 +61,7 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                       Text(
                         "Enter your personal details",
-                        style: TextStyle(color: Colors.grey),
+                        style: GoogleFonts.urbanist(color: Colors.grey),
                       ),
                       SizedBox(
                         height: 30.kh,
@@ -71,43 +69,45 @@ class ProfileView extends GetView<ProfileController> {
                       Center(
                         child: controller.profilestatus.value != 0
                             ? Center(
-                          child: CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            maxRadius: 60,
-                            backgroundImage:
-                            FileImage(controller.pickedImage.value),
-                          ),
-                        ):CachedNetworkImage(
-                          fit: BoxFit.fill,
-                          imageUrl:
-                              "${controller.logindetails.value.user?.image}",
-                          imageBuilder: (context, imageProvider) =>
-                              CircleAvatar(
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.grey,
+                                  maxRadius: 60,
+                                  backgroundImage:
+                                      FileImage(controller.pickedImage.value),
+                                ),
+                              )
+                            : CachedNetworkImage(
+                                fit: BoxFit.fill,
+                                imageUrl:
+                                    "${controller.logindetails.value.user?.image}",
+                                imageBuilder: (context, imageProvider) =>
+                                    CircleAvatar(
+                                        backgroundColor: Colors.grey.shade50,
+                                        maxRadius: 60,
+                                        backgroundImage: imageProvider
+                                        //  FileImage(controller.pickedImage.value),
+                                        ),
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: CircleAvatar(
+                                    // backgroundColor: Colors.grey,
+                                    maxRadius: 60,
+                                    // backgroundImage:imageProvider
+                                    //  FileImage(controller.pickedImage.value),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    CircleAvatar(
                                   backgroundColor: Colors.grey.shade50,
                                   maxRadius: 60,
-                                  backgroundImage: imageProvider
+                                  child: Lottie.asset(
+                                      'assets/json/default_profile.json'),
                                   //  FileImage(controller.pickedImage.value),
-                                  ),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: CircleAvatar(
-                              // backgroundColor: Colors.grey,
-                              maxRadius: 60,
-                              // backgroundImage:imageProvider
-                              //  FileImage(controller.pickedImage.value),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => CircleAvatar(
-                            backgroundColor: Colors.grey.shade50,
-                            maxRadius: 60,
-                            child: Lottie.asset(
-                                'assets/json/default_profile.json'),
-                            //  FileImage(controller.pickedImage.value),
-                          ),
-                        ),
+                                ),
+                              ),
                       ),
                       SizedBox(
                         height: 30.kh,
@@ -131,53 +131,86 @@ class ProfileView extends GetView<ProfileController> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: <Widget>[
-                                        InkWell(onTap:(){
-                                  controller.pickImage();
-                                  Get.back();
-                                  },
+                                        InkWell(
+                                          onTap: () {
+                                            controller.pickImage();
+                                            Get.back();
+                                          },
                                           child: Container(
-                                            margin: EdgeInsets.fromLTRB(16,0,16,0),
+                                            margin: EdgeInsets.fromLTRB(
+                                                16, 0, 16, 0),
                                             height: 60.kh,
                                             width: double.infinity,
-                                            child: Center(child: Text("Photo Gallery",style: TextStyle(color: Color(0xff007AFF),fontSize: 18,),)),
+                                            child: Center(
+                                                child: Text(
+                                              "Photo Gallery",
+                                              style: GoogleFonts.urbanist(
+                                                color: Color(0xff007AFF),
+                                                fontSize: 18,
+                                              ),
+                                            )),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.only(
-                                                    topRight: Radius.circular(15),
+                                                    topRight:
+                                                        Radius.circular(15),
                                                     topLeft:
                                                         Radius.circular(15))),
                                           ),
                                         ),
-                                        SizedBox(height: 1,),
-                                        InkWell(onTap: (){
-                                          controller.pickFromCamera();
-                                          Get.back();
-                                        },
+                                        SizedBox(
+                                          height: 1,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            controller.pickFromCamera();
+                                            Get.back();
+                                          },
                                           child: Container(
-                                            margin: EdgeInsets.fromLTRB(16,0,16,0),
+                                            margin: EdgeInsets.fromLTRB(
+                                                16, 0, 16, 0),
                                             height: 60.kh,
                                             width: double.infinity,
-                                            child: Center(child: Text("Camera",style: TextStyle(color: Color(0xff007AFF),fontSize: 18,))),
+                                            child: Center(
+                                                child: Text("Camera",
+                                                    style: GoogleFonts.urbanist(
+                                                      color: Color(0xff007AFF),
+                                                      fontSize: 18,
+                                                    ))),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius: BorderRadius.only(
-                                                    bottomRight: Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
                                                     bottomLeft:
-                                                    Radius.circular(15))),
+                                                        Radius.circular(15))),
                                           ),
                                         ),
-                                        SizedBox(height: 10,),
-                                        InkWell(onTap: (){
-                                          Get.back();
-                                        },
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        InkWell(
+                                          onTap: () {
+                                            Get.back();
+                                          },
                                           child: Container(
-                                            margin: EdgeInsets.fromLTRB(16,0,16,0),
+                                            margin: EdgeInsets.fromLTRB(
+                                                16, 0, 16, 0),
                                             height: 60.kh,
                                             width: double.infinity,
-                                            child: Center(child: Text("Cancle",style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold),)),
+                                            child: Center(
+                                                child: Text(
+                                              "Cancle",
+                                              style: GoogleFonts.urbanist(
+                                                  color: Colors.red,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                borderRadius: BorderRadius.all(Radius.circular(15),)),
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15),
+                                                )),
                                           ),
                                         )
                                       ],
@@ -204,14 +237,14 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                       Text(
                         "Name",
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: 16.kh, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 16.kh,
+                        height: 8.kh,
                       ),
-                      Obx(()=>
-                         TextFieldDesign(
+                      Obx(
+                        () => TextFieldDesign(
                           hintText: 'Enter your name as per driver’s licence',
                           controller: controller.nameController.value,
                         ),
@@ -221,26 +254,26 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                       Text(
                         "Email",
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: 16.kh, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 16.kh,
+                        height: 8.kh,
                       ),
                       TextFieldDesign(
                         controller: controller.emailController.value,
-                        hintText: 'Email (optional)',
+                        hintText: 'Email id',
                       ),
                       SizedBox(
                         height: 16.kh,
                       ),
                       Text(
                         "Date of birth",
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: 16.kh, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 16.kh,
+                        height: 8.kh,
                       ),
                       DataOfBirthDesign(
                         dateController: controller.dateController.value,
@@ -252,12 +285,10 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                       Text(
                         "Gender",
-                        style: TextStyle(
+                        style: GoogleFonts.urbanist(
                             fontSize: 16.kh, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
-                        height: 16.kh,
-                      ),
+
                       Row(
                         children: [
                           Row(
@@ -296,26 +327,30 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                         ],
                       ),
-                      Spacer(),
-              controller.updateProfile.value==true? Center(
-                child: SizedBox(
-                    width: 200.kh,
-                    height: 100.kh,
-                    child: Lottie.asset('assets/json/car_loader.json')),
-              ):ButtonDesign(
-                          onPressed: () {
-                            controller.userOnBoard().then((value) {
-                              if(value==1)
-                              {
-                                Get.toNamed(Routes.PRE_LICENCE_VERIFICATION);
-                              }
-                              else{
-                                print("Some issue while onboarding");
-                              }
-                            });
-
-                          },
-                          name: "Next"),
+                      // Spacer(),
+                      SizedBox(
+                        height: 16.kh,
+                      ),
+                      controller.updateProfile.value == true
+                          ? Center(
+                              child: SizedBox(
+                                  width: 200.kh,
+                                  height: 100.kh,
+                                  child: Lottie.asset(
+                                      'assets/json/car_loader.json')),
+                            )
+                          : ButtonDesign(
+                              onPressed: () {
+                                controller.userOnBoard().then((value) {
+                                  if (value == 1) {
+                                    Get.toNamed(
+                                        Routes.PRE_LICENCE_VERIFICATION);
+                                  } else {
+                                    print("Some issue while onboarding");
+                                  }
+                                });
+                              },
+                              name: "Next"),
                     ],
                   ),
           ),

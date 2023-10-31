@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
@@ -16,6 +17,8 @@ class OtpView extends GetView<OtpController> {
 
   @override
   Widget build(BuildContext context) {
+    if(!controller.checkTimer.value)
+      controller.startTimer();
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
@@ -29,7 +32,7 @@ class OtpView extends GetView<OtpController> {
               ),
               Text(
                 "My OTP is",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.kh),
+                style: GoogleFonts.urbanist(fontWeight: FontWeight.bold, fontSize: 24.kh),
               ),
               SizedBox(
                 height: 10.kh,
@@ -38,18 +41,18 @@ class OtpView extends GetView<OtpController> {
                 text: new TextSpan(
                   // Note: Styles for TextSpans must be explicitly defined.
                   // Child text spans will inherit styles from parent
-                  style: new TextStyle(
+                  style:  GoogleFonts.urbanist(
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
                     new TextSpan(
                         text: 'Check your SMS. We have sent you OTP at \n ',
-                        style: TextStyle(color: Colors.grey)),
+                        style: GoogleFonts.urbanist(color: Colors.grey)),
                     new TextSpan(
                         text:
-                            '${controller.instanceOfOtpNeededData.mobileNumber}',
-                        style: new TextStyle(
+                            '${(controller.instanceOfOtpNeededData.mobileNumber).substring(0, 3)}*******${(controller.instanceOfOtpNeededData.mobileNumber).substring((controller.instanceOfOtpNeededData.mobileNumber).length - 3,(controller.instanceOfOtpNeededData.mobileNumber).length)}',
+                        style:  GoogleFonts.urbanist(
                             color: Colors.red, fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -62,7 +65,7 @@ class OtpView extends GetView<OtpController> {
                 numberOfFields: 6,
                 borderColor: ColorUtil.kPrimary,
                 focusedBorderColor: ColorUtil.kPrimary,
-                //  styles: otpTextStyles,
+                //  styles: otpGoogleFonts.urbanists,
                 showFieldAsBox: false,
                 borderWidth: 3.0,
 //runs when a code is typed in
@@ -81,25 +84,26 @@ class OtpView extends GetView<OtpController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("I did not recieve a code ",
-                      style: TextStyle(color: Colors.grey)),
+                      style: GoogleFonts.urbanist(color: Colors.grey)),
                   InkWell(
                       onTap: () {
                         Auth().verifyPhone(
                             controller.instanceOfOtpNeededData.mobileNumber,
                             false);
+                        if(!(controller.timer.isActive))
                         controller.startTimer();
                       },
                       child: controller.reSendLoader.value == false
                           ? Text(
                               "Resend",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   color: Colors.red,
                                   decoration: TextDecoration.underline,
                                   fontWeight: FontWeight.bold),
                             )
                           : Text(
                               "00:${controller.start.value}s",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 17,
                                   color: Colors.red),

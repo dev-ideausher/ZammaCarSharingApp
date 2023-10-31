@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
 
 import '../controllers/help_controller.dart';
@@ -15,9 +16,9 @@ class HelpView extends GetView<HelpController> {
         elevation: 0.1,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title: const Text(
+        title:  Text(
           'Help',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.urbanist(color: Colors.black),
         ),
         centerTitle: true,
 
@@ -33,7 +34,7 @@ class HelpView extends GetView<HelpController> {
                   offset: Offset(-16, 0),
                   child: Text(
                     "Privacy Policy",
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.kh,
@@ -50,7 +51,7 @@ class HelpView extends GetView<HelpController> {
                   offset: Offset(-16, 0),
                   child: Text(
                     "Term’s & Condtions",
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.kh,
@@ -67,7 +68,7 @@ class HelpView extends GetView<HelpController> {
                   offset: Offset(-16, 0),
                   child: Text(
                     "Support",
-                    style: TextStyle(
+                    style: GoogleFonts.urbanist(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18.kh,

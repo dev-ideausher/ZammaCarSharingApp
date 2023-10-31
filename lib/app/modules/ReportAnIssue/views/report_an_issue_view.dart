@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
@@ -21,9 +22,9 @@ class ReportAnIssueView extends GetView<ReportAnIssueController> {
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
         ),
-        title: const Text(
+        title:  Text(
           'Report An Issue',
-          style: TextStyle(color: ColorUtil.ZammaBlack),
+          style: GoogleFonts.urbanist(color: ColorUtil.ZammaBlack),
         ),
         centerTitle: true,
       ),
@@ -41,7 +42,7 @@ class ReportAnIssueView extends GetView<ReportAnIssueController> {
               ),
               Text(
                 "What’s the issue",
-                style: TextStyle(
+                style: GoogleFonts.urbanist(
                     fontSize: 24,
                     color: ColorUtil.ZammaBlack,
                     fontWeight: FontWeight.bold),
@@ -63,7 +64,7 @@ class ReportAnIssueView extends GetView<ReportAnIssueController> {
                         child: Obx(() => SizedBox(
                             width: 200.kw,
                             child: Text("${controller.filename.value}",
-                                style: TextStyle(color: ColorUtil.kPrimary)))),
+                                style: GoogleFonts.urbanist(color: ColorUtil.kPrimary)))),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 16, 0),
@@ -83,7 +84,7 @@ class ReportAnIssueView extends GetView<ReportAnIssueController> {
               ),
               Text(
                 "Add comment ",
-                style: TextStyle(
+                style: GoogleFonts.urbanist(
                     fontSize: 20,
                     color: ColorUtil.ZammaBlack,
                     fontWeight: FontWeight.bold),

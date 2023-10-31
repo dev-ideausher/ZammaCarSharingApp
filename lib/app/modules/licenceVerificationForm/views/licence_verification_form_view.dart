@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
@@ -24,9 +25,9 @@ class LicenceVerificationFormView
         elevation: 1,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title: const Text(
+        title:  Text(
           'Licence details',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.urbanist(color: Colors.black),
         ),
         centerTitle: true,
       ),
@@ -35,15 +36,15 @@ class LicenceVerificationFormView
           child: Obx(()=>
              Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-            Text("Licence Number",style: TextStyle(fontSize: 14.kh,fontWeight: FontWeight.bold),),
+            Text("Licence Number",style: GoogleFonts.urbanist(fontSize: 14.kh,fontWeight: FontWeight.bold),),
               SizedBox(height: 8.kh,),
               TextFieldDesign(hintText: "Enter licence number",controller: controller.licenceNumberController.value),
                   SizedBox(height: 24.kh,),
-                  Text("Valid till",style: TextStyle(fontSize: 14.kh,fontWeight: FontWeight.bold),),
+                  Text("Valid till",style: GoogleFonts.urbanist(fontSize: 14.kh,fontWeight: FontWeight.bold),),
                   SizedBox(height: 8.kh,),
                   DataOfBirthDesign(dateController: controller.dateController.value,monthController: controller.monthController.value,yearController: controller.yearController.value),
                   SizedBox(height: 24.kh,),
-                  Text("Upload Licence",style: TextStyle(fontSize: 14.kh,fontWeight: FontWeight.bold),),
+                  Text("Upload Licence",style: GoogleFonts.urbanist(fontSize: 14.kh,fontWeight: FontWeight.bold),),
                   SizedBox(height: 12.kh,),
                   controller.profilestatus.value != 0?Container(
                     height: 188.kh,
@@ -82,7 +83,7 @@ class LicenceVerificationFormView
                                     margin: EdgeInsets.fromLTRB(16,0,16,0),
                                     height: 60.kh,
                                     width: double.infinity,
-                                    child: Center(child: Text("Photo Gallery",style: TextStyle(color: Color(0xff007AFF),fontSize: 18,),)),
+                                    child: Center(child: Text("Photo Gallery",style: GoogleFonts.urbanist(color: Color(0xff007AFF),fontSize: 18,),)),
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.only(
@@ -100,7 +101,7 @@ class LicenceVerificationFormView
                                     margin: EdgeInsets.fromLTRB(16,0,16,0),
                                     height: 60.kh,
                                     width: double.infinity,
-                                    child: Center(child: Text("Camera",style: TextStyle(color: Color(0xff007AFF),fontSize: 18,))),
+                                    child: Center(child: Text("Camera",style: GoogleFonts.urbanist(color: Color(0xff007AFF),fontSize: 18,))),
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.only(
@@ -117,7 +118,7 @@ class LicenceVerificationFormView
                                     margin: EdgeInsets.fromLTRB(16,0,16,0),
                                     height: 60.kh,
                                     width: double.infinity,
-                                    child: Center(child: Text("Cancle",style: TextStyle(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold),)),
+                                    child: Center(child: Text("Cancle",style: GoogleFonts.urbanist(color: Colors.red,fontSize: 18,fontWeight: FontWeight.bold),)),
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.all(Radius.circular(15),)),

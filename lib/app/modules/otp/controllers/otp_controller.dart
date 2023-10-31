@@ -11,6 +11,7 @@ class OtpController extends GetxController {
   //TODO: Implement OtpController
 RxString smsCode="".obs;
 Rx<bool>reSendLoader=false.obs;
+Rx<bool>checkTimer=false.obs;
 late OtpNeededData instanceOfOtpNeededData ;
 final instanceOfGlobalData=Get.find<GlobalData>();
   @override
@@ -53,6 +54,7 @@ late Timer timer;
 var start = 30.obs;
 
 void startTimer() {
+  checkTimer.value=true;
   const oneSec = const Duration(seconds: 1);
   timer = new Timer.periodic(
     oneSec,
@@ -61,6 +63,7 @@ void startTimer() {
 
         timer.cancel();
         start.value = 30;
+       // checkTimer.value=false;
         reSendLoader.value=false;
       } else {
         reSendLoader.value=true;

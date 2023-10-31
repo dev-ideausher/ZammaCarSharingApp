@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
 class ButtonDesign extends StatelessWidget {
@@ -67,7 +68,7 @@ class ButtonDesignDeactive extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(name,style: TextStyle(color: Colors.white),), // <-- Text
+          Text(name,style: GoogleFonts.urbanist(color: Colors.white),), // <-- Text
           SizedBox(
             width: 10.kw,
           ),

@@ -43,7 +43,7 @@ class RepeatedApiCalling extends GetxService{
 
       instanceOfGlobalData.loader.value = false;
 
-      showMySnackbar(title: "Msg", msg: "Ride canceled");
+      showMySnackbar(title: "Message", msg: "Ride canceled");
 
       return 1;
     } catch (e) {

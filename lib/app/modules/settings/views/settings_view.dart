@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/auth.dart';
@@ -25,9 +26,9 @@ class SettingsView extends GetView<SettingsController> {
         elevation: 0.1,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title: const Text(
+        title: Text(
           'Settings',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.urbanist( color: Colors.black,fontSize: 24,fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
       ),
@@ -58,9 +59,9 @@ class SettingsView extends GetView<SettingsController> {
                               children: [
                                 Text(
                                   "Hey, ${controller.logindetails.value.user?.name}",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.urbanist( fontSize: 32,
+                                      fontWeight: FontWeight.bold)
+
                                 ),
                                 SizedBox(
                                   height: 10,
@@ -91,18 +92,18 @@ class SettingsView extends GetView<SettingsController> {
                                         ),
                                         Text(
                                           "${controller.logindetails.value.user?.noOfRides}",
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold),
+                                          style: GoogleFonts.urbanist(  fontSize: 24,
+                                              fontWeight: FontWeight.bold)
+
                                         ),
                                         SizedBox(
                                           height: 6.kh,
                                         ),
                                         Text(
                                           "Rides",
-                                          style: TextStyle(
-                                              fontSize: 16,
+                                          style: GoogleFonts.urbanist(  fontSize: 16,
                                               color: Color(0xff666666)),
+
                                         ),
                                       ]),
                                     ),
@@ -128,18 +129,19 @@ class SettingsView extends GetView<SettingsController> {
                                         ),
                                         Text(
                                           "${controller.logindetails.value.user?.totalTravelKm}",
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold),
+                                          style:GoogleFonts.urbanist(  fontSize: 24,
+                                              fontWeight: FontWeight.bold)
+
+
                                         ),
                                         SizedBox(
                                           height: 6.kh,
                                         ),
                                         Text(
                                           "Kilometers",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Color(0xff666666)),
+                                          style: GoogleFonts.urbanist(  fontSize: 16,
+                                              color: Color(0xff666666))
+
                                         ),
                                       ]),
                                     ),
@@ -156,10 +158,10 @@ class SettingsView extends GetView<SettingsController> {
                                 color: Colors.white,
                                 child: Text(
                                   "Welcome, User",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 32.kh,
-                                      fontWeight: FontWeight.bold),
+                                  style: GoogleFonts.urbanist(  color: Colors.black,
+                                    fontSize: 32.kh,
+                                    fontWeight: FontWeight.bold,)
+                             ,
                                 ),
                               ),
                               SizedBox(
@@ -179,21 +181,20 @@ class SettingsView extends GetView<SettingsController> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Sign up!",
-                                        style: TextStyle(
-                                            color: ColorUtil.kPrimary,
-                                            fontSize: 16.kh,
-                                            fontWeight: FontWeight.bold),
+                                        "Login!",
+                                        style: GoogleFonts.urbanist(  color: ColorUtil.kPrimary,
+                                          fontSize: 16.kh,
+                                          fontWeight: FontWeight.bold,)
+
                                       ),
                                       SizedBox(
                                         height: 8.kh,
                                       ),
                                       Text(
-                                        "Please register to book cars ",
-                                        style: TextStyle(
-                                          color: ColorUtil.ZammaGrey,
-                                          fontSize: 14.kh,
-                                        ),
+                                        "Please login to book your ride ",
+                                        style: GoogleFonts.urbanist(  color: ColorUtil.ZammaGrey,
+                                          fontSize: 14.kh,)
+
                                       ),
                                     ],
                                   ),
@@ -204,7 +205,7 @@ class SettingsView extends GetView<SettingsController> {
                     SizedBox(
                       height: 8.kh,
                     ),
-                    ListTile(onTap: (){
+                    controller.instanceOfGlobalData.isloginStatusGlobal.value == true?ListTile(onTap: (){
                       if(controller.instanceOfGlobalData.isloginStatusGlobal.value == true){
 
                       Get.toNamed(Routes.PROFILE);
@@ -218,14 +219,12 @@ class SettingsView extends GetView<SettingsController> {
                             offset: Offset(-16, 0),
                             child: Text(
                               "Profile setting",
-                              style: TextStyle(
-                                color: Colors.black,
+                              style: GoogleFonts.urbanist(  color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18.kh,
-                              ),
+                                fontSize: 18.kh,)
                             )),
                         trailing: Icon(Icons.arrow_forward_ios),
-                        tileColor: Colors.white),
+                        tileColor: Colors.white):SizedBox(),
                     controller.instanceOfGlobalData.isloginStatusGlobal.value == true?  SizedBox(
                       height: 3.kh,
                     ):SizedBox(
@@ -244,11 +243,10 @@ class SettingsView extends GetView<SettingsController> {
                               offset: Offset(-16, 0),
                               child: Text(
                                 "View Documents",
-                                style: TextStyle(
-                                  color: Colors.black,
+                                style: GoogleFonts.urbanist(  color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18.kh,
-                                ),
+                                  fontSize: 18.kh,),
+
                               ),),
                           trailing: Icon(Icons.arrow_forward_ios),
                           tileColor: Colors.white),
@@ -269,11 +267,10 @@ class SettingsView extends GetView<SettingsController> {
                               offset: Offset(-16, 0),
                               child: Text(
                                 "Ride History",
-                                style: TextStyle(
-                                  color: Colors.black,
+                                style: GoogleFonts.urbanist(  color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18.kh,
-                                ),
+                                  fontSize: 18.kh,)
+
                               )),
                           trailing: Icon(Icons.arrow_forward_ios),
                           tileColor: Colors.white),
@@ -285,20 +282,24 @@ class SettingsView extends GetView<SettingsController> {
                     ):SizedBox(
 
                     ),
-                    controller.instanceOfGlobalData.isloginStatusGlobal.value == true? ListTile(
-                        leading: SvgPicture.asset("assets/icons/payment.svg"),
-                        title: Transform.translate(
-                            offset: Offset(-16, 0),
-                            child: Text(
-                              "Payments",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.kh,
-                              ),
-                            )),
-                        trailing: Icon(Icons.arrow_forward_ios),
-                        tileColor: Colors.white):SizedBox(
+                    controller.instanceOfGlobalData.isloginStatusGlobal.value == true? InkWell(onTap: (){
+Get.toNamed(Routes.TOTAL_PAYMENT);
+                    },
+                      child: ListTile(
+                          leading: SvgPicture.asset("assets/icons/payment.svg"),
+                          title: Transform.translate(
+                              offset: Offset(-16, 0),
+                              child: Text(
+                                "Payments",
+                                style: GoogleFonts.urbanist(  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18.kh,)
+
+
+                              )),
+                          trailing: Icon(Icons.arrow_forward_ios),
+                          tileColor: Colors.white),
+                    ):SizedBox(
                       height: 3.kh,
                     ),
                     SizedBox(
@@ -314,11 +315,10 @@ class SettingsView extends GetView<SettingsController> {
                               offset: Offset(-16, 0),
                               child: Text(
                                 "Help",
-                                style: TextStyle(
-                                  color: Colors.black,
+                                style: GoogleFonts.urbanist(  color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18.kh,
-                                ),
+                                  fontSize: 18.kh,)
+
                               )),
                           trailing: Icon(Icons.arrow_forward_ios),
                           tileColor: Colors.white),
@@ -349,9 +349,9 @@ class SettingsView extends GetView<SettingsController> {
                                           Text(
                                             "Are you sure want to \n logout ?",
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20.kh),
+                                            style: GoogleFonts.urbanist(  fontWeight: FontWeight.bold,
+                                                fontSize: 20.kh)
+
                                           ),
                                         ]),
                                       ),
@@ -371,10 +371,8 @@ class SettingsView extends GetView<SettingsController> {
                                                   child: Center(
                                                     child: Text(
                                                       "Back",
-                                                      style: TextStyle(
-                                                          color: ColorUtil
-                                                              .kPrimary,
-                                                          fontSize: 16.kh),
+                                                      style: GoogleFonts.urbanist( color: ColorUtil.kPrimary,fontSize: 16.kh)
+
                                                     ),
                                                   ),
                                                 ),
@@ -404,9 +402,8 @@ class SettingsView extends GetView<SettingsController> {
                                                   child: Center(
                                                     child: Text(
                                                       "Logout",
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 16.kh),
+                                                      style: GoogleFonts.urbanist(color: Colors.white, fontSize: 16.kh)
+
                                                     ),
                                                   ),
                                                 ),
@@ -425,17 +422,16 @@ class SettingsView extends GetView<SettingsController> {
                                     offset: Offset(-16, 0),
                                     child: Text(
                                       "Logout",
-                                      style: TextStyle(
-                                        color: Colors.red,
+                                      style: GoogleFonts.urbanist(color: Colors.red,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18.kh,
-                                      ),
+                                        fontSize: 18.kh,)
+
                                     )),
                                 trailing: Icon(Icons.arrow_forward_ios),
                                 tileColor: Colors.white),
                           )
                         : SizedBox(),
-                    controller.instanceOfGlobalData.isloginStatusGlobal.value == true? InkWell(
+               /*     controller.instanceOfGlobalData.isloginStatusGlobal.value == true? InkWell(
                       onTap: () {
 
                         Get.toNamed(Routes.REPORT_AN_ISSUE);
@@ -448,7 +444,7 @@ class SettingsView extends GetView<SettingsController> {
                             offset: Offset(-16, 0),
                             child: Text(
                               "Report an issue",
-                              style: TextStyle(
+                              style: GoogleFonts.urbanist(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18.kh,
@@ -456,18 +452,18 @@ class SettingsView extends GetView<SettingsController> {
                             ),),
                           trailing: Icon(Icons.arrow_forward_ios),
                           tileColor: Colors.white),
-                    ):SizedBox(),
+                    ):SizedBox(),*/
                     Spacer(),
                     Column(
                       children: [
                         Text("Version 1.0",
-                            style: TextStyle(color: ColorUtil.ZammaGrey)),
+                            style: GoogleFonts.urbanist(color: ColorUtil.ZammaGrey)),
                         SizedBox(
                           height: 8.kh,
                         ),
                         Text(
                           "Developed by Idea Usher",
-                          style: TextStyle(color: Color(0xff6B4EFF)),
+                          style: GoogleFonts.urbanist(color: Color(0xff6B4EFF)),
                         ),
                         SizedBox(
                           height: 20.kh,

@@ -255,7 +255,7 @@ class Auth extends GetxController {
     }
   }
 
-  Future<bool> verifyOTP(
+ /* Future<bool> verifyOTP(
       {required String smsCode,
       required String verificationId,
       required String phoneNumber}) async {
@@ -285,6 +285,37 @@ class Auth extends GetxController {
       print(e);
       return false;
     }
+  }*/
+  Future<bool> verifyOTP(
+      {required String smsCode,
+        required String verificationId,
+        required String phoneNumber}) async {
+ //   UtilWidgets.showLoading();
+    bool verified = false;
+    try {
+      var firebaseAuth1 = PhoneAuthProvider.credential(
+          verificationId: verificationId, smsCode: smsCode);
+
+      await firebaseAuth
+          .signInWithCredential(firebaseAuth1)
+          .then((value) async {
+        if (value.user != null) {
+          Get.find<GetStorageService>().jwToken= await value.user!.getIdToken();
+
+          verified = true;
+        } else {
+          showMySnackbar(title: "Error",msg: "Entered Otp is wrong");
+        //  UtilWidgets.showToast(message: "Entered Otp is wrong", isError: true);
+        }
+      });
+    } catch (e) {
+    //  UtilWidgets.hideLoading();
+     // UtilWidgets.showToast(message: e.toString(), isError: true);
+      showMySnackbar(title: "Error",msg:"Entered Otp is wrong");
+    } finally {
+     // UtilWidgets.hideLoading();
+    }
+    return verified;
   }
 
   Future<void> logout() async {

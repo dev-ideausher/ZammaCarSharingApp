@@ -1,16 +1,19 @@
 import 'package:get/get.dart';
 
-import 'package:zammacarsharing/app/modules/CameraDesign/bindings/camera_design_binding.dart';
-import 'package:zammacarsharing/app/modules/CameraDesign/views/camera_design_view.dart';
-import 'package:zammacarsharing/app/modules/InputCardDetails/bindings/input_card_details_binding.dart';
-import 'package:zammacarsharing/app/modules/InputCardDetails/views/input_card_details_view.dart';
-
+import '../modules/CameraDesign/bindings/camera_design_binding.dart';
+import '../modules/CameraDesign/views/camera_design_view.dart';
 import '../modules/CompletedRideDetails/bindings/completed_ride_details_binding.dart';
 import '../modules/CompletedRideDetails/views/completed_ride_details_view.dart';
+import '../modules/InputCardDetails/bindings/input_card_details_binding.dart';
+import '../modules/InputCardDetails/views/input_card_details_view.dart';
 import '../modules/Report/bindings/report_binding.dart';
 import '../modules/Report/views/report_view.dart';
 import '../modules/ReportAnIssue/bindings/report_an_issue_binding.dart';
 import '../modules/ReportAnIssue/views/report_an_issue_view.dart';
+import '../modules/TotalPayment/bindings/total_payment_binding.dart';
+import '../modules/TotalPayment/views/total_payment_view.dart';
+import '../modules/Zone/bindings/zone_binding.dart';
+import '../modules/Zone/views/zone_view.dart';
 import '../modules/booking/bindings/booking_binding.dart';
 import '../modules/booking/views/booking_view.dart';
 import '../modules/documentTypeList/bindings/document_type_list_binding.dart';
@@ -47,6 +50,7 @@ import '../modules/viewInsurance/bindings/view_insurance_binding.dart';
 import '../modules/viewInsurance/views/view_insurance_view.dart';
 import '../modules/viewLicence/bindings/view_licence_binding.dart';
 import '../modules/viewLicence/views/view_licence_view.dart';
+
 
 part 'app_routes.dart';
 
@@ -171,5 +175,16 @@ class AppPages {
       page: () => CameraDesignView(),
       binding: CameraDesignBinding(),
     ),
+    GetPage(
+      name: _Paths.ZONE,
+      page: () => ZoneView(),
+      binding: ZoneBinding(),
+    ),
+    GetPage(
+      name: _Paths.TOTAL_PAYMENT,
+      page: () => const TotalPaymentView(),
+      binding: TotalPaymentBinding(),
+    ),
+
   ];
 }

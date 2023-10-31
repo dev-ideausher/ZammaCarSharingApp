@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/report_controller.dart';
 
@@ -12,9 +13,9 @@ class ReportView extends GetView<ReportController> {
         elevation: 0.1,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title: const Text(
+        title:  Text(
           'Settings',
-          style: TextStyle(color: Colors.black),
+          style: GoogleFonts.urbanist(color: Colors.black),
         ),
         centerTitle: true,
       ),
