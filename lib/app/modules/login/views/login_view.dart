@@ -109,7 +109,7 @@ class LoginView extends GetView<LoginController> {
                     ),
 
                     Spacer(),
-                   controller.instanceOfGlobalData.loader.value==true?Center(child: SizedBox(width: 200.kh,height: 100.kh,child: Lottie.asset('assets/json/car_loader.json'))): ButtonDesign(onPressed: (){
+                   controller.instanceOfGlobalData.loader.value== true ? Center(child: SizedBox(width: 200.kh,height: 100.kh,child: Lottie.asset('assets/json/car_loader.json'))): ButtonDesign(onPressed: (){
                       controller.getOtpFunction();
 
                     },name: "Next",),

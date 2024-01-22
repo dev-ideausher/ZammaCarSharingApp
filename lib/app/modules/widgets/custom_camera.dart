@@ -34,7 +34,7 @@ class GenralCamera {
                   },
                   controller: CameraController(
                     snapshot.data![0],
-                    ResolutionPreset.high,
+                    ResolutionPreset.low,
                     enableAudio: false,
                   ),
                 );

@@ -13,8 +13,8 @@ class DeviceDioClient {
   DeviceDioClient(this._dio, {this.isOverlayLoader = false, this.showSnakbar = false, this.header}) {
     _dio
       ..options.baseUrl = Endpoints.baseUrl
-      ..options.connectTimeout = Endpoints.connectionTimeout
-      ..options.receiveTimeout = Endpoints.receiveTimeout
+      ..options.connectTimeout = Duration(milliseconds :Endpoints.connectionTimeout)
+      ..options.receiveTimeout = Duration(milliseconds:Endpoints.receiveTimeout)
       ..options.responseType = ResponseType.json
       ..options.headers=header
       ..interceptors.add(DeviceInterceptorsInterceptors(isOverlayLoader: isOverlayLoader, showSnakbar: showSnakbar));

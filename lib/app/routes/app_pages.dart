@@ -30,6 +30,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/otp/bindings/otp_binding.dart';
 import '../modules/otp/views/otp_view.dart';
+import '../modules/paymentFinalDetails/bindings/payment_final_details_binding.dart';
+import '../modules/paymentFinalDetails/views/payment_final_details_view.dart';
 import '../modules/preInsuranceVerification/bindings/pre_insurance_verification_binding.dart';
 import '../modules/preInsuranceVerification/views/pre_insurance_verification_view.dart';
 import '../modules/preLicenceVerification/bindings/pre_licence_verification_binding.dart';
@@ -50,7 +52,6 @@ import '../modules/viewInsurance/bindings/view_insurance_binding.dart';
 import '../modules/viewInsurance/views/view_insurance_view.dart';
 import '../modules/viewLicence/bindings/view_licence_binding.dart';
 import '../modules/viewLicence/views/view_licence_view.dart';
-
 
 part 'app_routes.dart';
 
@@ -185,6 +186,10 @@ class AppPages {
       page: () => const TotalPaymentView(),
       binding: TotalPaymentBinding(),
     ),
-
+    GetPage(
+      name: _Paths.PAYMENT_FINAL_DETAILS,
+      page: () => const PaymentFinalDetailsView(),
+      binding: PaymentFinalDetailsBinding(),
+    ),
   ];
 }

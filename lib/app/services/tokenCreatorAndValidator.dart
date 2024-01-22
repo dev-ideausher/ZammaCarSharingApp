@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:zammacarsharing/app/services/globalData.dart';
 import 'package:zammacarsharing/app/services/storage.dart';
 
 
@@ -16,17 +17,26 @@ class TokenCreateGenrate extends GetxService{
     bool hasExpired = true;
 
     while (hasExpired) {
-      mytoken.value = await user.getIdToken();
+      Get.find<GlobalData>().loader.value = false;
+      mytoken.value = "${await firebaseAuth.currentUser!.getIdToken()}";
       // generate token
-      await Future.delayed(Duration(milliseconds: 200));
-      hasExpired = JwtDecoder.isExpired(mytoken.value);
+      try{
+        await Future.delayed(Duration(milliseconds: 200));
+        hasExpired = JwtDecoder.isExpired(mytoken.value);
+        Get.find<GetStorageService>().jwToken = mytoken.value;
+        Get.find<GetStorageService>().setUserId = user.uid;
+        print("userid : ${user.uid}");
+        print("coustomUserId : ${Get.find<GetStorageService>().getCustomUserId}");
 
-      Get.find<GetStorageService>().jwToken = mytoken.value;
-      Get.find<GetStorageService>().setUserId = user.uid;
-      print("userid : ${user.uid}");
-      print("coustomUserId : ${Get.find<GetStorageService>().getCustomUserId}");
-      //Get.find<GetStorageService>().setisLoggedIn=true;
-      log("${Get.find<GetStorageService>().jwToken}");
+        //Get.find<GetStorageService>().setisLoggedIn=true;
+
+        log("${Get.find<GetStorageService>().jwToken}");
+
+      }catch(e){
+        Get.find<GlobalData>().loader.value = false;
+
+        print(e);
+      }
 
     }
   }

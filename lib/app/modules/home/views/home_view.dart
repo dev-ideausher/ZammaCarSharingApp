@@ -42,23 +42,39 @@ class HomeView extends GetView<HomeController> {
           () => Stack(
             children: [
               Container(
-                height: Get.find<GlobalData>().isloginStatusGlobal.value == false?610.kh:695.kh,
-            //    color: Colors.blue,
-                child:controller.mapLoader.value ?Center(child: SizedBox(width: 200.kh,height: 100.kh,child: Lottie.asset('assets/json/car_loader.json'))):controller.isMapLoaded.value?GoogleMap(
-                  // on below line setting camera position
-                  initialCameraPosition: kGoogle,
-                  // on below line specifying map type.
-                  mapType: MapType.normal,
-                  // on below line setting user location enabled.
-                  myLocationEnabled: true,
-                  // on below line setting compass enabled.
-                  compassEnabled: true,
-                  markers: Set.of(controller.listOfMarker.value),
-                  // on below line specifying controller on map complete.
-                  onMapCreated: (GoogleMapController mcontroller) {
-                    controller.mapCompleter.complete(mcontroller);
-                  },
-                ):Center(child: Text("Location permission requied.",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18.kh),)),
+                height:
+                    Get.find<GlobalData>().isloginStatusGlobal.value == false
+                        ? 610.kh
+                        : 695.kh,
+                //    color: Colors.blue,
+                child: controller.mapLoader.value
+                    ? Center(
+                        child: SizedBox(
+                            width: 200.kh,
+                            height: 100.kh,
+                            child: Lottie.asset('assets/json/car_loader.json')))
+                    : controller.isMapLoaded.value
+                        ? GoogleMap(
+                            // on below line setting camera position
+                            initialCameraPosition: kGoogle,
+                            // on below line specifying map type.
+                            mapType: MapType.normal,
+                            // on below line setting user location enabled.
+                            myLocationEnabled: true,
+                            // on below line setting compass enabled.
+                            compassEnabled: true,
+                            markers: Set.of(controller.listOfMarker.value),
+                            // on below line specifying controller on map complete.
+                            onMapCreated: (GoogleMapController mcontroller) {
+                              controller.mapCompleter.complete(mcontroller);
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                            "Location permission requied.",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18.kh),
+                          )),
 
                 /*GoogleMap(
                   onMapCreated: (mapController) {
@@ -72,7 +88,7 @@ class HomeView extends GetView<HomeController> {
                 ),*/
               ),
 
-              Get.find<GlobalData>().isloginStatusGlobal.value == false
+              Get.find<GetStorageService>().getisLoggedIn == false
                   ? Align(
                       alignment: FractionalOffset.bottomCenter,
                       child: Container(
@@ -89,7 +105,8 @@ class HomeView extends GetView<HomeController> {
                                 EdgeInsets.fromLTRB(30.kw, 16.kh, 30.kw, 16.kh),
                             height: 75.kh,
                             child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Obx(() => Get.find<GlobalData>()
                                               .isloginStatusGlobal
@@ -454,7 +471,8 @@ class HomeView extends GetView<HomeController> {
                                         SizedBox(
                                           height: 10.kh,
                                         ),
-                                        SvgPicture.asset("assets/icons/cars.svg"),
+                                        SvgPicture.asset(
+                                            "assets/icons/cars.svg"),
                                         SizedBox(
                                           height: 10.kh,
                                         ),
@@ -469,7 +487,7 @@ class HomeView extends GetView<HomeController> {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                     // controller.zone.value = true;
+                                      // controller.zone.value = true;
                                       Get.toNamed(Routes.ZONE);
                                     },
                                     child: Column(
@@ -477,7 +495,8 @@ class HomeView extends GetView<HomeController> {
                                         SizedBox(
                                           height: 10.kh,
                                         ),
-                                        SvgPicture.asset("assets/icons/zone.svg"),
+                                        SvgPicture.asset(
+                                            "assets/icons/zone.svg"),
                                         SizedBox(
                                           height: 10.kh,
                                         ),
@@ -537,11 +556,11 @@ class HomeView extends GetView<HomeController> {
                         ),
                         child: Column(children: [
                           Container(
-                            margin:
-                                EdgeInsets.fromLTRB(30.kw, 16.kh, 30.kw,0 ),
+                            margin: EdgeInsets.fromLTRB(30.kw, 16.kh, 30.kw, 0),
                             height: 70.kh,
                             child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Obx(() => Get.find<GlobalData>()
                                               .isloginStatusGlobal
@@ -906,7 +925,8 @@ class HomeView extends GetView<HomeController> {
                                         SizedBox(
                                           height: 10.kh,
                                         ),
-                                        SvgPicture.asset("assets/icons/cars.svg"),
+                                        SvgPicture.asset(
+                                            "assets/icons/cars.svg"),
                                         SizedBox(
                                           height: 10.kh,
                                         ),
@@ -929,7 +949,8 @@ class HomeView extends GetView<HomeController> {
                                         SizedBox(
                                           height: 10.kh,
                                         ),
-                                        SvgPicture.asset("assets/icons/zone.svg"),
+                                        SvgPicture.asset(
+                                            "assets/icons/zone.svg"),
                                         SizedBox(
                                           height: 10.kh,
                                         ),
@@ -971,7 +992,9 @@ class HomeView extends GetView<HomeController> {
                       ),
                     ),
               controller.cars.value == true ? cars(0.5) : SizedBox(),
-              controller.carDetails.value == true ? carDetails(0.7) : SizedBox(),
+              controller.carDetails.value == true
+                  ? carDetails(0.7)
+                  : SizedBox(),
               controller.zone.value == true ? zone(0.4) : SizedBox(),
               controller.customePrice.value == true
                   ? customePrice(0.7)
@@ -988,6 +1011,7 @@ class HomeView extends GetView<HomeController> {
               // controller.enrideInspection.value == true
               //     ? enrideInspection(0.85)
               //     : SizedBox(),
+
             ],
           ),
         )),
@@ -1015,13 +1039,14 @@ class HomeView extends GetView<HomeController> {
             ),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Center(
+                 Center(
                   child: Container(
                 height: 2,
                 width: 100.kw,
                 color: ColorUtil.kPrimary,
-              )),
-              Container(
+                  ),
+                 ),
+                Container(
                 height: 30.kh,
                 margin: EdgeInsets.fromLTRB(16.kw, 24.kh, 16.kw, 0),
                 child: Row(
@@ -1044,11 +1069,11 @@ class HomeView extends GetView<HomeController> {
                         child: SvgPicture.asset("assets/icons/cross.svg"),
                       ),
                     ]),
-              ),
-              SizedBox(
+                ),
+                SizedBox(
                 height: 20.kh,
-              ),
-              Container(
+                ),
+                Container(
                 padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
                 height: 50.kh,
                 child: ListView.builder(
@@ -1060,32 +1085,22 @@ class HomeView extends GetView<HomeController> {
                       return InkWell(
                         onTap: () {
                           controller.tapAttention.value = index;
-
-                          controller.getSelectCategoyCars(
-                              "${(controller.categoriesModels.value.category?[index]?.name)?.toLowerCase()}");
+                          controller.getSelectCategoyCars("${(controller.categoriesModels.value.category?[index]?.name)?.toLowerCase()}");
                         },
-                        child: Obx(
+                        child : Obx(
                           () => Container(
-                            margin:
-                                EdgeInsets.fromLTRB(12.kh, 0.kh, 0.kh, 16.kh),
-                            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            decoration: BoxDecoration(
-                              color: controller.tapAttention.value == index
-                                  ? ColorUtil.kPrimary
-                                  : Colors.white,
-                              border: Border.all(color: ColorUtil.ZammaGrey),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(4),
-                              ),
+                            margin         : EdgeInsets.fromLTRB(12.kh, 0.kh, 0.kh, 16.kh),
+                            padding        : EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            decoration     : BoxDecoration(
+                              color        : controller.tapAttention.value == index
+                                           ? ColorUtil.kPrimary
+                                           : Colors.white,
+                              border       : Border.all(color: ColorUtil.ZammaGrey),
+                              borderRadius : BorderRadius.all(Radius.circular(4),),
                             ),
-                            child: Center(
-                              child: Text(
-                                "${controller.categoriesModels.value.category?[index]?.name}",
-                                style: GoogleFonts.urbanist(
-                                    color:
-                                        controller.tapAttention.value == index
-                                            ? Colors.white
-                                            : Colors.black),
+                            child      : Center(
+                              child    : Text("${controller.categoriesModels.value.category?[index]?.name}",
+                                style  : GoogleFonts.urbanist(color : controller.tapAttention.value == index ? Colors.white : Colors.black),
                               ),
                             ),
                           ),
@@ -1093,17 +1108,16 @@ class HomeView extends GetView<HomeController> {
                       );
                     }),
               ),
-              Obx(
-                () => Expanded(
-                  child: controller.instanceOfGlobalData.loader.value == true
+
+
+                  Obx(
+                   () => Expanded(child: controller.instanceOfGlobalData.loader.value == true
                       ? Column(
                           children: [
-                            Center(
-                              child: SizedBox(
+                            Center(child: SizedBox(
                                   width: 200.kh,
                                   height: 200.kh,
-                                  child: Lottie.asset(
-                                      'assets/json/car_loader.json')),
+                                  child: Lottie.asset('assets/json/car_loader.json'),),
                             ),
                           ],
                         )
@@ -1121,65 +1135,32 @@ class HomeView extends GetView<HomeController> {
                               ],
                             )
                           : ListView.builder(
-                              itemCount:
-                                  controller.carsModel.value.cars?.length,
+                              itemCount: controller.carsModel.value.cars?.length,
                               itemBuilder: (contex, index) {
                                 return InkWell(
                                   onTap: () {
-                                    controller.model.value =
-                                        "${controller.carsModel.value.cars?[index]?.brand} ${controller.carsModel.value.cars?[index]?.model}";
-                                    controller.carImage.value = (controller
-                                            .carsModel
-                                            .value
-                                            .cars?[index]
-                                            ?.images?[0])
-                                        .toString();
-                                    controller.seatCapcity.value = (controller
-                                            .carsModel
-                                            .value
-                                            .cars?[index]
-                                            ?.seatCapacity)
-                                        .toString();
-                                    controller.milage.value = (controller
-                                        .carsModel
-                                        .value
-                                        .cars?[index]
-                                        ?.mileage)
-                                        .toString();
-                                    controller.fuelType.value = (controller
-                                        .carsModel
-                                        .value
-                                        .cars?[index]
-                                        ?.fuelType)
-                                        .toString();
-                                    controller.fuelLavel.value = (controller
-                                        .carsModel
-                                        .value
-                                        .cars?[index]
-                                        ?.fuelLevel)
-                                        .toString();
-                                    controller.carId.value = (controller
-                                            .carsModel.value.cars?[index]?.Id)
-                                        .toString();
-                                    controller.qnr.value = (controller
-                                            .carsModel.value.cars?[index]?.qnr)
-                                        .toString();
-                                    controller.selectedCarLatitude.value=(controller.carsModel.value.cars?[index]?.position?.coordinates?[1])!;
-                                    controller.selectedCarLongitude.value=(controller.carsModel.value.cars?[index]?.position?.coordinates?[0])!;
-                                  //  controller.cars.value = false;
+                                    controller.model.value       = "${controller.carsModel.value.cars?[index]?.brand} ${controller.carsModel.value.cars?[index]?.model}";
+                                    controller.carImage.value    = (controller.carsModel.value.cars?[index]?.images?[0]).toString();
+                                    controller.seatCapcity.value = (controller.carsModel.value.cars?[index]?.seatCapacity).toString();
+                                    controller.milage.value      = (controller.carsModel.value.cars?[index]?.mileage).toString();
+                                    controller.fuelType.value    = (controller.carsModel.value.cars?[index]?.fuelType).toString();
+                                    controller.fuelLavel.value   = (controller.carsModel.value.cars?[index]?.fuelLevel).toString();
+                                    controller.carId.value       = (controller.carsModel.value.cars?[index]?.Id).toString();
+                                    controller.qnr.value         = (controller.carsModel.value.cars?[index]?.qnr).toString();
+                                    controller.selectedCarLatitude.value  = (controller.carsModel.value.cars?[index]?.position?.coordinates?[1])!;
+                                    controller.selectedCarLongitude.value = (controller.carsModel.value.cars?[index]?.position?.coordinates?[0])!;
+                                    //  controller.cars.value = false;
                                     controller.carDetails.value = true;
-                                    Get.find<GetStorageService>().setQNR ="${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
-                                    controller.instanceOfGlobalData.QNR.value =
-                                        "${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
-                                    print(
-                                        "qnr Value : ${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}");
+                                    Get.find<GetStorageService>().setQNR      = "${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
+                                    controller.instanceOfGlobalData.QNR.value = "${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
+                                    print("qnr Value : ${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}");
                                     controller.cars.value = false;
-                                    },
+                                  },
                                   child: Container(
-                                    padding:EdgeInsets.fromLTRB(0, 8, 8, 8),
+                                      padding: EdgeInsets.fromLTRB(0, 8, 8, 8),
                                       height: 80.kh,
-                                      margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
-
+                                      margin:
+                                          EdgeInsets.fromLTRB(16, 16, 16, 0),
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                             color: ColorUtil.ZammaGrey),
@@ -1196,7 +1177,6 @@ class HomeView extends GetView<HomeController> {
                                             imageBuilder:
                                                 (context, imageProvider) =>
                                                     Container(
-
                                               margin: EdgeInsets.fromLTRB(
                                                   0, 10, 10, 10),
                                               width: 100.kh,
@@ -1204,9 +1184,7 @@ class HomeView extends GetView<HomeController> {
                                                 image: DecorationImage(
                                                   image: imageProvider,
                                                   fit: BoxFit.cover,
-
                                                 ),
-
                                                 borderRadius: BorderRadius.all(
                                                   Radius.circular(4),
                                                 ),
@@ -1223,7 +1201,8 @@ class HomeView extends GetView<HomeController> {
                                                 width: 100.kh,
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius: BorderRadius.all(
+                                                  borderRadius:
+                                                      BorderRadius.all(
                                                     Radius.circular(4),
                                                   ),
                                                   // shape: BoxShape.circle,
@@ -1369,9 +1348,9 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
                           ),
-                          /*  errorWidget: (context, url, error) =>
-                                                SvgPicture.asset("assets/SVG/profiledefault.svg"),*/
+                          /*  errorWidget: (context, url, error) =>  SvgPicture.asset("assets/SVG/profiledefault.svg"),*/
                         ),
+
                         /* Container(
                           height: 100.kh,
                           width: 260.kw,
@@ -1379,9 +1358,11 @@ class HomeView extends GetView<HomeController> {
                             child: Image.asset("assets/images/bigCars.png"),
                           ),
                         ),*/
+
                         SizedBox(
                           height: 30.kh,
                         ),
+
                         Container(
                             height: 35.kh,
                             width: 165.kw,
@@ -1407,7 +1388,7 @@ class HomeView extends GetView<HomeController> {
                               children: [
                                 SvgPicture.asset("assets/icons/battery.svg"),
                                 Text(
-                                  "${controller.fuelLavel.value} ${controller.fuelType.value=="fuel"?" Liter":" %"}",
+                                  "${controller.fuelLavel.value} ${controller.fuelType.value == "fuel" ? " Liter" : " %"}",
                                   style: GoogleFonts.urbanist(fontSize: 14),
                                 ),
                               ],
@@ -1415,8 +1396,8 @@ class HomeView extends GetView<HomeController> {
                             Column(
                               children: [
                                 Icon(Icons.speed),
-                                Obx(()=>
-                                   Text(
+                                Obx(
+                                  () => Text(
                                     "${controller.milage.value}",
                                     style: GoogleFonts.urbanist(fontSize: 14),
                                   ),
@@ -1439,7 +1420,7 @@ class HomeView extends GetView<HomeController> {
                           height: 8.kh,
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                           child: Divider(
                             thickness: 1,
                             color: ColorUtil.ZammaGrey,
@@ -1451,12 +1432,14 @@ class HomeView extends GetView<HomeController> {
                             title: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text("Feature 1",
-                                    style: GoogleFonts.urbanist(fontSize: 18.kh))),
+                                    style:
+                                        GoogleFonts.urbanist(fontSize: 18.kh))),
                             subtitle: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text(
                                   "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-                                  style: GoogleFonts.urbanist(color: Colors.black),
+                                  style:
+                                      GoogleFonts.urbanist(color: Colors.black),
                                 ))),
                         SizedBox(
                           height: 8.kh,
@@ -1474,7 +1457,8 @@ class HomeView extends GetView<HomeController> {
                                 offset: Offset(-16, 10),
                                 child: Text(
                                   "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-                                  style: GoogleFonts.urbanist(color: Colors.black),
+                                  style:
+                                      GoogleFonts.urbanist(color: Colors.black),
                                 ))),
                         SizedBox(
                           height: 8.kh,
@@ -1485,12 +1469,14 @@ class HomeView extends GetView<HomeController> {
                             title: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text("Feature 3",
-                                    style: GoogleFonts.urbanist(fontSize: 18.kh))),
+                                    style:
+                                        GoogleFonts.urbanist(fontSize: 18.kh))),
                             subtitle: Transform.translate(
                                 offset: Offset(-16, 10),
                                 child: Text(
                                   "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.",
-                                  style: GoogleFonts.urbanist(color: Colors.black),
+                                  style:
+                                      GoogleFonts.urbanist(color: Colors.black),
                                 ))),
                         SizedBox(
                           height: 20.kh,
@@ -1510,39 +1496,53 @@ class HomeView extends GetView<HomeController> {
                               shrinkWrap: true,
                               itemCount: 2,
                               itemBuilder: (context, index) {
-                                return InkWell(onTap: (){
-                                  controller.planTapAttention.value=index;
+                                return InkWell(
+                                  onTap: () {
+                                    controller.planTapAttention.value = index;
 
-                                  if(index==0) {
-                                    controller.getCarPricing();
-                                    controller.bookingPriceDetails.value = false;
-                                    controller.customePrice.value = true;
+                                    if (index == 0) {
+                                      controller.getCarPricing();
+                                      controller.bookingPriceDetails.value =
+                                          false;
+                                      controller.customePrice.value = true;
 
-                                    controller.planTapAttention.value=100;
-                                    controller.carDetails.value=false;
-                                  }
-                                  if(index==1){
+                                      controller.planTapAttention.value = 100;
+                                      controller.carDetails.value = false;
+                                    }
+                                    if (index == 1) {
+                                      controller.customePrice.value = false;
+                                      controller.bookingPriceDetails.value =
+                                          true;
 
-                                    controller.customePrice.value = false;
-                                    controller.bookingPriceDetails.value = true;
-
-                                    controller.planTapAttention.value=100;
-                                    controller.carDetails.value=false;
-                                  }
-                                },
+                                      controller.planTapAttention.value = 100;
+                                      controller.carDetails.value = false;
+                                    }
+                                  },
                                   child: Container(
                                     margin: EdgeInsets.all(16),
                                     height: 50.kh,
                                     width: 160.kw,
-
                                     decoration: BoxDecoration(
-                                        color:controller.planTapAttention.value==index? ColorUtil.kPrimary:Colors.white,
+                                        color:
+                                            controller.planTapAttention.value ==
+                                                    index
+                                                ? ColorUtil.kPrimary
+                                                : Colors.white,
                                         border: Border.all(
                                           color: ColorUtil.kPrimary,
                                         ),
-                                        borderRadius: BorderRadius.all(Radius.circular(10))
-                                    ),
-                                    child: Center(child: Text("${index==0?"Custom Plan":"Basic Plan"}",style: GoogleFonts.urbanist(color: controller.planTapAttention.value==index?Colors.white:Colors.black),)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Center(
+                                        child: Text(
+                                      "${index == 0 ? "Custom Plan" : "Basic Plan"}",
+                                      style: GoogleFonts.urbanist(
+                                          color: controller
+                                                      .planTapAttention.value ==
+                                                  index
+                                              ? Colors.white
+                                              : Colors.black),
+                                    )),
                                   ),
                                 );
                               }),
@@ -2855,6 +2855,8 @@ class HomeView extends GetView<HomeController> {
   //   );
   // }
   //
+
+
   Widget bookingPriceDetails(double initialVal) {
     return DraggableScrollableSheet(
       initialChildSize: initialVal,
@@ -2918,14 +2920,15 @@ class HomeView extends GetView<HomeController> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(width: 300.kh,
+                            SizedBox(
+                              width: 300.kh,
                               child: Text(
                                 "We’ll transact an amount of \$${1} to verify your card details.",
                                 style: GoogleFonts.urbanist(
-                                    fontWeight: FontWeight.w600, fontSize: 16.kh),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.kh),
                               ),
                             ),
-
                           ],
                         ),
                       ),
@@ -2948,94 +2951,106 @@ class HomeView extends GetView<HomeController> {
                                   child: ButtonDesign(
                                       name: "Verify Payment",
                                       onPressed: () {
-                                      //  Get.toNamed(Routes.CAMERA_DESIGN);
-
+                                        //  Get.toNamed(Routes.CAMERA_DESIGN);
                                         controller.getAddressFromLatLng();
-
-                                        controller
-                                            .onBoardingStatus()
+                                        controller.onBoardingStatus()
                                             .then((value) {
-
                                           if (value == 1) {
                                             //   Get.find<GlobalData>().QNR.value=controller.carId.value;
-                                           controller.getInProcessHistory().then((value) {
-                                             if(value==1){
-                                               showMySnackbar(
-                                                   title: "Error",
-                                                   msg:
-                                                   "Complete inprogress ride before booking new ride");
-                                             }
-                                             else{
-                                               controller.getOnGoingHistory().then((value){
-                                                 if(value==1){
-                                                   showMySnackbar(
-                                                       title: "Error",
-                                                       msg:
-                                                       "Complete your ongoing ride before booking new ride");
-                                                 }
-                                                 else{
-                                                   if (controller.logindetails.value
-                                                       .user?.isSuspended ==
-                                                       false)
+                                            controller.getInProcessHistory()
+                                                .then((value) {
+                                              if (value == 1) {
+                                                showMySnackbar(
+                                                    title: "Error",
+                                                    msg:
+                                                        "Complete inprogress ride before booking new ride");
+                                              } else {
+                                                controller
+                                                    .getOnGoingHistory()
+                                                    .then((value) {
+                                                  if (value == 1) {
+                                                    showMySnackbar(
+                                                        title: "Error",
+                                                        msg:
+                                                            "Complete your ongoing ride before booking new ride");
+                                                  } else {
+                                                    print(
+                                                        controller.model.value);
 
-                                                     controller
-                                                         .createBooking(
-                                                         carId: controller
-                                                             .carId.value,
-                                                         qnr: controller.qnr.value)
-                                                         .then((value) {
-                                                       if (value == 1) {
-                                                         Get.toNamed(Routes.SAVED_CARDS,arguments: [
-                                                           (controller
-                                                               .createBookinModel
-                                                               .value
-                                                               .booking
-                                                               ?.Id),
-                                                           (controller
-                                                               .model.value),
-                                                           (controller
-                                                               .seatCapcity.value),
-                                                           true,"basic",1.0,0,0
-                                                         ]);
-
-                                                         print(
-                                                             "Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
-                                                         // controller.carBooking.value = true;
-                                                         controller.bookingPriceDetails
-                                                             .value = false;
-                                                       }
-                                                     });
-                                                   else
-                                                     showMySnackbar(
-                                                         title: "Error",
-                                                         msg:
-                                                         "User blocked by the admin");
-                                                 }
-                                               });
-                                             }
-                                           });
-
-                                          }
-                                          else {
-                                            if (controller.logindetails.value.user?.isApproved == false){
+                                                    if (controller
+                                                            .logindetails
+                                                            .value
+                                                            .user
+                                                            ?.isSuspended ==
+                                                        false)
+                                                      Get.toNamed(
+                                                          Routes.SAVED_CARDS,
+                                                          arguments: [
+                                                            (controller
+                                                                .createBookinModel
+                                                                .value
+                                                                .booking
+                                                                ?.Id),
+                                                            (controller
+                                                                .model.value),
+                                                            (controller
+                                                                .seatCapcity
+                                                                .value),
+                                                            true,
+                                                            "basic",
+                                                            1.0,
+                                                            0,
+                                                            0
+                                                          ]
+                                                          //  );
+                                                          // controller.createBooking(carId: controller.carId.value, qnr: controller.qnr.value).then((value) {
+                                                          //   if (value == 1){
+                                                          //     Get.toNamed(
+                                                          //       Routes.SAVED_CARDS,
+                                                          //
+                                                          //         arguments: [
+                                                          //       (controller.createBookinModel.value.booking?.Id),
+                                                          //       (controller.model.value),
+                                                          //       (controller.seatCapcity.value),
+                                                          //       true,"basic",1.0,0,0
+                                                          //     ]);
+                                                          //     print("Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
+                                                          //     // controller.carBooking.value = true;
+                                                          //     controller.bookingPriceDetails.value = false;
+                                                          //   }
+                                                          // }
+                                                          //
+                                                          );
+                                                    else
+                                                      showMySnackbar(
+                                                          title: "Error",
+                                                          msg:
+                                                              "User blocked by the admin");
+                                                  }
+                                                });
+                                              }
+                                            });
+                                          } else {
+                                            if (controller.logindetails.value
+                                                    .user?.isApproved ==
+                                                false) {
                                               showMySnackbar(
                                                   title: "Error",
                                                   msg:
-                                                  "User approval pending");
-                                            }
-                                            else if (controller.logindetails.value
-                                                .user?.isSuspended ==
-                                                true){
+                                                      "User blocked or rejected by the admin");
+                                            } else if (controller.logindetails
+                                                    .value.user?.isSuspended ==
+                                                true) {
                                               showMySnackbar(
                                                   title: "Error",
                                                   msg:
-                                                  "User blocked by the admin");
+                                                      "User blocked by the admin");
+                                            } else {
+                                              showMySnackbar(
+                                                  title: "Error",
+                                                  msg:
+                                                      "You Need To Login First");
                                             }
-
-                                            else{
-                                              showMySnackbar(title: "Error", msg: "You Need To Login First");
-                                            }
-
                                           }
                                         });
                                       }),
@@ -3057,6 +3072,7 @@ class HomeView extends GetView<HomeController> {
       },
     );
   }
+
 //
 // Widget enrideInspection(double initialVal) {
 //   return DraggableScrollableSheet(
@@ -3472,16 +3488,16 @@ class HomeView extends GetView<HomeController> {
                       topRight: Radius.circular(20.0),
                       topLeft: Radius.circular(20.0)),
                 ),
-                child: Obx(()=>
-                   Column(
+                child: Obx(
+                  () => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
                             child: Container(
-                              height: 2,
-                              width: 100.kw,
-                              color: ColorUtil.kPrimary,
-                            )),
+                          height: 2,
+                          width: 100.kw,
+                          color: ColorUtil.kPrimary,
+                        )),
                         Container(
                           height: 30.kh,
                           margin: EdgeInsets.fromLTRB(16.kw, 24.kh, 16.kw, 0),
@@ -3501,8 +3517,8 @@ class HomeView extends GetView<HomeController> {
                                     Scaffold.of(context)
                                         .showBodyScrim(false, 0.0);
                                   },
-                                  child:
-                                  SvgPicture.asset("assets/icons/cross.svg"),
+                                  child: SvgPicture.asset(
+                                      "assets/icons/cross.svg"),
                                 ),
                               ]),
                         ),
@@ -3511,18 +3527,22 @@ class HomeView extends GetView<HomeController> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-
-                          child: Obx(()=> Text("Amount: \$ ${controller.finalAmount.value} ",style: GoogleFonts.urbanist(fontSize: 20,fontWeight: FontWeight.bold),)),
-
+                          child: Obx(() => Text(
+                                "Amount: \$ ${controller.finalAmount.value} ",
+                                style: GoogleFonts.urbanist(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              )),
                         ),
                         SizedBox(
                           height: 16.kh,
                         ),
                         Padding(
-                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
-
-                          child: Text("Time ",style: GoogleFonts.urbanist(fontWeight: FontWeight.bold),),
-
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: Text(
+                            "Time ",
+                            style: GoogleFonts.urbanist(
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
 
                         Container(
@@ -3531,47 +3551,64 @@ class HomeView extends GetView<HomeController> {
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-itemCount: controller.timeLength.value,
+                              itemCount: controller.timeLength.value,
                               itemBuilder: (context, index) {
-                                return Obx(()=>
-                                   InkWell(onTap: (){
+                                return Obx(
+                                  () => InkWell(
+                                    onTap: () {
+                                      controller.timeTapAttention.value = index;
 
-                                       controller.timeTapAttention.value = index;
-
-                                    controller.calculateCharges();
-                                  },
+                                      controller.calculateCharges();
+                                    },
                                     child: Container(
-                                      margin: EdgeInsets.fromLTRB(16,16,0,16),
+                                      margin:
+                                          EdgeInsets.fromLTRB(16, 16, 0, 16),
                                       height: 50.kh,
                                       width: 50.kw,
-
                                       decoration: BoxDecoration(
-                                         color: controller.timeTapAttention.value==index?Colors.indigo:Colors.white,
+                                          color: controller
+                                                      .timeTapAttention.value ==
+                                                  index
+                                              ? Colors.indigo
+                                              : Colors.white,
                                           border: Border.all(
                                             color: ColorUtil.kPrimary,
                                           ),
-                                          borderRadius: BorderRadius.all(Radius.circular(10))
-                                      ),
-                                      child: Center(child: Text("${(controller.carPriceById.value.carPricing?.pricingRules?[index]?.hours)} \nhour",textAlign: TextAlign.center,style: GoogleFonts.urbanist(fontWeight: FontWeight.bold,color: controller.timeTapAttention.value==index?Colors.white:Colors.black),)),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                      child: Center(
+                                          child: Text(
+                                        "${(controller.carPriceById.value.carPricing?.pricingRules?[index]?.hours)} \nhour",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.urbanist(
+                                            fontWeight: FontWeight.bold,
+                                            color: controller.timeTapAttention
+                                                        .value ==
+                                                    index
+                                                ? Colors.white
+                                                : Colors.black),
+                                      )),
                                     ),
                                   ),
                                 );
                               }),
                         ),
                         Padding(
-                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
-
-                          child: Obx(()=> Text("Extra charges \$${controller.extraMinuteCharges.value}/minute ",)),
-
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: Obx(() => Text(
+                                "Extra charges \$${controller.extraMinuteCharges.value}/minute ",
+                              )),
                         ),
                         SizedBox(
                           height: 16.kh,
                         ),
                         Padding(
-                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
-
-                          child: Text("Distance ",style: GoogleFonts.urbanist(fontWeight: FontWeight.bold),),
-
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: Text(
+                            "Distance ",
+                            style: GoogleFonts.urbanist(
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
 
                         Container(
@@ -3580,138 +3617,191 @@ itemCount: controller.timeLength.value,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
-itemCount: controller.milesLength.value,
+                              itemCount: controller.milesLength.value,
                               itemBuilder: (context, index) {
-                                return Obx(()=>
-                                    InkWell(onTap: (){
-                                      controller.distanceTapAttention.value=index;
+                                return Obx(
+                                  () => InkWell(
+                                    onTap: () {
+                                      controller.distanceTapAttention.value =
+                                          index;
                                       controller.calculateCharges();
                                     },
-                                      child: Container(
-                                        margin: EdgeInsets.fromLTRB(16,16,0,16),
-                                        height: 50.kh,
-                                        width: 50.kw,
-
-                                        decoration: BoxDecoration(
-                                            color: controller.distanceTapAttention.value==index?Colors.indigo:Colors.white,
-                                            border: Border.all(
-                                              color: ColorUtil.kPrimary,
-                                            ),
-                                            borderRadius: BorderRadius.all(Radius.circular(10))
-                                        ),
-                                        child: Center(child: Text("${(controller.carPriceById.value.carPricing?.mileageRates?[index]?.miles)!} \n miles",textAlign: TextAlign.center,style: GoogleFonts.urbanist(fontWeight: FontWeight.bold,color: controller.distanceTapAttention.value==index?Colors.white:Colors.black),)),
-                                      ),
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.fromLTRB(16, 16, 0, 16),
+                                      height: 50.kh,
+                                      width: 50.kw,
+                                      decoration: BoxDecoration(
+                                          color: controller.distanceTapAttention
+                                                      .value ==
+                                                  index
+                                              ? Colors.indigo
+                                              : Colors.white,
+                                          border: Border.all(
+                                            color: ColorUtil.kPrimary,
+                                          ),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
+                                      child: Center(
+                                          child: Text(
+                                        "${(controller.carPriceById.value.carPricing?.mileageRates?[index]?.miles)!} \n miles",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.urbanist(
+                                            fontWeight: FontWeight.bold,
+                                            color: controller
+                                                        .distanceTapAttention
+                                                        .value ==
+                                                    index
+                                                ? Colors.white
+                                                : Colors.black),
+                                      )),
                                     ),
+                                  ),
                                 );
                               }),
                         ),
 
                         Padding(
-                          padding:  EdgeInsets.fromLTRB(16,0,16,0),
-
-                          child: Obx(()=> Text("Extra charges \$${controller.extraMilesCharges.value}/mile",)),
-
+                          padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: Obx(() => Text(
+                                "Extra charges \$${controller.extraMilesCharges.value}/mile",
+                              )),
                         ),
                         SizedBox(
                           height: 24.kh,
                         ),
                         Center(
                           child: Obx(
-                                () => controller.instanceOfGlobalData.loader.value ==
-                                true
-                                ? Center(
-                              child: SizedBox(
-                                  width: 200.kh,
-                                  height: 100.kh,
-                                  child: Lottie.asset(
-                                      'assets/json/car_loader.json')),
-                            )
-                                : Container(
-                              child: ButtonDesign(
-                                  name: "Book",
-                                  onPressed: () {
-                                    controller.getAddressFromLatLng();
-                                    controller
-                                        .onBoardingStatus()
-                                        .then((value) {
-
-                                      if (value == 1) {
-                                        //   Get.find<GlobalData>().QNR.value=controller.carId.value;
-                                        controller.getInProcessHistory().then((value) {
-                                          if(value==1){
-                                            showMySnackbar(
-                                                title: "Error",
-                                                msg:
-                                                "Complete inprogress ride before booking new ride");
-                                          }
-                                          else{
-                                            controller.getOnGoingHistory().then((value){
-                                              if(value==1){
-                                                showMySnackbar(
-                                                    title: "Error",
-                                                    msg:
-                                                    "Complete your ongoing ride before booking new ride");
-                                              }
-                                              else{
-                                                if (controller.logindetails.value
-                                                    .user?.isSuspended ==
-                                                    false)
+                            () =>
+                                controller.instanceOfGlobalData.loader.value ==
+                                        true
+                                    ? Center(
+                                        child: SizedBox(
+                                            width: 200.kh,
+                                            height: 100.kh,
+                                            child: Lottie.asset(
+                                                'assets/json/car_loader.json')),
+                                      )
+                                    : Container(
+                                        child: ButtonDesign(
+                                            name: "Book",
+                                            onPressed: () {
+                                              controller.getAddressFromLatLng();
+                                              controller
+                                                  .onBoardingStatus()
+                                                  .then((value) {
+                                                if (value == 1) {
+                                                  //   Get.find<GlobalData>().QNR.value=controller.carId.value;
                                                   controller
-                                                      .createBooking(
-                                                      carId: controller
-                                                          .carId.value,
-                                                      qnr: controller.qnr.value)
+                                                      .getInProcessHistory()
                                                       .then((value) {
                                                     if (value == 1) {
-                                                      Get.toNamed(Routes.SAVED_CARDS,arguments: [
-                                                        (controller
-                                                            .createBookinModel
-                                                            .value
-                                                            .booking
-                                                            ?.Id),
-                                                        (controller
-                                                            .model.value),
-                                                        (controller
-                                                            .seatCapcity.value),
-                                                        true,"custom",(controller.finalAmount.value),(controller.carPriceById.value.carPricing?.mileageRates?[controller.distanceTapAttention.value]?.miles),(controller.carPriceById.value.carPricing?.pricingRules?[controller.timeTapAttention.value]?.hours)
-                                                      ]);
-                                                      // Get.toNamed(Routes.BOOKING,
-                                                      //     arguments: [
-                                                      //       (controller
-                                                      //           .createBookinModel
-                                                      //           .value
-                                                      //           .booking
-                                                      //           ?.Id),
-                                                      //       (controller
-                                                      //           .model.value),
-                                                      //       (controller
-                                                      //           .seatCapcity.value),
-                                                      //       true
-                                                      //     ]);
-                                                      print(
-                                                          "Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
-                                                      // controller.carBooking.value = true;
-                                                      controller.customePrice.value = false;
+                                                      showMySnackbar(
+                                                          title: "Error",
+                                                          msg:
+                                                              "Complete inprogress ride before booking new ride");
+                                                    } else {
+                                                      controller
+                                                          .getOnGoingHistory()
+                                                          .then((value) {
+                                                        if (value == 1) {
+                                                          showMySnackbar(
+                                                              title: "Error",
+                                                              msg:
+                                                                  "Complete your ongoing ride before booking new ride");
+                                                        } else {
+                                                          if (controller
+                                                                  .logindetails
+                                                                  .value
+                                                                  .user
+                                                                  ?.isSuspended ==
+                                                              false)
+                                                            controller
+                                                                .createBooking(
+                                                                    carId: controller
+                                                                        .carId
+                                                                        .value,
+                                                                    qnr: controller
+                                                                        .qnr
+                                                                        .value)
+                                                                .then((value) {
+                                                              if (value == 1) {
+                                                                Get.toNamed(
+                                                                    Routes
+                                                                        .SAVED_CARDS,
+                                                                    arguments: [
+                                                                      (controller
+                                                                          .createBookinModel
+                                                                          .value
+                                                                          .booking
+                                                                          ?.Id),
+                                                                      (controller
+                                                                          .model
+                                                                          .value),
+                                                                      (controller
+                                                                          .seatCapcity
+                                                                          .value),
+                                                                      true,
+                                                                      "custom",
+                                                                      (controller
+                                                                          .finalAmount
+                                                                          .value),
+                                                                      (controller
+                                                                          .carPriceById
+                                                                          .value
+                                                                          .carPricing
+                                                                          ?.mileageRates?[controller
+                                                                              .distanceTapAttention
+                                                                              .value]
+                                                                          ?.miles),
+                                                                      (controller
+                                                                          .carPriceById
+                                                                          .value
+                                                                          .carPricing
+                                                                          ?.pricingRules?[controller
+                                                                              .timeTapAttention
+                                                                              .value]
+                                                                          ?.hours)
+                                                                    ]);
+                                                                // Get.toNamed(Routes.BOOKING,
+                                                                //     arguments: [
+                                                                //       (controller
+                                                                //           .createBookinModel
+                                                                //           .value
+                                                                //           .booking
+                                                                //           ?.Id),
+                                                                //       (controller
+                                                                //           .model.value),
+                                                                //       (controller
+                                                                //           .seatCapcity.value),
+                                                                //       true
+                                                                //     ]);
+                                                                print(
+                                                                    "Booking Id ${(controller.createBookinModel.value.booking?.Id)}");
+                                                                // controller.carBooking.value = true;
+                                                                controller
+                                                                    .customePrice
+                                                                    .value = false;
+                                                              }
+                                                            });
+                                                          else
+                                                            showMySnackbar(
+                                                                title: "Error",
+                                                                msg:
+                                                                    "User blocked or rejected by the admin");
+                                                        }
+                                                      });
                                                     }
                                                   });
-                                                else
+                                                } else {
                                                   showMySnackbar(
                                                       title: "Error",
                                                       msg:
-                                                      "User blocked or approval pending");
-                                              }
-                                            });
-                                          }
-                                        });
-
-
-
-                                      } else {
-                                        showMySnackbar(title: "Error", msg: "You Need To Login First");
-                                      }
-                                    });
-                                  }),
-                            ),
+                                                          "User blocked or rejected by the admin");
+                                                }
+                                              });
+                                            }),
+                                      ),
                           ),
                         ),
                         SizedBox(

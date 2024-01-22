@@ -93,7 +93,7 @@ class Auth extends GetxController {
       required String photoUrl,
       required String phoneNumber}) async {
     var mytoken = await firebaseAuth.currentUser!.getIdToken(true);
-    Get.find<GetStorageService>().jwToken = mytoken;
+    Get.find<GetStorageService>().jwToken = mytoken!;
   }
 
   //apple
@@ -222,6 +222,7 @@ class Auth extends GetxController {
           phoneNumber: phoneNumber,
           // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: await (String verId) {
+            Get.find<GlobalData>().loader.value = false;
             //Starts the phone number verification process for the given phone number.
             //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
           },
@@ -233,23 +234,23 @@ class Auth extends GetxController {
 
            if(firstTime)
             Get.offNamed(Routes.OTP,arguments: [OtpNeededData(mobileNumber: phoneNumber,veryFicationId: verificationId)]);
-
           },
           // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
         //  timeout: const Duration(seconds: 20),
-          verificationCompleted:await (AuthCredential phoneAuthCredential) {
+          verificationCompleted : await (AuthCredential phoneAuthCredential){
             print("verificationCompleted");
             print(phoneAuthCredential);
-
+            Get.find<GlobalData>().loader.value = false;
           },
-          verificationFailed:await (error) {
+          verificationFailed: await (error){
+            Get.find<GlobalData>().loader.value = false;
             Get.snackbar("Error", error.message.toString());
           });
 
       print("before");
 
     } catch (e) {
-
+      Get.find<GlobalData>().loader.value = false;
       Get.snackbar("Error", e.toString());
 
     }
@@ -300,8 +301,7 @@ class Auth extends GetxController {
           .signInWithCredential(firebaseAuth1)
           .then((value) async {
         if (value.user != null) {
-          Get.find<GetStorageService>().jwToken= await value.user!.getIdToken();
-
+          Get.find<GetStorageService>().jwToken =  "${await firebaseAuth.currentUser!.getIdToken(true)}";
           verified = true;
         } else {
           showMySnackbar(title: "Error",msg: "Entered Otp is wrong");

@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zammacarsharing/app/modules/home/controllers/home_controller.dart';
 import 'package:zammacarsharing/app/modules/models/booking_ongoing_model.dart';
 import 'package:zammacarsharing/app/modules/models/car_pricing_model.dart';
 import 'package:zammacarsharing/app/modules/models/create_bookin_model.dart';
@@ -96,9 +97,9 @@ class BookingController extends GetxController {
   List<int> time = [];
 
   // Data Coming From Home Controller and ride history
-  final bookingId = Get.arguments[0];
-  final model = Get.arguments[1];
-  final seatCapcity = Get.arguments[2];
+  final bookingId = Get.arguments[0] ?? "";
+  final model    = Get.arguments[1] ?? "";
+  final seatCapcity = Get.arguments[2] ?? "";
 
   //loader variable
   RxBool loader = false.obs;
@@ -118,6 +119,7 @@ class BookingController extends GetxController {
       carBooking.value = Get.arguments[3];
       rideStart.value = true;
     }
+
     getTransationDetails();
     getInProcessHistory();
     getBookingDetailsUsingBookingId();
@@ -152,10 +154,12 @@ class BookingController extends GetxController {
   RxBool bookingDetailsLoader = false.obs;
 
   getBookingDetailsUsingBookingId() async {
+    await Future.delayed(Duration(seconds: 3));
+    await getOnGoingHistory();
+await Get.find<HomeController>().getcar();
     try {
       bookingDetailsLoader.value = true;
-      final response =
-          await APIManager.getBookingByBookingId(bookingId: bookingId);
+      final response = await APIManager.getBookingByBookingId(bookingId: bookingId == "" ? "${rideHistory.value.data?[0]?.Id}" : bookingId);
       getBookingDetailsModel.value =
           BookingDetailsModels.fromJson(jsonDecode(response.toString()));
       bookingDetailsLoader.value = false;
@@ -171,21 +175,15 @@ class BookingController extends GetxController {
     instanceOfGlobalData.loader.value = true;
     var body = {"cancelReason": "Not available"};
     try {
-      final response =
-          await APIManager.cancelBooking(body: body, bookingId: bookingId);
-      createBookinModel.value =
-          CreateBookinModel.fromJson(jsonDecode(response.toString()));
-
+      final response = await APIManager.cancelBooking(body: body, bookingId: bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId );
+      createBookinModel.value = CreateBookinModel.fromJson(jsonDecode(response.toString()));
       print("response.data : ${response.toString()}");
-
       instanceOfGlobalData.loader.value = false;
-
       showMySnackbar(title: "Message", msg: "Ride canceled");
       instanceOfGlobalData.waitingRideTicker.cancel();
       return 1;
     } catch (e) {
       showMySnackbar(title: "Error", msg: "Error while cancel booking");
-
       instanceOfGlobalData.loader.value = false;
 
       return 0;
@@ -317,7 +315,7 @@ class BookingController extends GetxController {
             ]
           };
           final response = await APIManager.postInspectionImageUrl(
-              body: body, bookingId: (bookingId).toString());
+              body: body, bookingId: (bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId).toString());
           inspectionModel.value =
               InspectionModel.fromJson(jsonDecode(response.toString()));
 
@@ -344,7 +342,7 @@ class BookingController extends GetxController {
             ]
           };
           final response = await APIManager.postInspectionImageUrl(
-              body: body, bookingId: (bookingId).toString());
+              body: body, bookingId: (bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId).toString());
           inspectionModel.value =
               InspectionModel.fromJson(jsonDecode(response.toString()));
 
@@ -359,7 +357,7 @@ class BookingController extends GetxController {
               };
 
               final responseend = await APIManager.endInspectionImageUrl(
-                  body: body2, bookingId: (bookingId).toString());
+                  body: body2, bookingId: (bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId).toString());
               endride.value =
                   EndRide.fromJson(jsonDecode(responseend.toString()));
 
@@ -422,7 +420,7 @@ class BookingController extends GetxController {
       };
 
       final response =
-          await APIManager.markBookingOngoing(bookingId: bookingId, body: body);
+          await APIManager.markBookingOngoing(bookingId: bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId, body: body);
       bookingOngoing.value =
           BookingOngoing.fromJson(jsonDecode(response.toString()));
 
@@ -436,12 +434,10 @@ class BookingController extends GetxController {
 
   //getLockStatus
   getLockStatus() async {
-    final url = Endpoints.getLockStatus +
-        "${Get.find<GetStorageService>().getQNR}/central-lock";
+    final url = Endpoints.getLockStatus + "${Get.find<GetStorageService>().getQNR}/central-lock";
     var headers = {
       "Content-Type": "application/json",
-      "X-CloudBoxx-ApiKey":
-          "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
+      "X-CloudBoxx-ApiKey": "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
     };
     print(headers);
     final response = await http.get(Uri.parse(url), headers: headers);
@@ -454,8 +450,7 @@ class BookingController extends GetxController {
   }
 
   getImoblizerStatus() async {
-    final url = Endpoints.getLockStatus +
-        "${Get.find<GetStorageService>().getQNR}/immobilizer";
+    final url = Endpoints.getLockStatus + "${Get.find<GetStorageService>().getQNR}/immobilizer";
     var headers = {
       "Content-Type": "application/json",
       "X-CloudBoxx-ApiKey":
@@ -523,8 +518,7 @@ class BookingController extends GetxController {
         "${Get.find<GetStorageService>().getQNR}/central-lock";
     var headers = {
       "Content-Type": "application/json",
-      "X-CloudBoxx-ApiKey":
-          "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
+      "X-CloudBoxx-ApiKey": "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
     };
     var body = {"state": status};
     print(headers);
@@ -611,15 +605,17 @@ class BookingController extends GetxController {
   getOnGoingHistory() async {
     try {
       if (rideStart.value == true) {
+
         print("ride Start");
+
         loader.value = true;
+
         final response = await APIManager.getOnGoingRideHistory();
-        rideHistory.value =
-            RideHistory.fromJson(jsonDecode(response.toString()));
-        instanceOfGlobalData.lastStampToseconds(
-            startTime: DateTime.parse(
-                (rideHistory.value.data?[0]?.pickupTime).toString()));
+        rideHistory.value = RideHistory.fromJson(jsonDecode(response.toString()));
+        instanceOfGlobalData.lastStampToseconds(startTime: DateTime.parse((rideHistory.value.data?[0]?.pickupTime).toString()));
+
         loader.value = false;
+
       }
     } catch (e) {
       print(e);
@@ -649,12 +645,10 @@ class BookingController extends GetxController {
 
   getTransationDetails() async {
     try {
-      final response = await APIManager.getPaymentHistory(bookingid: bookingId);
+      final response = await APIManager.getPaymentHistory(bookingid: bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId);
       transactionDetails.value =
           TransactionDetails.fromJson(jsonDecode(response.toString()));
-      bookingType.value =
-          (transactionDetails.value.bookingTransactions?[0]?.bookingPlan)
-              .toString();
+      bookingType.value = (transactionDetails.value.bookingTransactions?[0]?.bookingPlan).toString();
       finalDistanceTravel.value = (transactionDetails
               .value.bookingTransactions?[0]?.bookingPaymentObject?.mile)
           .toString();
@@ -684,7 +678,7 @@ class BookingController extends GetxController {
       required String dropTime,
       required int additionalWaitingTime,required double extraTimeCharges,required double extraMileCharges}) async {
     DateTime startDate = DateTime.parse((pickupTime).toString());
-    DateTime endDate = DateTime.parse((dropTime).toString());
+    DateTime endDate   = DateTime.parse((dropTime).toString());
     final actualDifference = endDate.toUtc().difference(startDate.toUtc());
 
     int second = actualDifference.inSeconds;
@@ -743,8 +737,8 @@ class BookingController extends GetxController {
 
     var sourceLatitude = position.latitude;
     var sourceLongitude = position.longitude;
-    var destinationLongitude = getBookingDetailsModel.value.data?.pickupLocation?.coordinates?[1];
-    var destinationLatitude = getBookingDetailsModel.value.data?.pickupLocation?.coordinates?[0];
+    var destinationLongitude  = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
+    var destinationLatitude   = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
     String mapOptions = ['saddr=$sourceLatitude,$sourceLongitude', 'daddr=$destinationLatitude,$destinationLongitude', 'dir_action=navigate'].join('&');
     final url ='https://www.google.com/maps/dir/?api=1&origin=$sourceLatitude,$sourceLongitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving&dir_action=navigate';
   //  final url = 'https://www.google.com/maps?$mapOptions';

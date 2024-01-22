@@ -9,19 +9,20 @@ import 'package:zammacarsharing/app/services/globalData.dart';
 class RideHistoryController extends GetxController {
   //TODO: Implement RideHistoryController
 
-   Rx<RideHistory> rideHistory = RideHistory().obs;
+  Rx<RideHistory> rideHistory = RideHistory().obs;
 
-   RxBool loader=false.obs;
+  RxBool loader = false.obs;
 
-   @override
+  @override
   void onInit() {
     super.onInit();
-
     collectRideHistory();
   }
-collectRideHistory(){
-  getrideHistory();
-}
+
+  collectRideHistory() {
+    getrideHistory();
+  }
+
   @override
   void onReady() {
     super.onReady();
@@ -32,19 +33,15 @@ collectRideHistory(){
     super.onClose();
   }
 
-   getrideHistory() async {
-
+  getrideHistory() async {
     try {
-      loader.value=true;
+      loader.value = true;
       final response = await APIManager.getRideHistory();
       print("");
       rideHistory.value = RideHistory.fromJson(jsonDecode(response.toString()));
-      loader.value=false;
-    }catch(e){
-     loader.value=false;
+      loader.value = false;
+    } catch (e) {
+      loader.value = false;
     }
-
   }
-
-
 }

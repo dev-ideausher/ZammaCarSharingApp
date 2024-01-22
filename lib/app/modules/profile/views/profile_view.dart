@@ -264,6 +264,29 @@ class ProfileView extends GetView<ProfileController> {
                         controller: controller.emailController.value,
                         hintText: 'Email id',
                       ),
+
+                      SizedBox(
+                        height: 16.kh,
+                      ),
+                      Text(
+                        "Phone",
+                        style: GoogleFonts.urbanist(
+                            fontSize: 16.kh, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 8.kh,
+                      ),
+                      Container(
+                          height: 45.kh,
+                          width: 344.kw,
+                          //padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
+                          decoration: BoxDecoration(
+                              color: Color(0xffF3F2F3),
+                              borderRadius: BorderRadius.all(Radius.circular(5))),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Align(alignment:Alignment.centerLeft,child: Text("${controller.logindetails.value.user?.phone}")),
+                          )),
                       SizedBox(
                         height: 16.kh,
                       ),

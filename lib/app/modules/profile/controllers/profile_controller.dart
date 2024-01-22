@@ -79,6 +79,7 @@ class ProfileController extends GetxController {
   Future<void> onBoardingStatus() async {
     await Get.put(GetStorageService()).initState();
     instanceOfGlobalData.loader.value = true;
+    Get.find<GetStorageService>().setisLoggedIn = true;
     try {
       final response = await APIManager.checkIsUserOnBoard();
 
@@ -169,8 +170,10 @@ class ProfileController extends GetxController {
        // "address":"Hauz Khas Delhi"
       };
       try {
+
         final response = await APIManager.onBoardUser(body: body);
          logindetails.value = logedInDetails.fromJson(jsonDecode(response.toString()));
+        Get.find<GetStorageService>().setisLoggedIn = true;
         Get.find<GlobalData>().userId.value=(logindetails.value.user?.Id).toString();
          print("response.data : ${response.toString()}");
 

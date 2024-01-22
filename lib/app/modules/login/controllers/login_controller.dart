@@ -27,13 +27,19 @@ Rx<bool> loader=false.obs;
   }
 
   getOtpFunction() {
+
     instanceOfGlobalData.loader.value=true;
+
     if (mobileNumber.value == "") {
+
       showMySnackbar(title: "Error",msg: "Field must not be empty");
-      instanceOfGlobalData.loader.value=false;
+      instanceOfGlobalData.loader.value = false;
+
     }
     else{
-      Auth().verifyPhone(mobileNumber.value,true);
+      Get.put(Auth());
+      Get.find<Auth>().verifyPhone(mobileNumber.value,true);
+
     }
 
   }

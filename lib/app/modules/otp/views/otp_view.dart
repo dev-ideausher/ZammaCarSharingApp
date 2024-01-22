@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sms_autodetect/sms_autodetect.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/auth.dart';
@@ -17,6 +17,7 @@ class OtpView extends GetView<OtpController> {
 
   @override
   Widget build(BuildContext context) {
+
     if(!controller.checkTimer.value)
       controller.startTimer();
     return Scaffold(
@@ -58,25 +59,86 @@ class OtpView extends GetView<OtpController> {
                 ),
               ),
               SizedBox(
-                height: 10.kh,
+                height: 40.kh,
               ),
-              OtpTextField(
-                // showFieldAsBox: true,
-                numberOfFields: 6,
-                borderColor: ColorUtil.kPrimary,
-                focusedBorderColor: ColorUtil.kPrimary,
-                //  styles: otpGoogleFonts.urbanists,
-                showFieldAsBox: false,
-                borderWidth: 3.0,
-//runs when a code is typed in
-                onCodeChanged: (String code) {
-//handle validation or checks here if necessary
+              PinCodeTextField(
+                autoDisposeControllers: false,
+                appContext: Get.context!,
+                pastedTextStyle: TextStyle(
+                  color: Colors.green.shade600,
+                  fontWeight: FontWeight.bold,
+                ),
+                length: 6,
+                obscureText: false,
+                animationType: AnimationType.fade,
+                validator: (v) {
+                  if (v!.length < 6) {
+                    return "Please enter valid OTP";
+                  } else {
+                    return null;
+                  }
                 },
-//runs when every textfield is filled
-                onSubmit: (String verificationCode) {
-                  controller.smsCode.value = verificationCode;
+                pinTheme: PinTheme(
+                  fieldOuterPadding: EdgeInsets.only(left: 2, right: 2),
+                  shape: PinCodeFieldShape.underline,
+                  borderRadius: BorderRadius.circular(5),
+                  fieldHeight: 40.kh,
+                  fieldWidth: 50.kw,
+                  activeFillColor: Colors.white,
+                  inactiveFillColor: Colors.white,
+                  selectedColor: Colors.black54,
+                  selectedFillColor: Colors.white,
+                  inactiveColor: Colors.black54,
+                  activeColor: Colors.black54,
+                ),
+                cursorColor: Colors.black,
+                animationDuration: Duration(milliseconds: 300),
+                enableActiveFill: true,
+                autoDismissKeyboard: false,
+                controller: controller.OTPController.value,
+                keyboardType: TextInputType.number,
+                mainAxisAlignment: MainAxisAlignment.center,
+                boxShadows: [
+                  BoxShadow(
+                    offset: Offset(0, 1),
+                    color: Colors.black12,
+                    blurRadius: 5,
+                  )
+                ],
+                onCompleted: (v) {
+                  print("Completed");
+                  controller.smsCode.value = v.removeAllWhitespace;
+                },
+                onTap: () {
+                  print("Pressed");
+                },
+                onChanged: (value) {
+                  print(value);
+                },
+                beforeTextPaste: (text) {
+                  print("Allowing to paste $text");
+                  //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                  //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                  return true;
                 },
               ),
+//               OtpTextField(
+//                 // showFieldAsBox: true,
+//                 numberOfFields: 6,
+//                 borderColor: ColorUtil.kPrimary,
+//                 focusedBorderColor: ColorUtil.kPrimary,
+//                 //  styles: otpGoogleFonts.urbanists,
+//                 showFieldAsBox: false,
+//                 borderWidth: 3.0,
+// //runs when a code is typed in
+//                 onCodeChanged: (String code) {
+// //handle validation or checks here if necessary
+//                 },
+// //runs when every textfield is filled
+//                 onSubmit: (String verificationCode) {
+//                   controller.smsCode.value = verificationCode;
+//                 },
+//               ),
               SizedBox(
                 height: 30.kh,
               ),

@@ -7,7 +7,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
 
-
 class CameraOverlay extends StatefulWidget {
   const CameraOverlay(
     // this.model,
@@ -20,6 +19,7 @@ class CameraOverlay extends StatefulWidget {
     this.loadingWidget,
     this.infoMargin,
   }) : super(key: key);
+
   // final OverlayModel model;
   final bool flash;
   final CameraController controller;
@@ -57,7 +57,7 @@ class _FlutterCameraOverlayState extends State<CameraOverlay> {
 
   @override
   void dispose() {
-    controller.dispose();
+    //controller.dispose();
     super.dispose();
   }
 
@@ -97,12 +97,17 @@ class _FlutterCameraOverlayState extends State<CameraOverlay> {
           margin: const EdgeInsets.all(40),
           child: InkWell(
             onTap: () async {
-              for (int i = 10; i > 0; i--) {
-                await HapticFeedback.vibrate();
+              // for (int i = 10; i > 0; i--) {
+              //   await HapticFeedback.vibrate();
+              // }
+              try {
+                XFile file = await controller.takePicture();
+                widget.onCapture(File(file.path));
+              } catch (e) {
+                print("${e}");
               }
 
-              XFile file = await controller.takePicture();
-              widget.onCapture(File(file.path));
+              //  file.saveTo(file.path);
             },
             child: CircleAvatar(
               radius: 25.kh,

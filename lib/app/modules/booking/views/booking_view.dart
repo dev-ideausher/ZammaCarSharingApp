@@ -186,7 +186,7 @@ class BookingView extends GetView<BookingController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: 30.kh,
+                          height: 25.kh,
                         ),
                         Obx(()=>CachedNetworkImage(
                           fit: BoxFit.cover,
@@ -306,12 +306,18 @@ class BookingView extends GetView<BookingController> {
                                       width: 5.kh,
                                     ),
                                     Obx(()=>
-                                       Text(
-                                        "Mileage : ${controller.getBookingDetailsModel.value.data?.car?.mileage}",
-                                        style: GoogleFonts.urbanist(
-                                          color: Color(0xFF5F5F5F),
-                                        ),
+                                       SizedBox(
+                                         width: 90.kw,
+                                         child: Center(
+                                           child: Text(
+                                            "Mileage : ${controller.getBookingDetailsModel.value.data?.car?.mileage}",
+                                            style: GoogleFonts.urbanist(
+                                              color: Color(0xFF5F5F5F),
+                                            ),
+                                             overflow: TextOverflow.ellipsis,
                                       ),
+                                         ),
+                                       ),
                                     ),
                                   ],
                                 )),
@@ -686,7 +692,7 @@ class BookingView extends GetView<BookingController> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            "Front hood",
+                                            "Front Side",
                                             style: GoogleFonts.urbanist(
                                               color: Color(0xFF000000),
                                             ),
@@ -914,8 +920,7 @@ class BookingView extends GetView<BookingController> {
                                       controller.lodingMsg.value =
                                       "Uploading image";
                                       context.loaderOverlay.show();
-                                    controller
-                                        .uploadInspectionImage("S")
+                                    controller.uploadInspectionImage("S")
                                         .then((value) {
                                     if (value == 1) {
 
@@ -1127,7 +1132,7 @@ class BookingView extends GetView<BookingController> {
                       padding: const EdgeInsets.fromLTRB(16.0, 24, 0, 0),
                       child: Column(
                         children: [
-                          Text("Onging Trip",
+                          Text("Ongoing Trip",
                               style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
                           SizedBox(
                             height: 5,
@@ -1429,10 +1434,14 @@ class BookingView extends GetView<BookingController> {
 
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.grey,
+                            primary: controller.getBookingDetailsModel.value.data?.car?.ignition== "off" ? Colors.grey : Colors.green,
                             fixedSize: Size(344.kw, 56.kh),
                           ),
-                          onPressed: (){},
+                          onPressed:(){
+
+
+
+                          },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -1711,7 +1720,7 @@ class BookingView extends GetView<BookingController> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "Front hood",
+                                          "Front Side",
                                           style: GoogleFonts.urbanist(
                                             color: Color(0xFF000000),
                                           ),
@@ -2280,11 +2289,12 @@ class BookingView extends GetView<BookingController> {
                               : Container(
                                   child: ButtonDesign(
                                       name: "Pay",
-                                      onPressed: () {
-                                        if((controller.totalFare.value)>0) {
+                                      onPressed: () async{
+                                        if((controller.totalFare.value) > 0) {
+                                           await controller.getTransationDetails();
                                           Get.toNamed(Routes.SAVED_CARDS,
                                               arguments: [
-                                                controller.bookingId,
+                                                controller.bookingId == "" ? controller.rideHistory.value.data![0]!.Id:controller.bookingId,
                                                 "End",
                                                 "",
                                                 false,

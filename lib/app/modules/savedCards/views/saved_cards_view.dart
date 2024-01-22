@@ -77,12 +77,13 @@ class SavedCardsView extends GetView<SavedCardsController> {
                           controller.savedCardsresponse.value.cards?.length,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: () {
+                          onTap: () async{
 
 
-                            controller.payViaCard(index).then((value) {
+                           await controller.payViaCard(index).then((value) {
                               if (value == 1) {
-                                if (controller.model == "End") {
+                                if (controller.model == "End")
+                                {
                                   showDialog(
                                       context: context,
                                       barrierDismissible: false,
@@ -171,7 +172,8 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                         );
                                       });
 
-                                } else {
+                                }
+                                else {
                                   showDialog(
                                       context: context,
                                       barrierDismissible: false,
@@ -313,8 +315,7 @@ class SavedCardsView extends GetView<SavedCardsController> {
                             });
                           },
                           child: CreditCardWidget(
-                            cardNumber:
-                                controller.cardList.value[index].cardNumber,
+                            cardNumber: controller.cardList.value[index].cardNumber,
                             expiryDate: controller.cardList.value[index].cardDate,
                             cardHolderName: controller
                                         .cardList.value[index].cardHolderName ==

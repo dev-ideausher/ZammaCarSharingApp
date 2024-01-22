@@ -21,7 +21,7 @@ class CompletedRideDetailsView extends GetView<CompletedRideDetailsController> {
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
           title:  Text(
-            'Completed ride',
+            'Ride Details',
             style: GoogleFonts.urbanist( color: Colors.black),
 
           ),
@@ -213,7 +213,7 @@ class CompletedRideDetailsView extends GetView<CompletedRideDetailsController> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 5.kh,
+                                  height: 2.kh,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(16.kh, 0, 0, 0),

@@ -8,7 +8,7 @@ import 'package:zammacarsharing/app/services/dio/api_service.dart';
 class TotalPaymentController extends GetxController {
   //TODO: Implement TotalPaymentController
 
-  Rx<TotalPayments> totalPayment = TotalPayments().obs;
+Rx<TotalPayments> totalPayment = TotalPayments().obs;
 RxString outputDate="".obs;
 RxBool loader=false.obs;
 RxInt nuberOfPayment=0.obs;

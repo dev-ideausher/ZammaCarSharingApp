@@ -29,6 +29,7 @@ abstract class Routes {
   static const ZONE = _Paths.ZONE;
   static const TOTAL_PAYMENT = _Paths.TOTAL_PAYMENT;
   static const WELCOME_BACK = _Paths.WELCOME_BACK;
+  static const PAYMENT_FINAL_DETAILS = _Paths.PAYMENT_FINAL_DETAILS;
 }
 
 abstract class _Paths {
@@ -59,4 +60,5 @@ abstract class _Paths {
   static const ZONE = '/zone';
   static const TOTAL_PAYMENT = '/total-payment';
   static const WELCOME_BACK = '/welcome-back';
+  static const PAYMENT_FINAL_DETAILS = '/payment-final-details';
 }

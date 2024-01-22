@@ -15,8 +15,7 @@ class APIManager {
           .post(Endpoints.baseUrl, data: jsonEncode(body));
 
   static Future<Response> checkIsUserOnBoard() async =>
-      await DioClient(Dio(), showSnakbar: false, isOverlayLoader: false).post(
-          Endpoints.onBoardStatus,
+      await DioClient(Dio(), showSnakbar: false, isOverlayLoader: false).post(Endpoints.onBoardStatus,
           );
   static Future<Response> onBoardUser({required dynamic body}) async =>
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).post(
@@ -28,8 +27,7 @@ class APIManager {
           .get(Endpoints.getCategories);
 
   static Future<Response> getCars() async =>
-      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
-          .get(Endpoints.getAllCars);
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).get(Endpoints.getAllCars);
 
   static Future<Response> getCarsByCategory({required String cat}) async =>
       await DioClient(Dio(), showSnakbar: false, isOverlayLoader: false)
@@ -75,11 +73,12 @@ class APIManager {
 
   static Future<Response> getinProcessRideHistory() async =>
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
-          .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}&status=inprogress");
+          .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}&status=inprogress",
+
+      );
 
   static Future<Response> getOnGoingRideHistory() async =>
-      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)
-          .get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}&status=ongoing");
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).get(Endpoints.getRideHistory+"?user=${Get.find<GetStorageService>().getCustomUserId}&status=ongoing");
 
   static Future<Response> ReportAnIssue({required dynamic body}) async =>
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).post(
@@ -114,6 +113,11 @@ class APIManager {
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).get(
           Endpoints.getCoordinates
       );
+  static Future<Response> getParkingCoordinatesZonePolygon() async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false).get(
+          Endpoints.getCoordinatesZonePolygon
+      );
+
 
   static Future<Response> patchRideTime({required dynamic body,required String bookingId}) async =>
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).patch(

@@ -13,8 +13,8 @@ class DioClient {
   DioClient(this._dio, {this.isOverlayLoader = false, this.showSnakbar = false}) {
     _dio
       ..options.baseUrl = Endpoints.baseUrl
-      ..options.connectTimeout = Endpoints.connectionTimeout
-      ..options.receiveTimeout = Endpoints.receiveTimeout
+      ..options.connectTimeout = Duration(milliseconds: Endpoints.connectionTimeout)
+      ..options.receiveTimeout = Duration(milliseconds: Endpoints.receiveTimeout)
       ..options.responseType = ResponseType.json
       ..interceptors.add(AppInterceptors(isOverlayLoader: isOverlayLoader, showSnakbar: showSnakbar));
   }

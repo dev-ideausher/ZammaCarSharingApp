@@ -61,7 +61,8 @@ controller.collectRideHistory();
                         ]);
                       }
                       else {
-                        Get.toNamed(Routes.COMPLETED_RIDE_DETAILS,arguments: [(controller.rideHistory.value.data?[index]?.Id),
+                        Get.toNamed(Routes.COMPLETED_RIDE_DETAILS,arguments: [
+                          (controller.rideHistory.value.data?[index]?.Id),
                           (controller.rideHistory.value.data?[index]?.car?.model),(controller.rideHistory.value.data?[index]?.createdAt?.substring(0,10)),index] );
                       }
                     },
@@ -108,7 +109,7 @@ controller.collectRideHistory();
                                   width: 90.kw,
                                   height: 30.kh,
                                   decoration: BoxDecoration(
-                                    color: controller.rideHistory.value.data?[index]?.status=="completed"?Color(0xff031569):controller.rideHistory.value.data?[index]?.status=="inprogress"?Color(0xff008000):controller.rideHistory.value.data?[index]?.status=="cancelled"?Color(0xffFF0000):Color(0xff008000),
+                                    color: controller.rideHistory.value.data?[index]?.status =="completed" ? Color(0xff031569):controller.rideHistory.value.data?[index]?.status=="inprogress"?Color(0xff008000):controller.rideHistory.value.data?[index]?.status=="cancelled"?Color(0xffFF0000):Color(0xff008000),
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(15),
                                     ),

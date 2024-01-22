@@ -57,14 +57,18 @@ class SettingsView extends GetView<SettingsController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "Hey, ${controller.logindetails.value.user?.name}",
-                                  style: GoogleFonts.urbanist( fontSize: 32,
-                                      fontWeight: FontWeight.bold)
+                                SizedBox(
+                                  height: 40.kh,
 
+                                  child: Text(
+                                    "Hey, ${controller.logindetails.value.user?.name}",
+                                    style: GoogleFonts.urbanist( fontSize: 32,
+                                        fontWeight: FontWeight.bold)
+
+                                  ),
                                 ),
                                 SizedBox(
-                                  height: 10,
+                                  height: 20.kh,
                                 ),
                                 Row(
                                   mainAxisAlignment:

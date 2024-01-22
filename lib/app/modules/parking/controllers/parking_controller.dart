@@ -150,13 +150,12 @@ class ParkingController extends GetxController {
       final response =
       await APIManager.getParkingCoordinates();
       getParkingCoordinatesModel.value = ParkingCordinates.fromJson(jsonDecode(response.toString()));
-
-      List<ParkingCordinatesData> temp =  (getParkingCoordinatesModel.value.data)!;
+      List<ParkingCordinatesData?> temp =  (getParkingCoordinatesModel.value.data)!;
       print("temp : ${temp}");
-      for(ParkingCordinatesData polygon in temp){
+      for(ParkingCordinatesData? polygon in temp){
         List<LatLng> child=[];
-        for(var element in polygon.polygons!.coordinates![0]![0]!){
-          child.add(LatLng(element![0], element[1]));
+        for(var element in polygon!.polygons!.coordinates![0]![0]!){
+          child.add(LatLng(element!, element));
 
         }
         polygonPoint.add(child);

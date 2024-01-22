@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:zammacarsharing/app/modules/booking/controllers/booking_controller.dart';
+import 'package:zammacarsharing/app/modules/home/controllers/home_controller.dart';
 import 'package:zammacarsharing/app/modules/profile/controllers/profile_controller.dart';
 import 'package:zammacarsharing/app/modules/settings/controllers/settings_controller.dart';
 import 'package:zammacarsharing/app/services/globalData.dart';
@@ -11,6 +12,9 @@ class SplashBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<SplashController>(
       () => SplashController(),
+    );
+    Get.lazyPut<HomeController>(
+          () => HomeController(),
     );
     Get.lazyPut<GlobalData>(
           () => GlobalData(),

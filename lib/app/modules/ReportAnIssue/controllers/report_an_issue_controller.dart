@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:zammacarsharing/app/modules/booking/controllers/booking_controller.dart';
 import 'package:zammacarsharing/app/modules/models/image_response_model.dart';
 import 'package:zammacarsharing/app/modules/widgets/custom_camera.dart';
 import 'package:zammacarsharing/app/services/dio/api_service.dart';
@@ -23,7 +24,7 @@ class ReportAnIssueController extends GetxController {
   final instanceOfGlobalData = Get.find<GlobalData>();
   Rx<ImageUpload> imageUpload = ImageUpload().obs;
   Rx<TextEditingController> textEditingController=TextEditingController().obs;
-  final bookingId=Get.arguments[0];
+  final bookingId = Get.arguments[0];
   var issuepic = File("").obs;
   @override
   void onInit() {
@@ -147,7 +148,7 @@ class ReportAnIssueController extends GetxController {
                }
                var body={
                  "issue":"Raised issue",
-                 "bookingId":bookingId,
+                 "bookingId":bookingId == "" ?  "${Get.find<BookingController>().rideHistory.value.data?[0]?.Id}" :bookingId,
                  "image":(selectedFile.value!="Add Image")?(imageUpload.value.urls?[0]).toString():"",
                  "desc":textEditingController.value.text
                };

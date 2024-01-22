@@ -33,6 +33,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:ui' as ui;
 import 'dart:typed_data';
+
 class HomeController extends GetxController {
   //TODO: Implement HomeController
 
@@ -51,7 +52,7 @@ class HomeController extends GetxController {
   RxInt timeTapAttention = 0.obs;
   RxInt distanceTapAttention = 0.obs;
   RxInt planTapAttention = 100.obs;
-   RxDouble finalAmount = 0.0.obs;
+  RxDouble finalAmount = 0.0.obs;
   Rx<CategoriesModels> categoriesModels = CategoriesModels().obs;
   Rx<GetCars> carsModel = GetCars().obs;
   final imageUpload = ImageUpload().obs;
@@ -72,8 +73,8 @@ class HomeController extends GetxController {
   RxString carId = "".obs;
   RxString qnr = "".obs;
   RxDouble selectedCarLatitude = 0.0.obs;
-  RxDouble selectedCarLongitude= 0.0.obs;
-  RxString pickupAddress= "".obs;
+  RxDouble selectedCarLongitude = 0.0.obs;
+  RxString pickupAddress = "".obs;
   Rx<bool> freeTimer = false.obs;
   var frontHood = File("").obs;
   var leftSide = File("").obs;
@@ -83,8 +84,8 @@ class HomeController extends GetxController {
   final backImageStatus = 0.obs;
   final leftImageStatus = 0.obs;
   final rightImageStatus = 0.obs;
-  final extraMinuteCharges =0.0.obs;
-  final extraMilesCharges =0.0.obs;
+  final extraMinuteCharges = 0.0.obs;
+  final extraMilesCharges = 0.0.obs;
   final Completer<GoogleMapController> mapCompleter = Completer();
 
   // RxDouble lng=(-122.677433.obs) ;
@@ -94,59 +95,65 @@ class HomeController extends GetxController {
   BitmapDescriptor sourceMark = BitmapDescriptor.defaultMarker;
   RxSet<Marker> listOfMarker = <Marker>{}.obs;
   RxList carsImage = [].obs;
-   RxList<Marker> list=[Marker(markerId: MarkerId('1'),)].obs;
+  RxList<Marker> list = [
+    Marker(
+      markerId: MarkerId('1'),
+    )
+  ].obs;
   RxSet<Marker> marker = <Marker>{}.obs;
 
   final Completer<GoogleMapController> controllerr = Completer();
-RxBool mapLoader = true.obs;
-RxBool isMapLoaded = false.obs;
+  RxBool mapLoader = true.obs;
+  RxBool isMapLoaded = false.obs;
   RxInt timeLength = 0.obs;
   RxInt milesLength = 0.obs;
+
   // List<Marker> marker = [];
 
   // on below line we are specifying our camera position
 
-
   @override
-  Future<void> onInit() async {
+  onInit() async {
+    await getCurrentPosition();
+    await getcar();
+    await getCategories();
+    getReadyMarker();
+    getCarsAndCategories();
+    getInProcessOrOngoingRide();
+
+    //getcar();
     super.onInit();
 
     final User? user = await firebaseAuth.currentUser;
     if (user != null) {
-
       await Get.find<TokenCreateGenrate>().validateCreatetoken(user);
       fcmSubscribe();
     }
 
     instanceOfGlobalData.isloginStatusGlobal.value =
         Get.find<GetStorageService>().getisLoggedIn;
-  await  getCarsAndCategories();
-    await  getInProcessOrOngoingRide();
   }
 
-  fcmSubscribe(){
-    if(Get.find<GetStorageService>().getCustomUserId.isNotEmpty)
+  fcmSubscribe() {
+    if (Get.find<GetStorageService>().getCustomUserId.isNotEmpty)
       FirebaseMessagingUtils.firebaseMessagingUtils
-          .subFcm(Get
-          .find<GetStorageService>()
-          .getCustomUserId);
-
-
-   // print("fcm subscribe in nav bar ${Get.find<GetStorageService>().getUserId}");
+          .subFcm(Get.find<GetStorageService>().getCustomUserId);
+    // print("fcm subscribe in nav bar ${Get.find<GetStorageService>().getUserId}");
   }
 
-getInProcessOrOngoingRide() async {
-  final User? user = await firebaseAuth.currentUser;
-  if (user != null) {
-    getOnGoingHistory();
-    getInProcessHistory();
+  getInProcessOrOngoingRide() async {
+    final User? user = await firebaseAuth.currentUser;
+    if (user != null) {
+      getOnGoingHistory();
+      getInProcessHistory();
+    }
   }
-}
+
   Future<void> getCarsAndCategories() async {
-    await  getCurrentPosition();
-   await getCars();
-   await getCategories();
-  await getReadyMarker();
+    // await getCurrentPosition();
+    // getcar();
+    getCategories();
+    getReadyMarker();
   }
 
   @override
@@ -174,15 +181,12 @@ getInProcessOrOngoingRide() async {
     final response = await APIManager.getCateories();
     categoriesModels.value =
         CategoriesModels.fromJson(jsonDecode(response.toString()));
-
   }
 
-  Future<void> getCars() async {
+  Future<void> getcar() async {
     final response = await APIManager.getCars();
     carsModel.value = GetCars.fromJson(jsonDecode(response.toString()));
-
-print("");
-
+    print("");
 
     /* list.value=  [
       // List of Markers Added on Google Map
@@ -210,52 +214,46 @@ print("");
           )
       ),
     ];*/
-  //  instanceOfGlobalData..timeCalculationOngoing(baseTime: (carsModel.value.cars?[0]?.createdAt).toString());
 
+    //  instanceOfGlobalData..timeCalculationOngoing(baseTime: (carsModel.value.cars?[0]?.createdAt).toString());
   }
 
   Future<void> getReadyMarker() async {
     list.clear();
     listOfMarker.clear();
-    final Uint8List customMarker= await getBytesFromAsset(
-        path:"assets/images/markerCar.png", //paste the custom image path
+    final Uint8List customMarker = await getBytesFromAsset(
+        path: "assets/images/markerCar.png", //paste the custom image path
         width: 150 // size of custom image as marker
-    );
-    for(int i=0;i<carsModel.value.cars!.length;i++){
-      list.value.add(Marker(
-        icon: BitmapDescriptor.fromBytes(customMarker),
-        markerId: MarkerId("${i}"),
-        position: LatLng((carsModel.value.cars?[i]?.position?.coordinates?[1])!.toDouble(),(carsModel.value.cars?[i]?.position?.coordinates?[0])!.toDouble()),
-          onTap: () {
-            model.value =
-            "${carsModel.value.cars?[i]?.brand} ${carsModel.value.cars?[i]?.model}";
-            carImage.value = (carsModel
-                .value
-                .cars?[i]
-                ?.images?[0])
-                .toString();
-            seatCapcity.value = (carsModel
-                .value
-                .cars?[i]
-                ?.seatCapacity)
-                .toString();
-            milage.value=(carsModel
-                .value
-                 .cars?[i]?.mileage)
-                .toString();
-            carId.value = (carsModel.value.cars?[i]?.Id)
-                .toString();
-           qnr.value = (carsModel.value.cars?[i]?.qnr)
-                .toString();
-            cars.value = false;
-            carDetails.value = true;
-            Get.find<GetStorageService>().setQNR = (carsModel.value.cars?[i]?.qnr).toString();
-            instanceOfGlobalData.QNR.value =
-            "${(carsModel.value.cars?[i]?.qnr).toString()}";
-            qnr.value = (carsModel.value.cars?[i]?.qnr).toString();
-
-          }
-      ),);
+        );
+    for (int i = 0; i < carsModel.value.cars!.length; i++) {
+      list.value.add(
+        Marker(
+            icon: BitmapDescriptor.fromBytes(customMarker),
+            markerId: MarkerId("${i}"),
+            position: LatLng(
+                (carsModel.value.cars?[i]?.position?.coordinates?[1])!
+                    .toDouble(),
+                (carsModel.value.cars?[i]?.position?.coordinates?[0])!
+                    .toDouble()),
+            onTap: () {
+              model.value =
+                  "${carsModel.value.cars?[i]?.brand} ${carsModel.value.cars?[i]?.model}";
+              carImage.value =
+                  (carsModel.value.cars?[i]?.images?[0]).toString();
+              seatCapcity.value =
+                  (carsModel.value.cars?[i]?.seatCapacity).toString();
+              milage.value = (carsModel.value.cars?[i]?.mileage).toString();
+              carId.value = (carsModel.value.cars?[i]?.Id).toString();
+              qnr.value = (carsModel.value.cars?[i]?.qnr).toString();
+              cars.value = false;
+              carDetails.value = true;
+              Get.find<GetStorageService>().setQNR =
+                  (carsModel.value.cars?[i]?.qnr).toString();
+              instanceOfGlobalData.QNR.value =
+                  "${(carsModel.value.cars?[i]?.qnr).toString()}";
+              qnr.value = (carsModel.value.cars?[i]?.qnr).toString();
+            }),
+      );
     }
     listOfMarker.value.addAll(list.value);
     listOfMarker.refresh();
@@ -280,17 +278,17 @@ print("");
   }
 
   Future<void> getCurrentPosition() async {
-
     final hasPermission = await handleLocationPermission();
 
     if (!hasPermission) {
-      mapLoader.value=false;
+      mapLoader.value = false;
       return;
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     center = LatLng(position.latitude, position.longitude);
-    mapLoader.value=false;
-    isMapLoaded.value=true;
+    mapLoader.value = false;
+    isMapLoaded.value = true;
     GoogleMapController googleMapController = await mapCompleter.future;
     googleMapController.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -301,16 +299,14 @@ print("");
       ),
     );
 
-
-    print(
-        "position lat  : ${position.latitude}, long : ${position.longitude}");
+    print("position lat  : ${position.latitude}, long : ${position.longitude}");
   }
 
   Future<String> getAddressFromLatLng() async {
-    String address="";
-    placemarkFromCoordinates(selectedCarLatitude.value,selectedCarLongitude.value)
+    String address = "";
+    placemarkFromCoordinates(
+            selectedCarLatitude.value, selectedCarLongitude.value)
         .then((List<Placemark> placemarks) {
-
       Placemark place = placemarks[0];
       print(
           'Human : ${place.street}, ${place.subLocality},${place.administrativeArea}, ${place.postalCode} }');
@@ -322,22 +318,20 @@ print("");
       getGlobalServicesInstance.country.value = place.country.toString();
       getFreshRecommendation();
       getFeaturedAds();*/
-      pickupAddress.value="${place.street}, ${place.subLocality},${place.administrativeArea}, ${place.postalCode} ";
-
+      pickupAddress.value =
+          "${place.street}, ${place.subLocality},${place.administrativeArea}, ${place.postalCode} ";
     }).catchError((e) {
       debugPrint(e);
     });
     return address;
   }
 
-
-  Future<int> createBooking({required String carId, required String qnr}
-  ) async {
-
+  Future<int> createBooking(
+      {required String carId, required String qnr}) async {
     instanceOfGlobalData.loader.value = true;
     var body = {
       "carId": carId,
-    "qnr":qnr,
+      "qnr": qnr,
       "pickupLocation": {
         "type": "Point",
         "coordinates": [selectedCarLatitude.value, selectedCarLongitude.value],
@@ -359,7 +353,6 @@ print("");
     }
   }
 
-
   Future<int> onBoardingStatus() async {
     instanceOfGlobalData.loader.value = true;
     try {
@@ -369,16 +362,14 @@ print("");
       print("response.data : ${response}");
       if (logindetails.value.user?.isApproved == true) {
         if (logindetails.value.user?.isSuspended == false) {
-          instanceOfGlobalData.loader.value=false;
-
-
+          instanceOfGlobalData.loader.value = false;
           return 1;
         } else {
-          instanceOfGlobalData.loader.value=false;
+          instanceOfGlobalData.loader.value = false;
           return 0;
         }
       } else {
-        instanceOfGlobalData.loader.value=false;
+        instanceOfGlobalData.loader.value = false;
         return 0;
       }
     } catch (e) {
@@ -388,105 +379,100 @@ print("");
   }
 
   Future<void> getCarPricing() async {
-
     try {
       final response = await APIManager.getCarPricingById(carId: carId.value);
-    carPriceById.value =
-      CarPriceById.fromJson(jsonDecode(response.toString()));
-    timeLength.value=(carPriceById.value.carPricing?.pricingRules?.length)!;
-    milesLength.value=(carPriceById.value.carPricing?.mileageRates?.length)!;
-      extraMinuteCharges.value=double.parse("${carPriceById.value.carPricing?.extraMinuteRate}");
-      extraMilesCharges.value=double.parse("${carPriceById.value.carPricing?.extraMileRate}");
-      final tPrice=carPriceById.value.carPricing?.pricingRules?[0]?.price;
-      final dPrice=carPriceById.value.carPricing?.mileageRates?[0]?.price;
-      finalAmount.value=(tPrice!+dPrice!);
+      carPriceById.value =
+          CarPriceById.fromJson(jsonDecode(response.toString()));
+      timeLength.value = (carPriceById.value.carPricing?.pricingRules?.length)!;
+      milesLength.value =
+          (carPriceById.value.carPricing?.mileageRates?.length)!;
+      extraMinuteCharges.value =
+          double.parse("${carPriceById.value.carPricing?.extraMinuteRate}");
+      extraMilesCharges.value =
+          double.parse("${carPriceById.value.carPricing?.extraMileRate}");
+      final tPrice = carPriceById.value.carPricing?.pricingRules?[0]?.price;
+      final dPrice = carPriceById.value.carPricing?.mileageRates?[0]?.price;
+      finalAmount.value = (tPrice! + dPrice!);
     } catch (e) {
-
       debugPrint("error while fetching car pricing");
-
     }
   }
 
-  Future<Uint8List> getBytesFromAsset({required String path,required int width})async {
+  Future<Uint8List> getBytesFromAsset(
+      {required String path, required int width}) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(
-        data.buffer.asUint8List(),
-        targetWidth: width
-    );
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(
-        format: ui.ImageByteFormat.png))!
-        .buffer.asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
-RxBool statusCheck=false.obs;
-  RxBool statusCheckTwo=false.obs;
+
+  RxBool statusCheck = false.obs;
+  RxBool statusCheckTwo = false.obs;
 
   Future<int> getInProcessHistory() async {
     try {
-
-      statusCheck.value=true;
-        final response = await APIManager.getinProcessRideHistory();
-        rideHistory.value =
-            RideHistory.fromJson(jsonDecode(response.toString()));
-        /*instanceOfGlobalData.waitingLastStampToseconds(
+      statusCheck.value = true;
+      final response = await APIManager.getinProcessRideHistory();
+      rideHistory.value = RideHistory.fromJson(jsonDecode(response.toString()));
+      /*instanceOfGlobalData.waitingLastStampToseconds(
             startTime: DateTime.parse(
                 (rideHistory.value.data?[0]?.createdAt).toString()));*/
-        Get.toNamed(Routes.BOOKING, arguments: [
-          (rideHistory.value.data?[0]?.Id),
-          ("${rideHistory.value.data?[0]?.car?.brand} ${rideHistory.value.data?[0]?.car?.model}"),
-          (rideHistory.value.data?[0]?.car
-              ?.seatCapacity),true
-        ]);
-      Get.find<GetStorageService>().setQNR=(rideHistory.value.data?[0]?.qnr).toString();
-      statusCheck.value=false;
+      Get.toNamed(Routes.BOOKING, arguments: [
+        (rideHistory.value.data?[0]?.Id),
+        ("${rideHistory.value.data?[0]?.car?.brand} "
+            "${rideHistory.value.data?[0]?.car?.model}"),
+        (rideHistory.value.data?[0]?.car?.seatCapacity),
+        true
+      ]);
+      Get.find<GetStorageService>().setQNR =
+          (rideHistory.value.data?[0]?.qnr).toString();
+      statusCheck.value = false;
       return 1;
     } catch (e) {
-      statusCheck.value=false;
-    print("eroor while fetching inProcessRide : $e");
+      statusCheck.value = false;
+      print("eroor while fetching inProcessRide : $e");
       return 0;
     }
   }
 
   Future<int> getOnGoingHistory() async {
     try {
-      statusCheckTwo.value=true;
+      statusCheckTwo.value = true;
 
-        final response = await APIManager.getOnGoingRideHistory();
-        rideHistory.value =
-            RideHistory.fromJson(jsonDecode(response.toString()));
-       /* instanceOfGlobalData.lastStampToseconds(
+      final response = await APIManager.getOnGoingRideHistory();
+      rideHistory.value = RideHistory.fromJson(jsonDecode(response.toString()));
+      /* instanceOfGlobalData.lastStampToseconds(
             startTime: DateTime.parse(
                 (rideHistory.value.data?[0]?.pickupTime).toString()));*/
-        Get.toNamed(Routes.BOOKING, arguments: [
-          (rideHistory.value.data?[0]?.Id),
-          ("${rideHistory.value.data?[0]?.car?.brand} ${rideHistory.value.data?[0]?.car?.model}"),
-          (rideHistory.value.data?[0]?.car
-              ?.seatCapacity),false
-        ]);
-      Get.find<GetStorageService>().setQNR=(rideHistory.value.data?[0]?.qnr).toString();
-      statusCheckTwo.value=false;
+      Get.toNamed(Routes.BOOKING, arguments: [
+        (rideHistory.value.data?[0]?.Id),
+        ("${rideHistory.value.data?[0]?.car?.brand} ${rideHistory.value.data?[0]?.car?.model}"),
+        (rideHistory.value.data?[0]?.car?.seatCapacity),
+        false
+      ]);
+      Get.find<GetStorageService>().setQNR =
+          (rideHistory.value.data?[0]?.qnr).toString();
+      statusCheckTwo.value = false;
       return 1;
     } catch (e) {
-      statusCheckTwo.value=false;
+      statusCheckTwo.value = false;
       print("eroor while fetching ongoingRide : $e");
       return 0;
     }
   }
 
+  calculateCharges() {
+    final tPrice = carPriceById.value.carPricing?.pricingRules?[timeTapAttention.value]?.price;
+    final dPrice = carPriceById.value.carPricing?.mileageRates?[distanceTapAttention.value]?.price;
 
+    double timeCharges = 0;
+    double distanceCharge = 0;
 
-  calculateCharges(){
-
-    final tPrice=carPriceById.value.carPricing?.pricingRules?[timeTapAttention.value]?.price;
-    final dPrice=carPriceById.value.carPricing?.mileageRates?[distanceTapAttention.value]?.price;
-
-    double timeCharges=0;
-    double distanceCharge=0;
-
-  //  final timeCharges=(timeTapAttention.value+1)*10;
+    //  final timeCharges=(timeTapAttention.value+1)*10;
     //final distanceCharge=(distanceTapAttention.value*10)*10;
-     finalAmount.value=(tPrice!+dPrice!);
+    finalAmount.value = (tPrice! + dPrice!);
   }
-
-
 }

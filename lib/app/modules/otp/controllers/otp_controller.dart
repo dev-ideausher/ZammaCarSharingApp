@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sms_autodetect/sms_autodetect.dart';
 import 'package:zammacarsharing/app/modules/models/otp_used_class.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/auth.dart';
@@ -10,14 +12,18 @@ import 'package:zammacarsharing/app/services/snackbar.dart';
 class OtpController extends GetxController {
   //TODO: Implement OtpController
 RxString smsCode="".obs;
+var OTPController = TextEditingController().obs;
 Rx<bool>reSendLoader=false.obs;
 Rx<bool>checkTimer=false.obs;
 late OtpNeededData instanceOfOtpNeededData ;
 final instanceOfGlobalData=Get.find<GlobalData>();
   @override
-  void onInit() {
-    super.onInit();
+  void onInit() async{
     instanceOfOtpNeededData = Get.arguments[0];
+
+    await SmsAutoDetect().listenForCode;
+
+    super.onInit();
   }
 
   @override
