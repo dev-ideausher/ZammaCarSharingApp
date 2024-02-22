@@ -27,6 +27,8 @@ class SavedCardsController extends GetxController {
 
   Rx<CreateBookinModel> createBookinModel = CreateBookinModel().obs;
   var bookingId = Get.arguments[0];
+  var bookingIdM = "".obs;
+
   var model = Get.arguments[1];
   var seetCapacity = Get.arguments[2];
   var boolvale = Get.arguments[3];
@@ -130,10 +132,12 @@ class SavedCardsController extends GetxController {
 
         if (model != "End") {
           final response = await APIManager.createBooking(body: body);
-          bookingdata.value = CreateBookinModel.fromJson(jsonDecode(response.toString()));;
+          bookingdata.value = CreateBookinModel.fromJson(jsonDecode(response.toString()));
+          bookingIdM.value = "${bookingdata.value.booking?.Id}";
           log("Response is this : ${response}");
 
           if (response.statusCode == 200 || response.statusCode == 201) {
+            bookingIdM.value = "${bookingdata.value.booking?.Id}";
             await DialogHelper.hideDialog();
 
             print("Payment done");
@@ -155,7 +159,7 @@ class SavedCardsController extends GetxController {
 
           if (response.statusCode == 200 || response.statusCode == 201) {
             await DialogHelper.hideDialog();
-
+            bookingIdM.value = "${bookingdata.value.booking?.Id}";
             print("Payment done");
 
             return 1;
@@ -238,7 +242,9 @@ class SavedCardsController extends GetxController {
           bookingdata.value = CreateBookinModel.fromJson(jsonDecode(response.toString()));
 
           if (response.statusCode == 200 || response.statusCode == 201) {
+
             print("Payment done");
+            bookingIdM.value = "${bookingdata.value.booking?.Id}";
             await DialogHelper.hideDialog();
 
             return 1;
@@ -256,6 +262,7 @@ class SavedCardsController extends GetxController {
 
           if (response.statusCode == 200 || response.statusCode == 201) {
             print("Payment done");
+
             await DialogHelper.hideDialog();
 
             return 1;
@@ -280,13 +287,13 @@ class SavedCardsController extends GetxController {
   Future<int> cancelBooking() async {
    // final instanceOfGlobalData = Get.find<GlobalData>();
 
+
    // instanceOfGlobalData.loader.value = true;
     var body = {"cancelReason": "Not available"};
     try {
       final response =
-          await APIManager.cancelBooking(body: body, bookingId: bookingId);
-      createBookinModel.value =
-          CreateBookinModel.fromJson(jsonDecode(response.toString()));
+          await APIManager.cancelBooking(body: body, bookingId:    bookingIdM.value);
+      createBookinModel.value = CreateBookinModel.fromJson(jsonDecode(response.toString()));
 
       print("response.data : ${response.toString()}");
 

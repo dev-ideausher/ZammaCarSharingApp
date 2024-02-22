@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -98,8 +100,26 @@ class CompletedRideDetailsView extends GetView<CompletedRideDetailsController> {
 
                           ),
                         ),
+
                       ],
                     ),
+                    Padding(
+                      padding: EdgeInsets.all(16.0.kh),
+                      child: Text(
+                        "${(controller.rideHistory.value.data?[controller.index]?.pickupTime)}",
+                        style: GoogleFonts.urbanist( color: ColorUtil.ZammaGrey),
+
+                      ),
+                    ),
+
+                    // Padding(
+                    //   padding: EdgeInsets.all(16.0.kh),
+                    //   child: Text(
+                    //     "${double.parse(("${DateTime.parse("${controller.rideHistory.value.data?[controller.index]?.dropTime}")}")) - double.parse(("${DateTime.parse("${controller.rideHistory.value.data?[controller.index]?.pickupTime}").minute}"))}",
+                    //     style: GoogleFonts.urbanist( color: ColorUtil.ZammaGrey),
+                    //
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 16.kh,
                     ),

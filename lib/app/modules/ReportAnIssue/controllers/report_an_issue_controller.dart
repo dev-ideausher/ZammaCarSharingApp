@@ -134,10 +134,11 @@ class ReportAnIssueController extends GetxController {
       print(response.reasonPhrase);
     }
   }
+ var issueloader = false.obs;
 
   Future<void> uploadIssue() async {
 
-
+    issueloader.value = true;
       try  {
         //instanceOfGlobalData.loader.value = true;
                if(selectedFile.value!="Add Image") {
@@ -154,10 +155,12 @@ class ReportAnIssueController extends GetxController {
                };
         final response = await APIManager.ReportAnIssue(body: body);
      if(response.statusCode==200){
+       issueloader.value = false;
        Get.back();
+
      }
       } catch (e) {
-
+        issueloader.value = false;
       //  instanceOfGlobalData.loader.value = false;
         print("problem while reporing issue");
 

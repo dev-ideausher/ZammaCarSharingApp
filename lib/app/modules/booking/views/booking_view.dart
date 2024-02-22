@@ -34,19 +34,19 @@ class BookingView extends GetView<BookingController> {
           width: 250.kw,
           child: Row(children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(8.0,8,0,8),
+              padding: const EdgeInsets.fromLTRB(8.0, 8, 0, 8),
               child:
                   SizedBox(child: Lottie.asset('assets/json/car_loader.json')),
             ),
             SizedBox(
               width: 10.kw,
             ),
-             Obx(()=>
-                Text(
+            Obx(
+              () => Text(
                 "${controller.lodingMsg.value}",
-                style:  GoogleFonts.urbanist(fontSize: 16),
+                style: GoogleFonts.urbanist(fontSize: 16),
+              ),
             ),
-             ),
           ]),
         )),
         child: Container(
@@ -116,7 +116,7 @@ class BookingView extends GetView<BookingController> {
 
   Widget carBooking(double initialVal) {
     /*  if (!controller.checkTimer.value) controller.startTimer();*/
-  /*  if (!Get.find<GlobalData>().checkTimer.value)
+    /*  if (!Get.find<GlobalData>().checkTimer.value)
       Get.find<GlobalData>().startTimer();*/
     return DraggableScrollableSheet(
       initialChildSize: initialVal,
@@ -149,20 +149,27 @@ class BookingView extends GetView<BookingController> {
                       child: Column(
                         children: [
                           Text("Free Waiting",
-                              style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))
-                          ),
+                              style: GoogleFonts.urbanist(
+                                  color: Color(0xFFB4BCE1))),
                           SizedBox(
                             height: 5,
                           ),
                           Obx(
-                            () => controller.loader.value==true?CircularProgressIndicator(color: Colors.white): Text(
-                              //  "${controller.minute.value}:${controller.start.value}",
-                              "${controller.instanceOfGlobalData.waitingRideTime.value}",// "${Get.find<GlobalData>().minute.value}:${Get.find<GlobalData>().start.value}",
-                              style: GoogleFonts.urbanist(fontWeight: FontWeight.bold,
-                                fontSize: 28.kh,
-                                color: controller.instanceOfGlobalData.extraWaiting.value==true?Colors.red:Colors.white,)
-
-                            ),
+                            () => controller.loader.value == true
+                                ? CircularProgressIndicator(color: Colors.white)
+                                : Text(
+                                    //  "${controller.minute.value}:${controller.start.value}",
+                                    "${controller.instanceOfGlobalData.waitingRideTime.value}",
+                                    // "${Get.find<GlobalData>().minute.value}:${Get.find<GlobalData>().start.value}",
+                                    style: GoogleFonts.urbanist(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28.kh,
+                                      color: controller.instanceOfGlobalData
+                                                  .extraWaiting.value ==
+                                              true
+                                          ? Colors.red
+                                          : Colors.white,
+                                    )),
                           )
                         ],
                       ),
@@ -188,54 +195,46 @@ class BookingView extends GetView<BookingController> {
                         SizedBox(
                           height: 25.kh,
                         ),
-                        Obx(()=>CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl:
-                          "${controller.getBookingDetailsModel.value.data?.car?.images?[0]}",
-                          imageBuilder:
-                              (context, imageProvider) =>
-                              Container(
-
-                                margin: EdgeInsets.fromLTRB(
-                                    0, 10, 10, 10),
-                                height: 140.kh,
-                                width: 260.kw,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-
-                                  ),
-
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(4),
-                                  ),
-                                ),
-                              ),
-                          progressIndicatorBuilder: (context,
-                              url, downloadProgress) =>
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey.shade300,
-                                highlightColor:
-                                Colors.grey.shade100,
-                                child: Container(
-                                  height: 100.kh,
-                                  width: 260.kw,
-
-                                ),
-                              ),
-
-                          errorWidget: (context, url, error) => Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor:
-                            Colors.grey.shade100,
-                            child: Container(
-                              height: 100.kh,
+                        Obx(
+                          () => CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl:
+                                "${controller.getBookingDetailsModel.value.data?.car?.images?[0]}",
+                            imageBuilder: (context, imageProvider) => Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                              height: 140.kh,
                               width: 260.kw,
-
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(4),
+                                ),
+                              ),
+                            ),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                height: 100.kh,
+                                width: 260.kw,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                height: 100.kh,
+                                width: 260.kw,
+                              ),
                             ),
                           ),
-                        ),),
+                        ),
                         SizedBox(
                           height: 30.kh,
                         ),
@@ -248,11 +247,10 @@ class BookingView extends GetView<BookingController> {
                                   BorderRadius.all(Radius.circular(20)),
                             ),
                             child: Center(
-                                child: Text(
-                              "${controller.model}",
-                              style: GoogleFonts.urbanist(color: Colors.white,)
-
-                            ))),
+                                child: Text("${controller.model}",
+                                    style: GoogleFonts.urbanist(
+                                      color: Colors.white,
+                                    )))),
                         SizedBox(
                           height: 20.kh,
                         ),
@@ -262,11 +260,10 @@ class BookingView extends GetView<BookingController> {
                             Column(
                               children: [
                                 SvgPicture.asset("assets/icons/battery.svg"),
-                                Obx(()=>
-                                  Text(
-                                    "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType=="fule"?"Liter":"%"}",
+                                Obx(
+                                  () => Text(
+                                    "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType == "fule" ? "Liter" : "%"}",
                                     style: GoogleFonts.urbanist(fontSize: 14),
-
                                   ),
                                 ),
                               ],
@@ -277,7 +274,6 @@ class BookingView extends GetView<BookingController> {
                                 Text(
                                   "${controller.seatCapcity}",
                                   style: GoogleFonts.urbanist(fontSize: 14),
-
                                 ),
                               ],
                             ),
@@ -305,25 +301,26 @@ class BookingView extends GetView<BookingController> {
                                     SizedBox(
                                       width: 5.kh,
                                     ),
-                                    Obx(()=>
-                                       SizedBox(
-                                         width: 90.kw,
-                                         child: Center(
-                                           child: Text(
+                                    Obx(
+                                      () => SizedBox(
+                                        width: 90.kw,
+                                        child: Center(
+                                          child: Text(
                                             "Mileage : ${controller.getBookingDetailsModel.value.data?.car?.mileage}",
                                             style: GoogleFonts.urbanist(
                                               color: Color(0xFF5F5F5F),
                                             ),
-                                             overflow: TextOverflow.ellipsis,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
                                       ),
-                                         ),
-                                       ),
                                     ),
                                   ],
                                 )),
-                            InkWell(onTap: (){
-                              controller.openMap();
-                            },
+                            InkWell(
+                              onTap: () {
+                                controller.openMap();
+                              },
                               child: Container(
                                   height: 35.kh,
                                   width: 120.kw,
@@ -332,7 +329,8 @@ class BookingView extends GetView<BookingController> {
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(20)),
                                       border: Border.all(
-                                          width: 0.5, color: Color(0xFF5F5F5F))),
+                                          width: 0.5,
+                                          color: Color(0xFF5F5F5F))),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -365,9 +363,9 @@ class BookingView extends GetView<BookingController> {
                               : ButtonDesign(
                                   name: "Verify and Inspect",
                                   onPressed: () {
-                               //     controller.openMap();
+                                    //     controller.openMap();
 
-                                   /* controller
+                                    /* controller
                                         .qrBarCodeScannerDialogPlugin.value
                                         .getScannedQrBarCode(
                                             context: context,
@@ -390,7 +388,6 @@ class BookingView extends GetView<BookingController> {
 
                                             });*/
                                     controller.carInspection.value = true;
-
                                   }),
                         ),
                         SizedBox(
@@ -468,11 +465,12 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "No",
-                                                              style: GoogleFonts.urbanist(
-                                                                  color: ColorUtil
-                                                                      .kPrimary,
-                                                                  fontSize:
-                                                                      16.kh),
+                                                              style: GoogleFonts
+                                                                  .urbanist(
+                                                                      color: ColorUtil
+                                                                          .kPrimary,
+                                                                      fontSize:
+                                                                          16.kh),
                                                             ),
                                                           ),
                                                         ),
@@ -506,11 +504,12 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "Yes, cancel ride",
-                                                              style: GoogleFonts.urbanist(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      16.kh),
+                                                              style: GoogleFonts
+                                                                  .urbanist(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          16.kh),
                                                             ),
                                                           ),
                                                         ),
@@ -563,7 +562,7 @@ class BookingView extends GetView<BookingController> {
                       topLeft: Radius.circular(20.0)),
                 ),
                 child: Column(
-                 // crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                         child: Container(
@@ -597,8 +596,9 @@ class BookingView extends GetView<BookingController> {
                       padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
                       child: Column(
                         children: [
-                           Text("Free Waiting",
-                              style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
+                          Text("Free Waiting",
+                              style: GoogleFonts.urbanist(
+                                  color: Color(0xFFB4BCE1))),
                           SizedBox(
                             height: 5,
                           ),
@@ -606,11 +606,16 @@ class BookingView extends GetView<BookingController> {
                             () => controller.loader.value == true
                                 ? CircularProgressIndicator()
                                 : Text(
-                              "${controller.instanceOfGlobalData.waitingRideTime.value}", // "${controller.instanceOfGlobalData.minute.value}:${controller.instanceOfGlobalData.start.value}",
+                                    "${controller.instanceOfGlobalData.waitingRideTime.value}",
+                                    // "${controller.instanceOfGlobalData.minute.value}:${controller.instanceOfGlobalData.start.value}",
                                     style: GoogleFonts.urbanist(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 28.kh,
-                                        color: controller.instanceOfGlobalData.extraWaiting.value==true?Colors.red:Colors.white),
+                                        color: controller.instanceOfGlobalData
+                                                    .extraWaiting.value ==
+                                                true
+                                            ? Colors.red
+                                            : Colors.white),
                                   ),
                           )
                         ],
@@ -654,7 +659,6 @@ class BookingView extends GetView<BookingController> {
                                 children: [
                                   InkWell(
                                       onTap: () {
-
                                         controller.pickFromCamera("front");
                                       },
                                       child: Container(
@@ -699,6 +703,7 @@ class BookingView extends GetView<BookingController> {
                                           ),
                                         ],
                                       )),
+                                  //838087
                                   Positioned.fill(
                                     child: Align(
                                         alignment: Alignment.center,
@@ -910,43 +915,48 @@ class BookingView extends GetView<BookingController> {
                               : ButtonDesign(
                                   name: "Done",
                                   onPressed: () {
-                                    if (controller.frontImageStatus.value == 0 || controller.leftImageStatus.value == 0 ||
-                                        controller.rightImageStatus.value == 0 || controller.backImageStatus == 0) {
-                                      showMySnackbar(title: "Error",
-                                          msg: "All image mandatory");
-                                    }
-
-                                 else{
-                                      controller.lodingMsg.value =
-                                      "Uploading image";
-                                      context.loaderOverlay.show();
-                                    controller.uploadInspectionImage("S")
-                                        .then((value) {
-                                    if (value == 1) {
-
-                                    controller
-                                        .putImoblizerUnlock("unlocked")
-                                        .then((value) {
-                                    if (value != "locked") {
-                                    Future.delayed(
-                                    const Duration(seconds: 1), () {
-                                    context.loaderOverlay.hide();
-                                    controller.rideStart.value = true;
-                                    controller.carInspection.value =
-                                    false;
-                                    });
-                                    }else{
+                                    if (controller.frontImageStatus.value == 0 ||
+                                        controller.leftImageStatus.value == 0 ||
+                                        controller.rightImageStatus.value ==
+                                            0 ||
+                                        controller.backImageStatus == 0) {
                                       showMySnackbar(
                                           title: "Error",
-                                          msg: "Error unlocking imoblizer");
-                                    }
-                                    });
+                                          msg: "All image mandatory");
                                     } else {
-                                    showMySnackbar(
-                                    title: "Error",
-                                    msg: "Error while inspection");
-                                    }
-                                    });
+                                      controller.lodingMsg.value =
+                                          "Uploading image";
+                                      context.loaderOverlay.show();
+                                      controller
+                                          .uploadInspectionImage("S")
+                                          .then((value) {
+                                        if (value == 1) {
+                                          controller
+                                              .putImoblizerUnlock("unlocked")
+                                              .then((value) {
+                                            if (value != "locked") {
+                                              Future.delayed(
+                                                  const Duration(seconds: 1),
+                                                  () {
+                                                context.loaderOverlay.hide();
+                                                controller.rideStart.value =
+                                                    true;
+                                                controller.carInspection.value =
+                                                    false;
+                                              });
+                                            } else {
+                                              showMySnackbar(
+                                                  title: "Error",
+                                                  msg:
+                                                      "Error unlocking imoblizer");
+                                            }
+                                          });
+                                        } else {
+                                          showMySnackbar(
+                                              title: "Error",
+                                              msg: "Error while inspection");
+                                        }
+                                      });
                                     }
                                     //controller.rideStart.value = true;
                                   }),
@@ -1022,11 +1032,12 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "No",
-                                                              style: GoogleFonts.urbanist(
-                                                                  color: ColorUtil
-                                                                      .kPrimary,
-                                                                  fontSize:
-                                                                      16.kh),
+                                                              style: GoogleFonts
+                                                                  .urbanist(
+                                                                      color: ColorUtil
+                                                                          .kPrimary,
+                                                                      fontSize:
+                                                                          16.kh),
                                                             ),
                                                           ),
                                                         ),
@@ -1060,11 +1071,12 @@ class BookingView extends GetView<BookingController> {
                                                           child: Center(
                                                             child: Text(
                                                               "Yes, cancel ride",
-                                                              style: GoogleFonts.urbanist(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize:
-                                                                      16.kh),
+                                                              style: GoogleFonts
+                                                                  .urbanist(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          16.kh),
                                                             ),
                                                           ),
                                                         ),
@@ -1119,7 +1131,7 @@ class BookingView extends GetView<BookingController> {
                       topLeft: Radius.circular(20.0)),
                 ),
                 child: Column(
-             //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Center(
                         child: Container(
@@ -1127,24 +1139,27 @@ class BookingView extends GetView<BookingController> {
                       width: 100.kw,
                       color: Colors.white,
                     )),
-
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16.0, 24, 0, 0),
                       child: Column(
                         children: [
                           Text("Ongoing Trip",
-                              style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
+                              style: GoogleFonts.urbanist(
+                                  color: Color(0xFFB4BCE1))),
                           SizedBox(
                             height: 5,
                           ),
                           Obx(
-                            () =>controller.loader.value==true? CircularProgressIndicator(color: Colors.white) : Text(
-                                "${controller.instanceOfGlobalData.rideTime.value}", /* "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
-                              style: GoogleFonts.urbanist(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 28.kh,
-                                  color: Colors.white),
-                            ),
+                            () => controller.loader.value == true
+                                ? CircularProgressIndicator(color: Colors.white)
+                                : Text(
+                                    "${controller.instanceOfGlobalData.rideTime.value}",
+                                    /* "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
+                                    style: GoogleFonts.urbanist(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 28.kh,
+                                        color: Colors.white),
+                                  ),
                           )
                         ],
                       ),
@@ -1170,54 +1185,46 @@ class BookingView extends GetView<BookingController> {
                         SizedBox(
                           height: 30.kh,
                         ),
-                        Obx(()=>CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl:
-                          "${controller.getBookingDetailsModel.value.data?.car?.images?[0]}",
-                          imageBuilder:
-                              (context, imageProvider) =>
-                              Container(
-
-                                margin: EdgeInsets.fromLTRB(
-                                    0, 10, 10, 10),
-                                height: 140.kh,
-                                width: 260.kw,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-
-                                  ),
-
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(4),
-                                  ),
-                                ),
-                              ),
-                          progressIndicatorBuilder: (context,
-                              url, downloadProgress) =>
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey.shade300,
-                                highlightColor:
-                                Colors.grey.shade100,
-                                child: Container(
-                                  height: 100.kh,
-                                  width: 260.kw,
-
-                                ),
-                              ),
-
-                          errorWidget: (context, url, error) => Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor:
-                            Colors.grey.shade100,
-                            child: Container(
-                              height: 100.kh,
+                        Obx(
+                          () => CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl:
+                                "${controller.getBookingDetailsModel.value.data?.car?.images?[0]}",
+                            imageBuilder: (context, imageProvider) => Container(
+                              margin: EdgeInsets.fromLTRB(0, 10, 10, 10),
+                              height: 140.kh,
                               width: 260.kw,
-
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(4),
+                                ),
+                              ),
+                            ),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                height: 100.kh,
+                                width: 260.kw,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                height: 100.kh,
+                                width: 260.kw,
+                              ),
                             ),
                           ),
-                        ),),
+                        ),
                         SizedBox(
                           height: 30.kh,
                         ),
@@ -1245,9 +1252,9 @@ class BookingView extends GetView<BookingController> {
                             Column(
                               children: [
                                 SvgPicture.asset("assets/icons/battery.svg"),
-                                Obx(()=>
-                                   Text(
-                                     "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType=="fule"?"Liter":"%"}",
+                                Obx(
+                                  () => Text(
+                                    "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel == null ? "0" :controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType == "fule" ? "Liter" : "%"}",
                                     style: GoogleFonts.urbanist(fontSize: 14),
                                   ),
                                 ),
@@ -1404,9 +1411,11 @@ class BookingView extends GetView<BookingController> {
                                     SizedBox(
                                       width: 5.kh,
                                     ),
-                                    InkWell(onTap:(){
-                                      Get.toNamed(Routes.REPORT_AN_ISSUE,arguments: [controller.bookingId]);
-                                    } ,
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed(Routes.REPORT_AN_ISSUE,
+                                            arguments: [controller.bookingId]);
+                                      },
                                       child: Text(
                                         "Report a problem",
                                         style: GoogleFonts.urbanist(
@@ -1419,7 +1428,7 @@ class BookingView extends GetView<BookingController> {
                           ],
                         ),
 
-                       /* SizedBox(
+                        /* SizedBox(
                           height: 10.kh,
                         ),
                         ListTile(
@@ -1429,29 +1438,76 @@ class BookingView extends GetView<BookingController> {
                             ),
                             trailing: Icon(Icons.arrow_forward_ios)),*/
                         SizedBox(
-                          height: 10.kh,
+                          height: 20.kh,
                         ),
 
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: controller.getBookingDetailsModel.value.data?.car?.ignition== "off" ? Colors.grey : Colors.green,
-                            fixedSize: Size(344.kw, 56.kh),
-                          ),
-                          onPressed:(){
-
-
-
-                          },
-                          child: Row(
+                        Obx(() => Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text("Pause"), // <-- Text
+                              Text(
+                                "Ride status :",
+                                style: GoogleFonts.urbanist(
+                                  color: ColorUtil.kPrimary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              controller.getBookingDetailsModel.value.data?.car
+                                          ?.ignition ==
+                                      "off"
+                                  ? Center(
+                                      child: Text(
+                                      "Paused",
+                                      style: GoogleFonts.urbanist(
+                                        color: Colors.amber,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ))
+                                  : Text(
+                                      "Driving",
+                                      style: GoogleFonts.urbanist(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ), // <-- Text
                             ],
                           ),
                         ),
 
                         SizedBox(
-                          height: 10.kh,
+                          height: 20.kh,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            controller.openMapRide();
+                          },
+                          child: Container(
+                              height: 35.kh,
+                              width: 120.kw,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                                  border: Border.all(
+                                      width: 0.5,
+                                      color: Color(0xFF5F5F5F))),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.map_outlined),
+                                  SizedBox(
+                                    width: 5.kh,
+                                  ),
+                                  Text(
+                                    "Map view",
+                                    style: GoogleFonts.urbanist(
+                                      color: Color(0xFF5F5F5F),
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        SizedBox(
+                          height: 20.kh,
                         ),
 
                         SizedBox(
@@ -1463,7 +1519,8 @@ class BookingView extends GetView<BookingController> {
                                   width: 1.5, color: ColorUtil.kPrimary),
                             ),
                             label: Text('Complete the trip',
-                                style: GoogleFonts.urbanist(color: ColorUtil.kPrimary)),
+                                style: GoogleFonts.urbanist(
+                                    color: ColorUtil.kPrimary)),
                             icon: SvgPicture.asset("assets/icons/complete.svg"),
                             onPressed: () {
                               showDialog(
@@ -1507,10 +1564,11 @@ class BookingView extends GetView<BookingController> {
                                                   child: Center(
                                                     child: Text(
                                                       "No",
-                                                      style: GoogleFonts.urbanist(
-                                                          color: ColorUtil
-                                                              .kPrimary,
-                                                          fontSize: 16.kh),
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                              color: ColorUtil
+                                                                  .kPrimary,
+                                                              fontSize: 16.kh),
                                                     ),
                                                   ),
                                                 ),
@@ -1544,9 +1602,11 @@ class BookingView extends GetView<BookingController> {
                                                   child: Center(
                                                     child: Text(
                                                       "Yes, End ride",
-                                                      style: GoogleFonts.urbanist(
-                                                          color: Colors.white,
-                                                          fontSize: 16.kh),
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 16.kh),
                                                     ),
                                                   ),
                                                 ),
@@ -1628,14 +1688,16 @@ class BookingView extends GetView<BookingController> {
                     padding: const EdgeInsets.fromLTRB(16.0, 34, 16, 0),
                     child: Column(
                       children: [
-                        Text("Onging Trip",
-                            style: GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
+                        Text("Ongoing Trip",
+                            style:
+                                GoogleFonts.urbanist(color: Color(0xFFB4BCE1))),
                         SizedBox(
                           height: 5,
                         ),
                         Obx(
                           () => Text(
-                              "${controller.instanceOfGlobalData.rideTime.value}",   /*  "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
+                            "${controller.instanceOfGlobalData.rideTime.value}",
+                            /*  "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
                             style: GoogleFonts.urbanist(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 28.kh,
@@ -1938,31 +2000,34 @@ class BookingView extends GetView<BookingController> {
                             : ButtonDesign(
                                 name: "Done",
                                 onPressed: () {
-                                  if (controller.frontImageStatus.value == 0 || controller.leftImageStatus.value == 0 ||
-                                      controller.rightImageStatus.value == 0 || controller.backImageStatus == 0) {
-                                    showMySnackbar(title: "Error",
+                                  if (controller.frontImageStatus.value == 0 ||
+                                      controller.leftImageStatus.value == 0 ||
+                                      controller.rightImageStatus.value == 0 ||
+                                      controller.backImageStatus == 0) {
+                                    showMySnackbar(
+                                        title: "Error",
                                         msg: "All image mandatory");
-                                  }
-                                  else {
+                                  } else {
                                     controller.lodingMsg.value =
-                                    "Updating central lock";
+                                        "Updating central lock";
                                     context.loaderOverlay.show();
-                                    controller.putAutoCentralLock("locked")
+                                    controller
+                                        .putAutoCentralLock("locked")
                                         .then((value) {
                                       if (value == "locked") {
                                         Future.delayed(
                                             const Duration(seconds: 1), () {
                                           controller.lodingMsg.value =
-                                          "Updating immobilizer lock";
+                                              "Updating immobilizer lock";
                                           controller
-                                              .putImoblizerLock("locked").then((
-                                              value) {
+                                              .putImoblizerLock("locked")
+                                              .then((value) {
                                             if (value == "locked") {
                                               Future.delayed(
-                                                  const Duration(
-                                                      seconds: 1), () {
+                                                  const Duration(seconds: 1),
+                                                  () {
                                                 controller.lodingMsg.value =
-                                                "Uploading image";
+                                                    "Uploading image";
 
                                                 controller
                                                     .uploadInspectionImage("E")
@@ -1972,49 +2037,53 @@ class BookingView extends GetView<BookingController> {
                                                         .bookingPriceDetails
                                                         .value = true;
                                                     controller.endrideInspection
-                                                        .value =
-                                                    false;
+                                                        .value = false;
                                                     controller.rideStart.value =
-                                                    false;
-                                                    context.loaderOverlay.hide();
+                                                        false;
+                                                    context.loaderOverlay
+                                                        .hide();
                                                     controller.carBooking
                                                         .value = false;
-
                                                   } else {
-                                                    context.loaderOverlay.hide();
+                                                    context.loaderOverlay
+                                                        .hide();
                                                     showMySnackbar(
                                                         title: "Error",
-                                                        msg: "Error while inspection");
+                                                        msg:
+                                                            "Error while inspection");
                                                   }
                                                 });
                                               });
                                             } else {
                                               Future.delayed(
-                                                  const Duration(
-                                                      seconds: 1), () {
+                                                  const Duration(seconds: 1),
+                                                  () {
                                                 context.loaderOverlay.hide();
-                                                showMySnackbar(title: "Error",
-                                                    msg: "Error while updating immobilizer lock");
+                                                showMySnackbar(
+                                                    title: "Error",
+                                                    msg:
+                                                        "Error while updating immobilizer lock");
                                                 controller.lodingMsg.value =
-                                                "Analyzing your car";
+                                                    "Analyzing your car";
                                               });
                                             }
                                           });
                                         });
-                                      }
-                                      else {
+                                      } else {
                                         Future.delayed(
                                             const Duration(seconds: 1), () {
                                           context.loaderOverlay.hide();
-                                          showMySnackbar(title: "Error",
-                                              msg: "Error while updating central lock");
+                                          showMySnackbar(
+                                              title: "Error",
+                                              msg:
+                                                  "Error while updating central lock");
                                           controller.lodingMsg.value =
-                                          "Analyzing your car";
+                                              "Analyzing your car";
                                         });
                                       }
                                     });
                                   }
-                                      /*controller
+                                  /*controller
                                           .putImoblizerLock("locked")
                                           .then((value) {
                                         if (value == "locked") {
@@ -2030,7 +2099,6 @@ class BookingView extends GetView<BookingController> {
                                           });
                                         }
                                       });*/
-
 
                                   // Get.toNamed(Routes.LOGIN);
                                 }),
@@ -2101,14 +2169,14 @@ class BookingView extends GetView<BookingController> {
                             Text(
                               "${controller.finalTralvelTime.value} min",
                               style: GoogleFonts.urbanist(
-                                  color: Color(0xff008000) ,
+                                  color: Color(0xff008000),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16.kh),
                             ),
                           ],
                         ),
                       ),
-                     /* SizedBox(
+                      /* SizedBox(
                         height: 16.kh,
                       ),
                       Padding(
@@ -2289,21 +2357,29 @@ class BookingView extends GetView<BookingController> {
                               : Container(
                                   child: ButtonDesign(
                                       name: "Pay",
-                                      onPressed: () async{
-                                        if((controller.totalFare.value) > 0) {
-                                           await controller.getTransationDetails();
+                                      onPressed: () async {
+                                        if ((controller.totalFare.value) > 0) {
+                                          await controller
+                                              .getTransationDetails();
                                           Get.toNamed(Routes.SAVED_CARDS,
                                               arguments: [
-                                                controller.bookingId == "" ? controller.rideHistory.value.data![0]!.Id:controller.bookingId,
+                                                controller.bookingId == ""
+                                                    ? controller.rideHistory
+                                                        .value.data![0]!.Id
+                                                    : controller.bookingId,
                                                 "End",
                                                 "",
                                                 false,
                                                 "${controller.bookingType.value}",
-                                                double.parse((controller.totalFare.value).toStringAsFixed(3)),
-                                                (controller.finalDistanceTravel.value),(controller.finalTralvelTime.value)
+                                                double.parse(
+                                                    (controller.totalFare.value)
+                                                        .toStringAsFixed(3)),
+                                                (controller
+                                                    .finalDistanceTravel.value),
+                                                (controller
+                                                    .finalTralvelTime.value)
                                               ]);
-                                        }
-                                        else{
+                                        } else {
                                           Get.offAllNamed(Routes.HOME);
                                           showMySnackbar(
                                               title: "Message",

@@ -195,7 +195,7 @@ class GlobalData extends GetxService {
   }
 
   void lastStampToseconds({required DateTime startTime}) {
-
+    print("bjhbhjbhbjhbjbjhjbh");
     if(checkWaitRideTicker.value==true){
       checkWaitRideTicker.value=false;
       waitingRideTicker.cancel();
@@ -204,13 +204,14 @@ class GlobalData extends GetxService {
     waitingRideTime.value="";
     checkRideTicker.value=true;
 
-    rideTicker = Timer.periodic(const Duration(seconds: 1), (val) {
+    rideTicker = Timer.periodic( Duration(seconds: 1), (val) {
       rideTime.value = secondToFormatted(
           DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds);
       print("Ticker : ${rideTime.value}");
 
     });
   }
+
   String waitingSecondToFormatted(int tick) {
     Duration duration = Duration(seconds: tick);
 
@@ -248,8 +249,7 @@ class GlobalData extends GetxService {
         print("Ticker : ${waitingRideTime.value}");
       }else{
         waitingRideTime.value = waitingSecondToFormatted(
-            900-(DateTime
-                .now()
+            900-(DateTime.now()
                 .toUtc()
                 .difference(startTime.toUtc())
                 .inSeconds));

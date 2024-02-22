@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:get/instance_manager.dart';
 import 'package:zammacarsharing/app/services/dio/device_di_client.dart';
@@ -128,6 +127,11 @@ class APIManager {
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).get(
         Endpoints.getcarPricing+"$carId",
       );
+  static Future<Response> getCarById({required String carId}) async =>
+      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true).get(
+        Endpoints.getcarByID+"$carId",
+      );
+
 
   static Future<Response> updateAddress({required String bookingId,required dynamic body }) async =>
       await DioClient(Dio(), showSnakbar: true, isOverlayLoader: true)

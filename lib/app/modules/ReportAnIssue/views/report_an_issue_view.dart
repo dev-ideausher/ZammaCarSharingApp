@@ -117,6 +117,9 @@ class ReportAnIssueView extends GetView<ReportAnIssueController> {
                 child: ButtonDesign(
                     name: "Submit",
                     onPressed: () {
+                      controller.issueloader.value == true ? print(
+                        "No"
+                      ):
                       controller.uploadIssue();
                     }),
               )

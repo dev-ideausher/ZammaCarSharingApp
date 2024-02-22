@@ -2953,49 +2953,30 @@ class HomeView extends GetView<HomeController> {
                                       onPressed: () {
                                         //  Get.toNamed(Routes.CAMERA_DESIGN);
                                         controller.getAddressFromLatLng();
-                                        controller.onBoardingStatus()
-                                            .then((value) {
+                                        controller.onBoardingStatus().then((value) {
                                           if (value == 1) {
                                             //   Get.find<GlobalData>().QNR.value=controller.carId.value;
-                                            controller.getInProcessHistory()
-                                                .then((value) {
+                                            controller.getInProcessHistory().then((value) {
                                               if (value == 1) {
                                                 showMySnackbar(
                                                     title: "Error",
-                                                    msg:
-                                                        "Complete inprogress ride before booking new ride");
+                                                    msg: "Complete inprogress ride before booking new ride");
                                               } else {
-                                                controller
-                                                    .getOnGoingHistory()
-                                                    .then((value) {
+                                                controller.getOnGoingHistory().then((value) {
                                                   if (value == 1) {
                                                     showMySnackbar(
                                                         title: "Error",
-                                                        msg:
-                                                            "Complete your ongoing ride before booking new ride");
+                                                        msg: "Complete your ongoing ride before booking new ride");
                                                   } else {
-                                                    print(
-                                                        controller.model.value);
+                                                    print(controller.model.value);
 
-                                                    if (controller
-                                                            .logindetails
-                                                            .value
-                                                            .user
-                                                            ?.isSuspended ==
-                                                        false)
+                                                    if (controller.logindetails.value.user?.isSuspended == false)
                                                       Get.toNamed(
                                                           Routes.SAVED_CARDS,
                                                           arguments: [
-                                                            (controller
-                                                                .createBookinModel
-                                                                .value
-                                                                .booking
-                                                                ?.Id),
-                                                            (controller
-                                                                .model.value),
-                                                            (controller
-                                                                .seatCapcity
-                                                                .value),
+                                                            (controller.createBookinModel.value.booking?.Id),
+                                                            (controller.model.value),
+                                                            (controller.seatCapcity.value),
                                                             true,
                                                             "basic",
                                                             1.0,

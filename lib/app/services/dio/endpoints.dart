@@ -29,6 +29,8 @@ class Endpoints {
 
   static const String totalPayments = baseUrl+"transactions/user";
   static const String getcarPricing = baseUrl+"car-pricing/car/";
+  static const String getcarByID = baseUrl+"car/";
+
 
   //static const String payment = baseUrl+"user/stripe/add-card";
 

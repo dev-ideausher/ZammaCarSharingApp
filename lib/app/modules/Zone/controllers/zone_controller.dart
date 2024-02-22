@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:zammacarsharing/app/modules/Zone/controllers/zone_data.dart';
 import 'package:zammacarsharing/app/modules/home/controllers/home_controller.dart';
 import 'package:zammacarsharing/app/modules/models/parkin_cordinates.dart';
 import 'package:zammacarsharing/app/services/checkLocationPermission.dart';
@@ -29,14 +30,46 @@ class ZoneController extends GetxController {
   RxSet<Polygon> polygon = Set<Polygon>().obs;
   final Completer<GoogleMapController> mapCompleter = Completer();
   HomeController homeController=Get.find<HomeController>();
+var cardataID = carbyID().obs;
+
+  getCarbyID()async{
+    final response = await APIManager.getCarById(carId: "${Get.find<GetStorageService>().bookedCarID}");
+    cardataID.value = carbyID.fromJson(jsonDecode(response.toString()));
+
+
+    list.clear();
+    listOfMarker.clear();
+    final Uint8List customMarker= await getBytesFromAsset(
+        path:"assets/images/markerCar.png", //paste the custom image path
+        width: 150 // size of custom image as marker
+    );
+      list.value.add(Marker(
+          icon: BitmapDescriptor.fromBytes(customMarker),
+          markerId: MarkerId("1"),
+          position: LatLng((cardataID.value.car!.position!.coordinates![1]!).toDouble(),(cardataID.value.car!.position!.coordinates![0]!.toDouble())),
+          onTap: () {
+
+
+          }
+      ),);
+
+    listOfMarker.value.addAll(list.value);
+    listOfMarker.refresh();
+
+  }
+
 
   @override
   void onInit() {
     super.onInit();
+    if(Get.find<GetStorageService>().bookedCarID == "" || Get.find<GetStorageService>().bookedCarID == null ){
+      getReadyMarker();
+    }else{
+      getCarbyID();
+    }
      getAllParkingZone();
      getAllParkingZonePolygon();
      getCurrentPosition();
-     getReadyMarker();
   }
 
   @override
@@ -73,6 +106,57 @@ class ZoneController extends GetxController {
     print(
         "position lat  : ${position.latitude}, long : ${position.longitude}");
   }
+
+
+
+  Future<void> getCurrentCarMarket() async {
+    list.clear();
+    listOfMarker.clear();
+    final Uint8List customMarker= await getBytesFromAsset(
+        path:"assets/images/markerCar.png", //paste the custom image path
+        width: 150 // size of custom image as marker
+    );
+    for(int i=0;i<homeController.carsModel.value.cars!.length;i++){
+      list.value.add(Marker(
+          icon: BitmapDescriptor.fromBytes(customMarker),
+          markerId: MarkerId("${i}"),
+          position: LatLng((homeController.carsModel.value.cars?[i]?.position?.coordinates?[1])!.toDouble(),(homeController.carsModel.value.cars?[i]?.position?.coordinates?[0])!.toDouble()),
+          onTap: () {
+            homeController.model.value =
+            "${homeController.carsModel.value.cars?[i]?.brand} ${homeController.carsModel.value.cars?[i]?.model}";
+            homeController.carImage.value = (homeController.carsModel
+                .value
+                .cars?[i]
+                ?.images?[0])
+                .toString();
+            homeController.seatCapcity.value = (homeController.carsModel
+                .value
+                .cars?[i]
+                ?.seatCapacity)
+                .toString();
+            homeController.milage.value=(homeController.carsModel
+                .value
+                .cars?[i]?.mileage)
+                .toString();
+            homeController.carId.value = (homeController.carsModel.value.cars?[i]?.Id)
+                .toString();
+            homeController.qnr.value = (homeController.carsModel.value.cars?[i]?.qnr)
+                .toString();
+            homeController.cars.value = false;
+            homeController.carDetails.value = true;
+            Get.find<GetStorageService>().setQNR = (homeController.carsModel.value.cars?[i]?.qnr).toString();
+            homeController.instanceOfGlobalData.QNR.value =
+            "${(homeController.carsModel.value.cars?[i]?.qnr).toString()}";
+            homeController.qnr.value = (homeController.carsModel.value.cars?[i]?.qnr).toString();
+            Get.back();
+
+          }
+      ),);
+    }
+    listOfMarker.value.addAll(list.value);
+    listOfMarker.refresh();
+  }
+
 
   Future<void> getReadyMarker() async {
     list.clear();

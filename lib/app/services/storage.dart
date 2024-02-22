@@ -11,6 +11,9 @@ class GetStorageService extends GetxService {
   static final CustomUserId = GetStorage('CUSTOM_USERID');
   static final carQNR = GetStorage('QNR');
 
+  static final booking = GetStorage('BOOKING');
+
+
 
   String get jwToken => jwtToken.read('TOKEN') ?? "";
   set jwToken(String value) => jwtToken.write('TOKEN', value);
@@ -31,12 +34,23 @@ class GetStorageService extends GetxService {
   bool get setup => LoginStorage.read('SETUP') ?? false;
   set setup(bool value) => LoginStorage.write('SETUP', value);
 
+
+  String get bookedCarID => booking.read('BOOKEDCARDID') ?? "";
+  set bookedCarID(String value) => booking.write('BOOKEDCARDID', value);
+
   void deleteLocation() {
     jwtToken.remove('TOKEN');
     LoginStorage.remove('LOGGEDIN');
     UserId.remove('USERID');
     UserId.remove('CUSTOM_USERID');
     carQNR.remove('QNR');
+    print("DELETED");
+  }
+
+
+  void deleteBooking() {
+    jwtToken.remove('BOOKING');
+
     print("DELETED");
   }
 

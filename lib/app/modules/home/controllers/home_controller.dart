@@ -96,10 +96,7 @@ class HomeController extends GetxController {
   RxSet<Marker> listOfMarker = <Marker>{}.obs;
   RxList carsImage = [].obs;
   RxList<Marker> list = [
-    Marker(
-      markerId: MarkerId('1'),
-    )
-  ].obs;
+    Marker(markerId: MarkerId('1'),)].obs;
   RxSet<Marker> marker = <Marker>{}.obs;
 
   final Completer<GoogleMapController> controllerr = Completer();
@@ -277,6 +274,9 @@ class HomeController extends GetxController {
     }
   }
 
+var latitude = "".obs;
+var longitude = "".obs;
+
   Future<void> getCurrentPosition() async {
     final hasPermission = await handleLocationPermission();
 
@@ -286,6 +286,10 @@ class HomeController extends GetxController {
     }
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+
+    latitude.value = "${position.latitude}";
+    longitude.value = "${position.longitude}";
+
     center = LatLng(position.latitude, position.longitude);
     mapLoader.value = false;
     isMapLoaded.value = true;
@@ -404,9 +408,7 @@ class HomeController extends GetxController {
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
         targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
   }
 
   RxBool statusCheck = false.obs;

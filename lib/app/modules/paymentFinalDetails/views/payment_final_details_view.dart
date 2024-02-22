@@ -60,27 +60,27 @@ class PaymentFinalDetailsView extends GetView<PaymentFinalDetailsController> {
                 ],
               ),
 
-              10.kheightBox,
-              Row(
-                children: [
-                  Text(
-                    "Booking time",
-                    style: GoogleFonts.urbanist(
-                        color: ColorUtil.kPrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16),
-                  ),
-                  Spacer(),
-                  Center(
-                    child: Text(
-                        '${controller.payments.value.bookingPaymentObject!.time}',
-                        style: GoogleFonts.urbanist(
-                            color: ColorUtil.kPrimary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16)),
-                  ),
-                ],
-              ),
+              // 10.kheightBox,
+              // Row(
+              //   children: [
+              //     Text(
+              //       "Booking time",
+              //       style: GoogleFonts.urbanist(
+              //           color: ColorUtil.kPrimary,
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 16),
+              //     ),
+              //     Spacer(),
+              //     Center(
+              //       child: Text(
+              //           '${controller.payments.value.bookingPaymentObject!.time}',
+              //           style: GoogleFonts.urbanist(
+              //               color: ColorUtil.kPrimary,
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 16)),
+              //     ),
+              //   ],
+              // ),
               10.kheightBox,
               Row(
                 children: [

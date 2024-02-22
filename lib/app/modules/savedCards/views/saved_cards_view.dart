@@ -236,9 +236,11 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                                 Expanded(
                                                   child: InkWell(
                                                     onTap: () {
+                                                      // Get.back();
+                                                      // Get.offAllNamed(Routes.HOME);
                                                       controller.cancelBooking().then((value){
                                                         if(value==1){
-                                                    //      Get.back();
+                                                          Get.back();
                                                           Get.offAllNamed(Routes.HOME);
                                                         }
                                                       });

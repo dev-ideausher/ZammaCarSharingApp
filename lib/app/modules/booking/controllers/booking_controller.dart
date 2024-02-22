@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -72,7 +73,9 @@ class BookingController extends GetxController {
   Rx<EndRide> endride = EndRide().obs;
   Rx<TransactionDetails> transactionDetails = TransactionDetails().obs;
   Rx<CarPriceById> carPriceById = CarPriceById().obs;
+
   //pocGetLockStatus
+
   Rx<LockModel> lockModel = LockModel().obs;
   Rx<ImoblizerStatus> imoblizerStatus = ImoblizerStatus().obs;
   RxBool lockLoader = false.obs;
@@ -97,8 +100,8 @@ class BookingController extends GetxController {
   List<int> time = [];
 
   // Data Coming From Home Controller and ride history
-  final bookingId = Get.arguments[0] ?? "";
-  final model    = Get.arguments[1] ?? "";
+  final bookingId   = Get.arguments[0] ?? "";
+  final model       = Get.arguments[1] ?? "";
   final seatCapcity = Get.arguments[2] ?? "";
 
   //loader variable
@@ -107,6 +110,9 @@ class BookingController extends GetxController {
 //QR Scanner Use
   final qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog().obs;
   RxString code = "".obs;
+
+  Timer? timer;
+
 
   @override
   Future<void> onInit() async {
@@ -118,32 +124,36 @@ class BookingController extends GetxController {
     if (Get.arguments[3] == false) {
       carBooking.value = Get.arguments[3];
       rideStart.value = true;
-    }
 
+    }
     getTransationDetails();
     getInProcessHistory();
     getBookingDetailsUsingBookingId();
     getLockStatus();
     getImoblizerStatus();
     getOnGoingHistory();
-
     print("bookinId : ${bookingId}");
   }
 
   @override
   void onReady() {
     super.onReady();
+    timer = Timer.periodic(Duration(seconds: 2), (Timer t) => getBookingDetailsUsingBookingIdTimmer());
+
   }
 
   @override
   void onClose() {
+    timer?.cancel();
+    super.dispose();
+
 
   }
 
   resetValue() {
     frontHood.value = File("");
-    leftSide.value = File("");
-    backSide.value = File("");
+    leftSide.value  = File("");
+    backSide.value  = File("");
     rightSide.value = File("");
     frontImageStatus.value = 0;
     backImageStatus.value = 0;
@@ -156,13 +166,35 @@ class BookingController extends GetxController {
   getBookingDetailsUsingBookingId() async {
     await Future.delayed(Duration(seconds: 3));
     await getOnGoingHistory();
-await Get.find<HomeController>().getcar();
+   await Get.find<HomeController>().getcar();
     try {
       bookingDetailsLoader.value = true;
       final response = await APIManager.getBookingByBookingId(bookingId: bookingId == "" ? "${rideHistory.value.data?[0]?.Id}" : bookingId);
-      getBookingDetailsModel.value =
-          BookingDetailsModels.fromJson(jsonDecode(response.toString()));
+      getBookingDetailsModel.value = BookingDetailsModels.fromJson(jsonDecode(response.toString()));
+
+      Get.find<GetStorageService>().bookedCarID = "${getBookingDetailsModel.value.data?.car?.Id}";
+      print(Get.find<GetStorageService>().bookedCarID);
       bookingDetailsLoader.value = false;
+
+    } catch (e) {
+      bookingDetailsLoader.value = false;
+      throw "Error while fetching booking details by booking id";
+    }
+  }
+
+var c = 0.obs;
+  getBookingDetailsUsingBookingIdTimmer() async {
+
+    print("object");
+    try {
+      bookingDetailsLoader.value = true;
+      final response = await APIManager.getBookingByBookingId(bookingId: bookingId == "" ? "${rideHistory.value.data?[0]?.Id}" : bookingId);
+      getBookingDetailsModel.value = BookingDetailsModels.fromJson(jsonDecode(response.toString()));
+
+      Get.find<GetStorageService>().bookedCarID = "${getBookingDetailsModel.value.data?.car?.Id}";
+      print(Get.find<GetStorageService>().bookedCarID);
+      bookingDetailsLoader.value = false;
+
     } catch (e) {
       bookingDetailsLoader.value = false;
       throw "Error while fetching booking details by booking id";
@@ -185,7 +217,6 @@ await Get.find<HomeController>().getcar();
     } catch (e) {
       showMySnackbar(title: "Error", msg: "Error while cancel booking");
       instanceOfGlobalData.loader.value = false;
-
       return 0;
     }
   }
@@ -200,9 +231,7 @@ await Get.find<HomeController>().getcar();
     var headers = {'accept': 'application/json', 'token': token};
     request.files.add(await http.MultipartFile.fromPath('file', path));
     request.headers.addAll(headers);
-
     var response = await request.send();
-
     if (response.statusCode == 200) {
       // print(await response.stream.bytesToString());
       var value = await response.stream.bytesToString();
@@ -222,7 +251,7 @@ await Get.find<HomeController>().getcar();
     PickedFile? pickedImage;
     pickedImage = await picker.getImage(source: ImageSource.camera);*/
     GenralCamera.openCamera(onCapture: (pickedImage) {
-      if (pickedImage != null) {
+      if (pickedImage !=  null) {
         if (selectedSideFoto == "front") {
           frontImageStatus.value = 1;
           frontHood.value = pickedImage;
@@ -238,8 +267,8 @@ await Get.find<HomeController>().getcar();
         }
       }
     });
-    //  File pickedImage= await takePhoto();
 
+    //  File pickedImage= await takePhoto();
     /*   try {
       await ImageHandler.getImage(fromGallery: false, pickedImage: (file){
         if(file!=null){
@@ -271,6 +300,7 @@ await Get.find<HomeController>().getcar();
     } catch (e) {
       throw Exception(e);
     }*/
+
   }
 
   Future<int> uploadInspectionImage(String process) async {
@@ -309,9 +339,9 @@ await Get.find<HomeController>().getcar();
             "type": "beforeRide",
             "carImagesBeforeRide": [
               {"respectiveSide": "Front Hood", "image": carsImage.value[0]},
-              {"respectiveSide": "Left Side", "image": carsImage.value[1]},
+              {"respectiveSide": "Left Side", "image" :  carsImage.value[1]},
               {"respectiveSide": "Right Side", "image": carsImage.value[2]},
-              {"respectiveSide": "Back Side", "image": carsImage.value[3]}
+              {"respectiveSide": "Back Side", "image" :  carsImage.value[3]}
             ]
           };
           final response = await APIManager.postInspectionImageUrl(
@@ -742,6 +772,37 @@ await Get.find<HomeController>().getcar();
     String mapOptions = ['saddr=$sourceLatitude,$sourceLongitude', 'daddr=$destinationLatitude,$destinationLongitude', 'dir_action=navigate'].join('&');
     final url ='https://www.google.com/maps/dir/?api=1&origin=$sourceLatitude,$sourceLongitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving&dir_action=navigate';
   //  final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+
+  Future<void> openMapRide() async {
+    final hasPermission = await handleLocationPermission();
+
+    if (!hasPermission) {
+      //mapLoader.value=false;
+      return;
+    }
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    print(
+        "position lat  : ${position.latitude}, long : ${position.longitude}");
+
+    var sourceLatitude = position.latitude;
+    var sourceLongitude = position.longitude;
+    var destinationLongitude  = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
+    var destinationLatitude   = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
+  //  String mapOptions = ['saddr=$sourceLatitude,$sourceLongitude', 'daddr=$destinationLatitude,$destinationLongitude', 'dir_action=navigate'].join('&');
+    final url =
+        //" https://www.google.com/maps/dir/api=1&destination=${Get.find<HomeController>().latitude},${Get.find<HomeController>().longitude}&travelmode=driving';";
+        'https://www.google.com/maps?q=${Get.find<HomeController>().latitude},${Get.find<HomeController>().longitude}&travelmode=driving&dir_action=navigate';
+    https://www.google.com/maps/dir/?api=1&origin=$sourceLatitude,$sourceLongitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving&dir_action=navigate
+    //  final url = 'https://www.google.com/maps?$mapOptions';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
