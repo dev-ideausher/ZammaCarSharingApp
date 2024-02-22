@@ -44,7 +44,7 @@ dependencies:
   rename: ^2.0.1
   jwt_decoder: ^2.0.1
   lottie: ^2.0.0
-  cached_network_image: ^3.2.3
+  cached_network_image: ^3.3.1
   shimmer: ^2.0.0
   image_picker: ^0.8.7+1
   geolocator: ^9.0.2

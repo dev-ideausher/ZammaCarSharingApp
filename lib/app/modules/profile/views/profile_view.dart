@@ -115,7 +115,7 @@ class ProfileView extends GetView<ProfileController> {
                       Center(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: ColorUtil.kPrimary,
+                            backgroundColor: ColorUtil.kPrimary,
                           ),
                           onPressed: () {
                             // controller.pickImage();
@@ -282,10 +282,14 @@ class ProfileView extends GetView<ProfileController> {
                           //padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
                           decoration: BoxDecoration(
                               color: Color(0xffF3F2F3),
-                              borderRadius: BorderRadius.all(Radius.circular(5))),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5))),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 10.0),
-                            child: Align(alignment:Alignment.centerLeft,child: Text("${controller.logindetails.value.user?.phone}")),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                    "${controller.logindetails.value.user?.phone}")),
                           )),
                       SizedBox(
                         height: 16.kh,

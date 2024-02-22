@@ -1,24 +1,17 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:lottie/lottie.dart';
-
 //import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:zammacarsharing/app/modules/savedCards/controllers/saved_cards_controller.dart';
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
-import 'package:zammacarsharing/app/services/responsiveSize.dart';
 import 'package:zammacarsharing/app/services/globalData.dart';
-import 'package:google_maps_flutter_platform_interface/src/types/marker.dart';
+import 'package:zammacarsharing/app/services/responsiveSize.dart';
 import 'package:zammacarsharing/app/services/snackbar.dart';
 import 'package:zammacarsharing/app/services/storage.dart';
 
@@ -1011,7 +1004,6 @@ class HomeView extends GetView<HomeController> {
               // controller.enrideInspection.value == true
               //     ? enrideInspection(0.85)
               //     : SizedBox(),
-
             ],
           ),
         )),
@@ -1039,14 +1031,14 @@ class HomeView extends GetView<HomeController> {
             ),
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                 Center(
-                  child: Container(
-                height: 2,
-                width: 100.kw,
-                color: ColorUtil.kPrimary,
-                  ),
-                 ),
-                Container(
+              Center(
+                child: Container(
+                  height: 2,
+                  width: 100.kw,
+                  color: ColorUtil.kPrimary,
+                ),
+              ),
+              Container(
                 height: 30.kh,
                 margin: EdgeInsets.fromLTRB(16.kw, 24.kh, 16.kw, 0),
                 child: Row(
@@ -1069,11 +1061,11 @@ class HomeView extends GetView<HomeController> {
                         child: SvgPicture.asset("assets/icons/cross.svg"),
                       ),
                     ]),
-                ),
-                SizedBox(
+              ),
+              SizedBox(
                 height: 20.kh,
-                ),
-                Container(
+              ),
+              Container(
                 padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
                 height: 50.kh,
                 child: ListView.builder(
@@ -1085,22 +1077,31 @@ class HomeView extends GetView<HomeController> {
                       return InkWell(
                         onTap: () {
                           controller.tapAttention.value = index;
-                          controller.getSelectCategoyCars("${(controller.categoriesModels.value.category?[index]?.name)?.toLowerCase()}");
+                          controller.getSelectCategoyCars(
+                              "${(controller.categoriesModels.value.category?[index]?.name)?.toLowerCase()}");
                         },
-                        child : Obx(
+                        child: Obx(
                           () => Container(
-                            margin         : EdgeInsets.fromLTRB(12.kh, 0.kh, 0.kh, 16.kh),
-                            padding        : EdgeInsets.fromLTRB(20, 0, 20, 0),
-                            decoration     : BoxDecoration(
-                              color        : controller.tapAttention.value == index
-                                           ? ColorUtil.kPrimary
-                                           : Colors.white,
-                              border       : Border.all(color: ColorUtil.ZammaGrey),
-                              borderRadius : BorderRadius.all(Radius.circular(4),),
+                            margin:
+                                EdgeInsets.fromLTRB(12.kh, 0.kh, 0.kh, 16.kh),
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            decoration: BoxDecoration(
+                              color: controller.tapAttention.value == index
+                                  ? ColorUtil.kPrimary
+                                  : Colors.white,
+                              border: Border.all(color: ColorUtil.ZammaGrey),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(4),
+                              ),
                             ),
-                            child      : Center(
-                              child    : Text("${controller.categoriesModels.value.category?[index]?.name}",
-                                style  : GoogleFonts.urbanist(color : controller.tapAttention.value == index ? Colors.white : Colors.black),
+                            child: Center(
+                              child: Text(
+                                "${controller.categoriesModels.value.category?[index]?.name}",
+                                style: GoogleFonts.urbanist(
+                                    color:
+                                        controller.tapAttention.value == index
+                                            ? Colors.white
+                                            : Colors.black),
                               ),
                             ),
                           ),
@@ -1108,16 +1109,18 @@ class HomeView extends GetView<HomeController> {
                       );
                     }),
               ),
-
-
-                  Obx(
-                   () => Expanded(child: controller.instanceOfGlobalData.loader.value == true
+              Obx(
+                () => Expanded(
+                  child: controller.instanceOfGlobalData.loader.value == true
                       ? Column(
                           children: [
-                            Center(child: SizedBox(
-                                  width: 200.kh,
-                                  height: 200.kh,
-                                  child: Lottie.asset('assets/json/car_loader.json'),),
+                            Center(
+                              child: SizedBox(
+                                width: 200.kh,
+                                height: 200.kh,
+                                child:
+                                    Lottie.asset('assets/json/car_loader.json'),
+                              ),
                             ),
                           ],
                         )
@@ -1135,25 +1138,63 @@ class HomeView extends GetView<HomeController> {
                               ],
                             )
                           : ListView.builder(
-                              itemCount: controller.carsModel.value.cars?.length,
+                              itemCount:
+                                  controller.carsModel.value.cars?.length,
                               itemBuilder: (contex, index) {
                                 return InkWell(
                                   onTap: () {
-                                    controller.model.value       = "${controller.carsModel.value.cars?[index]?.brand} ${controller.carsModel.value.cars?[index]?.model}";
-                                    controller.carImage.value    = (controller.carsModel.value.cars?[index]?.images?[0]).toString();
-                                    controller.seatCapcity.value = (controller.carsModel.value.cars?[index]?.seatCapacity).toString();
-                                    controller.milage.value      = (controller.carsModel.value.cars?[index]?.mileage).toString();
-                                    controller.fuelType.value    = (controller.carsModel.value.cars?[index]?.fuelType).toString();
-                                    controller.fuelLavel.value   = (controller.carsModel.value.cars?[index]?.fuelLevel).toString();
-                                    controller.carId.value       = (controller.carsModel.value.cars?[index]?.Id).toString();
-                                    controller.qnr.value         = (controller.carsModel.value.cars?[index]?.qnr).toString();
-                                    controller.selectedCarLatitude.value  = (controller.carsModel.value.cars?[index]?.position?.coordinates?[1])!;
-                                    controller.selectedCarLongitude.value = (controller.carsModel.value.cars?[index]?.position?.coordinates?[0])!;
+                                    controller.model.value =
+                                        "${controller.carsModel.value.cars?[index]?.brand} ${controller.carsModel.value.cars?[index]?.model}";
+                                    controller.carImage.value = (controller
+                                            .carsModel
+                                            .value
+                                            .cars?[index]
+                                            ?.images?[0])
+                                        .toString();
+                                    controller.seatCapcity.value = (controller
+                                            .carsModel
+                                            .value
+                                            .cars?[index]
+                                            ?.seatCapacity)
+                                        .toString();
+                                    controller.milage.value = (controller
+                                            .carsModel
+                                            .value
+                                            .cars?[index]
+                                            ?.mileage)
+                                        .toString();
+                                    controller.fuelType.value = (controller
+                                            .carsModel
+                                            .value
+                                            .cars?[index]
+                                            ?.fuelType)
+                                        .toString();
+                                    controller.fuelLavel.value = (controller
+                                            .carsModel
+                                            .value
+                                            .cars?[index]
+                                            ?.fuelLevel)
+                                        .toString();
+                                    controller.carId.value = (controller
+                                            .carsModel.value.cars?[index]?.Id)
+                                        .toString();
+                                    controller.qnr.value = (controller
+                                            .carsModel.value.cars?[index]?.qnr)
+                                        .toString();
+                                    controller.selectedCarLatitude.value =
+                                        (controller.carsModel.value.cars?[index]
+                                            ?.position?.coordinates?[1])!;
+                                    controller.selectedCarLongitude.value =
+                                        (controller.carsModel.value.cars?[index]
+                                            ?.position?.coordinates?[0])!;
                                     //  controller.cars.value = false;
                                     controller.carDetails.value = true;
-                                    Get.find<GetStorageService>().setQNR      = "${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
-                                    controller.instanceOfGlobalData.QNR.value = "${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
-                                    print("qnr Value : ${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}");
+                                    Get.find<GetStorageService>().setQNR =
+                                        "${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
+                                    controller.instanceOfGlobalData.QNR.value =
+                                        "${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}";
+                                    print(
+                                        "qnr Value : ${controller.qnr.value = (controller.carsModel.value.cars?[index]?.qnr).toString()}");
                                     controller.cars.value = false;
                                   },
                                   child: Container(
@@ -2856,7 +2897,6 @@ class HomeView extends GetView<HomeController> {
   // }
   //
 
-
   Widget bookingPriceDetails(double initialVal) {
     return DraggableScrollableSheet(
       initialChildSize: initialVal,
@@ -2953,30 +2993,51 @@ class HomeView extends GetView<HomeController> {
                                       onPressed: () {
                                         //  Get.toNamed(Routes.CAMERA_DESIGN);
                                         controller.getAddressFromLatLng();
-                                        controller.onBoardingStatus().then((value) {
+                                        controller
+                                            .onBoardingStatus()
+                                            .then((value) {
                                           if (value == 1) {
                                             //   Get.find<GlobalData>().QNR.value=controller.carId.value;
-                                            controller.getInProcessHistory().then((value) {
+                                            controller
+                                                .getInProcessHistory()
+                                                .then((value) {
                                               if (value == 1) {
                                                 showMySnackbar(
                                                     title: "Error",
-                                                    msg: "Complete inprogress ride before booking new ride");
+                                                    msg:
+                                                        "Complete in progress ride before booking new ride");
                                               } else {
-                                                controller.getOnGoingHistory().then((value) {
+                                                controller
+                                                    .getOnGoingHistory()
+                                                    .then((value) {
                                                   if (value == 1) {
                                                     showMySnackbar(
                                                         title: "Error",
-                                                        msg: "Complete your ongoing ride before booking new ride");
+                                                        msg:
+                                                            "Complete your ongoing ride before booking new ride");
                                                   } else {
-                                                    print(controller.model.value);
+                                                    print(
+                                                        controller.model.value);
 
-                                                    if (controller.logindetails.value.user?.isSuspended == false)
+                                                    if (controller
+                                                            .logindetails
+                                                            .value
+                                                            .user
+                                                            ?.isSuspended ==
+                                                        false) {
                                                       Get.toNamed(
                                                           Routes.SAVED_CARDS,
                                                           arguments: [
-                                                            (controller.createBookinModel.value.booking?.Id),
-                                                            (controller.model.value),
-                                                            (controller.seatCapcity.value),
+                                                            (controller
+                                                                .createBookinModel
+                                                                .value
+                                                                .booking
+                                                                ?.Id),
+                                                            (controller
+                                                                .model.value),
+                                                            (controller
+                                                                .seatCapcity
+                                                                .value),
                                                             true,
                                                             "basic",
                                                             1.0,
@@ -3002,7 +3063,7 @@ class HomeView extends GetView<HomeController> {
                                                           // }
                                                           //
                                                           );
-                                                    else
+                                                    } else
                                                       showMySnackbar(
                                                           title: "Error",
                                                           msg:

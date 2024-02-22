@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
-import 'package:zammacarsharing/app/modules/booking/controllers/booking_controller.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
-import 'package:zammacarsharing/app/services/snackbar.dart';
 
 import '../controllers/saved_cards_controller.dart';
 
@@ -19,19 +15,26 @@ class SavedCardsView extends GetView<SavedCardsController> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(onWillPop:() async {
-      controller.cancelBooking();
-      return true;
-    },
+    return WillPopScope(
+      onWillPop: () async {
+        controller.cancelBooking();
+        return true;
+      },
       child: Scaffold(
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: ColorUtil.kPrimary,
+          foregroundColor: Colors.white,
           onPressed: () {
             // Add your onPressed code here!
             Get.toNamed(Routes.INPUT_CARD_DETAILS);
           },
           icon: Icon(Icons.add_card),
-          label: Text("Add your card details"),
+          label: Text(
+            "Add your card details",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
 
         /*FloatingActionButton(
@@ -45,10 +48,9 @@ class SavedCardsView extends GetView<SavedCardsController> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title:  Text(
+          title: Text(
             'Cards',
             style: GoogleFonts.urbanist(color: Colors.black),
-
           ),
           iconTheme: IconThemeData(color: Colors.black),
           actions: [],
@@ -77,13 +79,10 @@ class SavedCardsView extends GetView<SavedCardsController> {
                           controller.savedCardsresponse.value.cards?.length,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: () async{
-
-
-                           await controller.payViaCard(index).then((value) {
+                          onTap: () async {
+                            await controller.payViaCard(index).then((value) {
                               if (value == 1) {
-                                if (controller.model == "End")
-                                {
+                                if (controller.model == "End") {
                                   showDialog(
                                       context: context,
                                       barrierDismissible: false,
@@ -91,15 +90,13 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(10.0),
+                                                BorderRadius.circular(10.0),
                                           ),
-                                          contentPadding:
-                                          EdgeInsets.fromLTRB(
+                                          contentPadding: EdgeInsets.fromLTRB(
                                               0, 8.kh, 0, 0),
                                           content: Container(
                                             height: 250.kh,
                                             child: Column(children: [
-
                                               Column(
                                                 children: [
                                                   Container(
@@ -111,16 +108,17 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                                     ),
                                                     child: Image.asset(
                                                       "assets/images/card.png",
-                                                      fit: BoxFit.contain,color: ColorUtil.kPrimary,
+                                                      fit: BoxFit.contain,
+                                                      color: ColorUtil.kPrimary,
                                                     ),
                                                   ),
                                                   Text(
                                                     "Your \$${controller.amount} payment completed successfully.",
                                                     textAlign: TextAlign.center,
-                                                    style: GoogleFonts.urbanist(fontWeight:
-                                                    FontWeight.bold,
+                                                    style: GoogleFonts.urbanist(
+                                                        fontWeight:
+                                                            FontWeight.bold,
                                                         fontSize: 20.kh),
-
                                                   ),
                                                 ],
                                               ),
@@ -130,37 +128,39 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                           actions: [
                                             Row(
                                               mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceEvenly,
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Expanded(
                                                   child: InkWell(
                                                     onTap: () async {
                                                       //Get.back();
-                                                      Get.offAllNamed(Routes.HOME);
-
+                                                      Get.offAllNamed(
+                                                          Routes.HOME);
                                                     },
                                                     child: Container(
-                                                      decoration:
-                                                      BoxDecoration(
-                                                        color: ColorUtil
-                                                            .kPrimary,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            ColorUtil.kPrimary,
                                                         borderRadius:
-                                                        BorderRadius.only(bottomLeft: Radius.circular(
-                                                            10),
-                                                            bottomRight:
-                                                            Radius.circular(
-                                                                10)),
+                                                            BorderRadius.only(
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10)),
                                                       ),
                                                       height: 56.kh,
                                                       child: Center(
                                                         child: Text(
                                                           "Home",
-                                                          style: GoogleFonts.urbanist(
-                                                              color: Colors
-                                                                  .white,
-                                                              fontSize:
-                                                              16.kh),
+                                                          style: GoogleFonts
+                                                              .urbanist(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      16.kh),
                                                         ),
                                                       ),
                                                     ),
@@ -171,9 +171,7 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                           ],
                                         );
                                       });
-
-                                }
-                                else {
+                                } else {
                                   showDialog(
                                       context: context,
                                       barrierDismissible: false,
@@ -181,15 +179,13 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                         return AlertDialog(
                                           shape: RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(10.0),
+                                                BorderRadius.circular(10.0),
                                           ),
-                                          contentPadding:
-                                          EdgeInsets.fromLTRB(
+                                          contentPadding: EdgeInsets.fromLTRB(
                                               0, 8.kh, 0, 0),
                                           content: Container(
                                             height: 250.kh,
                                             child: Column(children: [
-
                                               Column(
                                                 children: [
                                                   Container(
@@ -201,7 +197,8 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                                     ),
                                                     child: Image.asset(
                                                       "assets/images/card.png",
-                                                      fit: BoxFit.contain,color: ColorUtil.kPrimary,
+                                                      fit: BoxFit.contain,
+                                                      color: ColorUtil.kPrimary,
                                                     ),
                                                   ),
                                                   Text(
@@ -209,17 +206,20 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.urbanist(
                                                         fontWeight:
-                                                        FontWeight.bold,
+                                                            FontWeight.bold,
                                                         fontSize: 20.kh),
                                                   ),
-                                                  SizedBox(height: 5.kh,),
+                                                  SizedBox(
+                                                    height: 5.kh,
+                                                  ),
                                                   Text(
                                                     "Enjoy your trip!",
                                                     textAlign: TextAlign.center,
                                                     style: GoogleFonts.urbanist(
                                                         fontWeight:
-                                                        FontWeight.bold,
-                                                        color: ColorUtil.kPrimary,
+                                                            FontWeight.bold,
+                                                        color:
+                                                            ColorUtil.kPrimary,
                                                         fontSize: 20.kh),
                                                   ),
                                                 ],
@@ -230,32 +230,34 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                           actions: [
                                             Row(
                                               mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceEvenly,
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Expanded(
                                                   child: InkWell(
                                                     onTap: () {
                                                       // Get.back();
                                                       // Get.offAllNamed(Routes.HOME);
-                                                      controller.cancelBooking().then((value){
-                                                        if(value==1){
+                                                      controller
+                                                          .cancelBooking()
+                                                          .then((value) {
+                                                        if (value == 1) {
                                                           Get.back();
-                                                          Get.offAllNamed(Routes.HOME);
+                                                          Get.offAllNamed(
+                                                              Routes.HOME);
                                                         }
                                                       });
-
                                                     },
                                                     child: Container(
                                                       height: 56.kh,
                                                       child: Center(
                                                         child: Text(
                                                           "Cancel Ride",
-                                                          style: GoogleFonts.urbanist(
-                                                              color: ColorUtil
-                                                                  .kPrimary,
-                                                              fontSize:
-                                                              16.kh),
+                                                          style: GoogleFonts
+                                                              .urbanist(
+                                                                  color: ColorUtil
+                                                                      .kPrimary,
+                                                                  fontSize:
+                                                                      16.kh),
                                                         ),
                                                       ),
                                                     ),
@@ -264,35 +266,40 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                                 Expanded(
                                                   child: InkWell(
                                                     onTap: () async {
+                                                      final bookingId =
+                                                          controller
+                                                              .bookingIdM.value;
                                                       Get.back();
-                                                      Get.offNamed(Routes.BOOKING, arguments: [
-                                                        (controller.bookingId),
-                                                        (controller.model),
-                                                        (controller.seetCapacity),
-                                                        controller.boolvale
-                                                      ]);
-
+                                                      Get.offNamed(
+                                                          Routes.BOOKING,
+                                                          arguments: [
+                                                            bookingId,
+                                                            (controller.model),
+                                                            (controller
+                                                                .seetCapacity),
+                                                            controller.boolvale
+                                                          ]);
                                                     },
                                                     child: Container(
-                                                      decoration:
-                                                      BoxDecoration(
-                                                        color: ColorUtil
-                                                            .kPrimary,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            ColorUtil.kPrimary,
                                                         borderRadius:
-                                                        BorderRadius.only(
-                                                            bottomRight:
-                                                            Radius.circular(
-                                                                10)),
+                                                            BorderRadius.only(
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
                                                       ),
                                                       height: 56.kh,
                                                       child: Center(
                                                         child: Text(
                                                           "Continue ride",
-                                                          style: GoogleFonts.urbanist(
-                                                              color: Colors
-                                                                  .white,
-                                                              fontSize:
-                                                              16.kh),
+                                                          style: GoogleFonts
+                                                              .urbanist(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      16.kh),
                                                         ),
                                                       ),
                                                     ),
@@ -303,27 +310,28 @@ class SavedCardsView extends GetView<SavedCardsController> {
                                           ],
                                         );
                                       });
-
-
                                 }
                               } else {
-                        //          controller.cancelBooking().then((value){
-                        //   if(value==1){
-                        //     Get.back();
-                        //   }
-                        // });
+                                //          controller.cancelBooking().then((value){
+                                //   if(value==1){
+                                //     Get.back();
+                                //   }
+                                // });
                                 print("problem while making payment");
                               }
                             });
                           },
                           child: CreditCardWidget(
-                            cardNumber: controller.cardList.value[index].cardNumber,
-                            expiryDate: controller.cardList.value[index].cardDate,
+                            cardNumber:
+                                controller.cardList.value[index].cardNumber,
+                            expiryDate:
+                                controller.cardList.value[index].cardDate,
                             cardHolderName: controller
                                         .cardList.value[index].cardHolderName ==
                                     null
                                 ? ""
-                                : controller.cardList.value[index].cardHolderName,
+                                : controller
+                                    .cardList.value[index].cardHolderName,
                             cvvCode: controller.cardList.value[index].cardCvc,
                             //  labelCardHolder: "",
                             obscureCardNumber: false,

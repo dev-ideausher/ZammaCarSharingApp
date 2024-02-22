@@ -4,13 +4,10 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -27,17 +24,12 @@ import 'package:zammacarsharing/app/modules/models/lock_model.dart';
 import 'package:zammacarsharing/app/modules/models/ride_history_model.dart';
 import 'package:zammacarsharing/app/modules/models/transationdetails_model.dart';
 import 'package:zammacarsharing/app/modules/widgets/custom_camera.dart';
-import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/checkLocationPermission.dart';
-import 'package:zammacarsharing/app/services/dialog_helper.dart';
 import 'package:zammacarsharing/app/services/dio/api_service.dart';
 import 'package:zammacarsharing/app/services/dio/endpoints.dart';
 import 'package:zammacarsharing/app/services/globalData.dart';
-import 'package:zammacarsharing/app/services/image_handler.dart';
-import 'package:zammacarsharing/app/services/repeated_api_calling.dart';
 import 'package:zammacarsharing/app/services/snackbar.dart';
 import 'package:zammacarsharing/app/services/storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:zammacarsharing/app/services/tokenCreatorAndValidator.dart';
 
 class BookingController extends GetxController {
@@ -100,8 +92,8 @@ class BookingController extends GetxController {
   List<int> time = [];
 
   // Data Coming From Home Controller and ride history
-  final bookingId   = Get.arguments[0] ?? "";
-  final model       = Get.arguments[1] ?? "";
+  final bookingId = Get.arguments[0] ?? "";
+  final model = Get.arguments[1] ?? "";
   final seatCapcity = Get.arguments[2] ?? "";
 
   //loader variable
@@ -113,7 +105,6 @@ class BookingController extends GetxController {
 
   Timer? timer;
 
-
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -124,7 +115,6 @@ class BookingController extends GetxController {
     if (Get.arguments[3] == false) {
       carBooking.value = Get.arguments[3];
       rideStart.value = true;
-
     }
     getTransationDetails();
     getInProcessHistory();
@@ -138,22 +128,20 @@ class BookingController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    timer = Timer.periodic(Duration(seconds: 2), (Timer t) => getBookingDetailsUsingBookingIdTimmer());
-
+    timer = Timer.periodic(Duration(seconds: 2),
+        (Timer t) => getBookingDetailsUsingBookingIdTimmer());
   }
 
   @override
   void onClose() {
     timer?.cancel();
     super.dispose();
-
-
   }
 
   resetValue() {
     frontHood.value = File("");
-    leftSide.value  = File("");
-    backSide.value  = File("");
+    leftSide.value = File("");
+    backSide.value = File("");
     rightSide.value = File("");
     frontImageStatus.value = 0;
     backImageStatus.value = 0;
@@ -166,35 +154,43 @@ class BookingController extends GetxController {
   getBookingDetailsUsingBookingId() async {
     await Future.delayed(Duration(seconds: 3));
     await getOnGoingHistory();
-   await Get.find<HomeController>().getcar();
+    await Get.find<HomeController>().getcar();
     try {
       bookingDetailsLoader.value = true;
-      final response = await APIManager.getBookingByBookingId(bookingId: bookingId == "" ? "${rideHistory.value.data?[0]?.Id}" : bookingId);
-      getBookingDetailsModel.value = BookingDetailsModels.fromJson(jsonDecode(response.toString()));
+      final response = await APIManager.getBookingByBookingId(
+          bookingId: bookingId == ""
+              ? "${rideHistory.value.data?[0]?.Id}"
+              : bookingId);
+      getBookingDetailsModel.value =
+          BookingDetailsModels.fromJson(jsonDecode(response.toString()));
 
-      Get.find<GetStorageService>().bookedCarID = "${getBookingDetailsModel.value.data?.car?.Id}";
+      Get.find<GetStorageService>().bookedCarID =
+          "${getBookingDetailsModel.value.data?.car?.Id}";
       print(Get.find<GetStorageService>().bookedCarID);
       bookingDetailsLoader.value = false;
-
     } catch (e) {
       bookingDetailsLoader.value = false;
       throw "Error while fetching booking details by booking id";
     }
   }
 
-var c = 0.obs;
+  var c = 0.obs;
   getBookingDetailsUsingBookingIdTimmer() async {
-
-    print("object");
     try {
+      //TODO booking id error
+      print("booking id : ${bookingId}");
       bookingDetailsLoader.value = true;
-      final response = await APIManager.getBookingByBookingId(bookingId: bookingId == "" ? "${rideHistory.value.data?[0]?.Id}" : bookingId);
-      getBookingDetailsModel.value = BookingDetailsModels.fromJson(jsonDecode(response.toString()));
+      final response = await APIManager.getBookingByBookingId(
+          bookingId: bookingId == ""
+              ? "${rideHistory.value.data?[0]?.Id}"
+              : bookingId);
+      getBookingDetailsModel.value =
+          BookingDetailsModels.fromJson(jsonDecode(response.toString()));
 
-      Get.find<GetStorageService>().bookedCarID = "${getBookingDetailsModel.value.data?.car?.Id}";
+      Get.find<GetStorageService>().bookedCarID =
+          "${getBookingDetailsModel.value.data?.car?.Id}";
       print(Get.find<GetStorageService>().bookedCarID);
       bookingDetailsLoader.value = false;
-
     } catch (e) {
       bookingDetailsLoader.value = false;
       throw "Error while fetching booking details by booking id";
@@ -207,8 +203,12 @@ var c = 0.obs;
     instanceOfGlobalData.loader.value = true;
     var body = {"cancelReason": "Not available"};
     try {
-      final response = await APIManager.cancelBooking(body: body, bookingId: bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId );
-      createBookinModel.value = CreateBookinModel.fromJson(jsonDecode(response.toString()));
+      final response = await APIManager.cancelBooking(
+          body: body,
+          bookingId:
+              bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId);
+      createBookinModel.value =
+          CreateBookinModel.fromJson(jsonDecode(response.toString()));
       print("response.data : ${response.toString()}");
       instanceOfGlobalData.loader.value = false;
       showMySnackbar(title: "Message", msg: "Ride canceled");
@@ -251,7 +251,7 @@ var c = 0.obs;
     PickedFile? pickedImage;
     pickedImage = await picker.getImage(source: ImageSource.camera);*/
     GenralCamera.openCamera(onCapture: (pickedImage) {
-      if (pickedImage !=  null) {
+      if (pickedImage != null) {
         if (selectedSideFoto == "front") {
           frontImageStatus.value = 1;
           frontHood.value = pickedImage;
@@ -300,7 +300,6 @@ var c = 0.obs;
     } catch (e) {
       throw Exception(e);
     }*/
-
   }
 
   Future<int> uploadInspectionImage(String process) async {
@@ -339,13 +338,16 @@ var c = 0.obs;
             "type": "beforeRide",
             "carImagesBeforeRide": [
               {"respectiveSide": "Front Hood", "image": carsImage.value[0]},
-              {"respectiveSide": "Left Side", "image" :  carsImage.value[1]},
+              {"respectiveSide": "Left Side", "image": carsImage.value[1]},
               {"respectiveSide": "Right Side", "image": carsImage.value[2]},
-              {"respectiveSide": "Back Side", "image" :  carsImage.value[3]}
+              {"respectiveSide": "Back Side", "image": carsImage.value[3]}
             ]
           };
           final response = await APIManager.postInspectionImageUrl(
-              body: body, bookingId: (bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId).toString());
+              body: body,
+              bookingId:
+                  (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
+                      .toString());
           inspectionModel.value =
               InspectionModel.fromJson(jsonDecode(response.toString()));
 
@@ -360,8 +362,7 @@ var c = 0.obs;
               showMySnackbar(title: "Error", msg: "Error While ongoing ride");
             }
           }
-        }
-        else {
+        } else {
           var body = {
             "type": "afterRide",
             "carImagesAfterRide": [
@@ -372,7 +373,10 @@ var c = 0.obs;
             ]
           };
           final response = await APIManager.postInspectionImageUrl(
-              body: body, bookingId: (bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId).toString());
+              body: body,
+              bookingId:
+                  (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
+                      .toString());
           inspectionModel.value =
               InspectionModel.fromJson(jsonDecode(response.toString()));
 
@@ -387,20 +391,30 @@ var c = 0.obs;
               };
 
               final responseend = await APIManager.endInspectionImageUrl(
-                  body: body2, bookingId: (bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId).toString());
+                  body: body2,
+                  bookingId: (bookingId == ""
+                          ? rideHistory.value.data![0]!.Id
+                          : bookingId)
+                      .toString());
               endride.value =
                   EndRide.fromJson(jsonDecode(responseend.toString()));
 
-              final response = await APIManager.getCarPricingById(carId: (endride.value.data?.car).toString());
+              final response = await APIManager.getCarPricingById(
+                  carId: (endride.value.data?.car).toString());
               carPriceById.value =
                   CarPriceById.fromJson(jsonDecode(response.toString()));
 
-              calculateTotalBookingTimeAndTotalAmount(extraMileCharges:double.parse("${carPriceById.value.carPricing?.extraMileRate}") ,extraTimeCharges: double.parse("${carPriceById.value.carPricing?.extraMinuteRate}"),
+              calculateTotalBookingTimeAndTotalAmount(
+                  extraMileCharges: double.parse(
+                      "${carPriceById.value.carPricing?.extraMileRate}"),
+                  extraTimeCharges: double.parse(
+                      "${carPriceById.value.carPricing?.extraMinuteRate}"),
                   additionalWaitingTime:
                       (endride.value.data?.additionalWaitingTime)!.toInt(),
                   dropTime: (endride.value.data?.dropTime).toString(),
                   pickupTime: (endride.value.data?.pickupTime).toString());
-             milage.value=(endride.value.data?.tripData?[0]?.event?.status?.mileage)!;
+              milage.value =
+                  (endride.value.data?.tripData?[0]?.event?.status?.mileage)!;
               showMySnackbar(
                   title: "Message", msg: "Ride Completed successfully");
 
@@ -449,8 +463,10 @@ var c = 0.obs;
         "waitingTime": instanceOfGlobalData.totalWaiting.value
       };
 
-      final response =
-          await APIManager.markBookingOngoing(bookingId: bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId, body: body);
+      final response = await APIManager.markBookingOngoing(
+          bookingId:
+              bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId,
+          body: body);
       bookingOngoing.value =
           BookingOngoing.fromJson(jsonDecode(response.toString()));
 
@@ -464,10 +480,12 @@ var c = 0.obs;
 
   //getLockStatus
   getLockStatus() async {
-    final url = Endpoints.getLockStatus + "${Get.find<GetStorageService>().getQNR}/central-lock";
+    final url = Endpoints.getLockStatus +
+        "${Get.find<GetStorageService>().getQNR}/central-lock";
     var headers = {
       "Content-Type": "application/json",
-      "X-CloudBoxx-ApiKey": "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
+      "X-CloudBoxx-ApiKey":
+          "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
     };
     print(headers);
     final response = await http.get(Uri.parse(url), headers: headers);
@@ -480,7 +498,8 @@ var c = 0.obs;
   }
 
   getImoblizerStatus() async {
-    final url = Endpoints.getLockStatus + "${Get.find<GetStorageService>().getQNR}/immobilizer";
+    final url = Endpoints.getLockStatus +
+        "${Get.find<GetStorageService>().getQNR}/immobilizer";
     var headers = {
       "Content-Type": "application/json",
       "X-CloudBoxx-ApiKey":
@@ -548,7 +567,8 @@ var c = 0.obs;
         "${Get.find<GetStorageService>().getQNR}/central-lock";
     var headers = {
       "Content-Type": "application/json",
-      "X-CloudBoxx-ApiKey": "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
+      "X-CloudBoxx-ApiKey":
+          "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
     };
     var body = {"state": status};
     print(headers);
@@ -635,17 +655,18 @@ var c = 0.obs;
   getOnGoingHistory() async {
     try {
       if (rideStart.value == true) {
-
         print("ride Start");
 
         loader.value = true;
 
         final response = await APIManager.getOnGoingRideHistory();
-        rideHistory.value = RideHistory.fromJson(jsonDecode(response.toString()));
-        instanceOfGlobalData.lastStampToseconds(startTime: DateTime.parse((rideHistory.value.data?[0]?.pickupTime).toString()));
+        rideHistory.value =
+            RideHistory.fromJson(jsonDecode(response.toString()));
+        instanceOfGlobalData.lastStampToseconds(
+            startTime: DateTime.parse(
+                (rideHistory.value.data?[0]?.pickupTime).toString()));
 
         loader.value = false;
-
       }
     } catch (e) {
       print(e);
@@ -675,10 +696,14 @@ var c = 0.obs;
 
   getTransationDetails() async {
     try {
-      final response = await APIManager.getPaymentHistory(bookingid: bookingId == "" ?rideHistory.value.data![0]!.Id : bookingId);
+      final response = await APIManager.getPaymentHistory(
+          bookingid:
+              bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId);
       transactionDetails.value =
           TransactionDetails.fromJson(jsonDecode(response.toString()));
-      bookingType.value = (transactionDetails.value.bookingTransactions?[0]?.bookingPlan).toString();
+      bookingType.value =
+          (transactionDetails.value.bookingTransactions?[0]?.bookingPlan)
+              .toString();
       finalDistanceTravel.value = (transactionDetails
               .value.bookingTransactions?[0]?.bookingPaymentObject?.mile)
           .toString();
@@ -706,26 +731,25 @@ var c = 0.obs;
   calculateTotalBookingTimeAndTotalAmount(
       {required String pickupTime,
       required String dropTime,
-      required int additionalWaitingTime,required double extraTimeCharges,required double extraMileCharges}) async {
+      required int additionalWaitingTime,
+      required double extraTimeCharges,
+      required double extraMileCharges}) async {
     DateTime startDate = DateTime.parse((pickupTime).toString());
-    DateTime endDate   = DateTime.parse((dropTime).toString());
+    DateTime endDate = DateTime.parse((dropTime).toString());
     final actualDifference = endDate.toUtc().difference(startDate.toUtc());
 
     int second = actualDifference.inSeconds;
     finalTralvelTime.value = "${actualDifference.inMinutes.toString()}";
-
-
 
     //0.39 dollar per minute
     double drivingAmount = (second) * (0.0065);
     double extraWaitingAmount = additionalWaitingTime * (0.0065);
 
     if (bookingType.value == "custom") {
-
       if (((promisedTravelTime.value * 60) * 60) < second) {
-
         double calculateCharge =
-            ((second - ((promisedTravelTime.value * 60) * 60)) * (extraTimeCharges / 60));
+            ((second - ((promisedTravelTime.value * 60) * 60)) *
+                (extraTimeCharges / 60));
         extraWaitingCharge.value =
             double.parse(extraWaitingAmount.toStringAsFixed(3));
         extraTravelTimeCharge.value =
@@ -734,7 +758,6 @@ var c = 0.obs;
             (extraWaitingAmount + calculateCharge).toStringAsFixed(3));
         finalTotalAmount.value = totalFare.value;
         totalFare.value = totalFare.value - (paidAmount.value);
-
       } else {
         extraTravelTimeCharge.value = 0.0;
         totalFare.value = 0.0;
@@ -760,48 +783,24 @@ var c = 0.obs;
       //mapLoader.value=false;
       return;
     }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
-    print(
-        "position lat  : ${position.latitude}, long : ${position.longitude}");
-
-    var sourceLatitude = position.latitude;
-    var sourceLongitude = position.longitude;
-    var destinationLongitude  = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
-    var destinationLatitude   = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
-    String mapOptions = ['saddr=$sourceLatitude,$sourceLongitude', 'daddr=$destinationLatitude,$destinationLongitude', 'dir_action=navigate'].join('&');
-    final url ='https://www.google.com/maps/dir/?api=1&origin=$sourceLatitude,$sourceLongitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving&dir_action=navigate';
-  //  final url = 'https://www.google.com/maps?$mapOptions';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-
-
-  Future<void> openMapRide() async {
-    final hasPermission = await handleLocationPermission();
-
-    if (!hasPermission) {
-      //mapLoader.value=false;
-      return;
-    }
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    print(
-        "position lat  : ${position.latitude}, long : ${position.longitude}");
+    print("position lat  : ${position.latitude}, long : ${position.longitude}");
 
     var sourceLatitude = position.latitude;
     var sourceLongitude = position.longitude;
-    var destinationLongitude  = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
-    var destinationLatitude   = getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
-  //  String mapOptions = ['saddr=$sourceLatitude,$sourceLongitude', 'daddr=$destinationLatitude,$destinationLongitude', 'dir_action=navigate'].join('&');
+    var destinationLongitude =
+        getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
+    var destinationLatitude =
+        getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
+    String mapOptions = [
+      'saddr=$sourceLatitude,$sourceLongitude',
+      'daddr=$destinationLatitude,$destinationLongitude',
+      'dir_action=navigate'
+    ].join('&');
     final url =
-        //" https://www.google.com/maps/dir/api=1&destination=${Get.find<HomeController>().latitude},${Get.find<HomeController>().longitude}&travelmode=driving';";
-        'https://www.google.com/maps?q=${Get.find<HomeController>().latitude},${Get.find<HomeController>().longitude}&travelmode=driving&dir_action=navigate';
-    https://www.google.com/maps/dir/?api=1&origin=$sourceLatitude,$sourceLongitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving&dir_action=navigate
+        'https://www.google.com/maps/dir/?api=1&origin=$sourceLatitude,$sourceLongitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving&dir_action=navigate';
     //  final url = 'https://www.google.com/maps?$mapOptions';
     if (await canLaunch(url)) {
       await launch(url);
@@ -810,4 +809,34 @@ var c = 0.obs;
     }
   }
 
+  Future<void> openMapRide() async {
+    final hasPermission = await handleLocationPermission();
+
+    if (!hasPermission) {
+      //mapLoader.value=false;
+      return;
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+
+    print("position lat  : ${position.latitude}, long : ${position.longitude}");
+
+    var sourceLatitude = position.latitude;
+    var sourceLongitude = position.longitude;
+    var destinationLongitude =
+        getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
+    var destinationLatitude =
+        getBookingDetailsModel.value.data?.car?.position?.coordinates?[0];
+    //  String mapOptions = ['saddr=$sourceLatitude,$sourceLongitude', 'daddr=$destinationLatitude,$destinationLongitude', 'dir_action=navigate'].join('&');
+    final url =
+        //" https://www.google.com/maps/dir/api=1&destination=${Get.find<HomeController>().latitude},${Get.find<HomeController>().longitude}&travelmode=driving';";
+        'https://www.google.com/maps?q=${Get.find<HomeController>().latitude},${Get.find<HomeController>().longitude}&travelmode=driving&dir_action=navigate';
+    https: //www.google.com/maps/dir/?api=1&origin=$sourceLatitude,$sourceLongitude&destination=$destinationLatitude,$destinationLongitude&travelmode=driving&dir_action=navigate
+    //  final url = 'https://www.google.com/maps?$mapOptions';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
