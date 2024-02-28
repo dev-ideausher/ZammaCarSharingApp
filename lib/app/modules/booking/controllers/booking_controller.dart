@@ -4,10 +4,12 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_bar_code_scanner_dialog/qr_bar_code_scanner_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,28 +41,22 @@ class BookingController extends GetxController {
   var currentSliderValue = 20.0.obs;
   LatLng center = LatLng(45.521563, -122.677433);
   Rx<bool> light = false.obs;
-  var frontHood = File("").obs;
-  var leftSide = File("").obs;
-  var backSide = File("").obs;
-  var rightSide = File("").obs;
-  final frontImageStatus = 0.obs;
-  final backImageStatus = 0.obs;
-  final leftImageStatus = 0.obs;
-  final rightImageStatus = 0.obs;
-  RxList carsImage = [].obs;
+  Rxn<File> frontHood = Rxn(null);
+  Rxn<File> backSide = Rxn(null);
+  Rxn<File> rightSide = Rxn(null);
+  Rxn<File> leftSide = Rxn(null);
   Rx<bool> carInspection = false.obs;
   Rx<bool> rideStart = false.obs;
   Rx<bool> endrideInspection = false.obs;
   Rx<bool> bookingPriceDetails = false.obs;
   Rx<bool> carBooking = true.obs;
+  Rx<bool> hasInternet = true.obs;
 
   //response model
   Rx<CreateBookinModel> createBookinModel = CreateBookinModel().obs;
   Rx<BookingDetailsModels> getBookingDetailsModel = BookingDetailsModels().obs;
-  Rx<InspectionModel> inspectionModel = InspectionModel().obs;
 
   Rx<ImageUpload> imageUpload = ImageUpload().obs;
-  Rx<BookingOngoing> bookingOngoing = BookingOngoing().obs;
   Rx<RideHistory> rideHistory = RideHistory().obs;
   Rx<EndRide> endride = EndRide().obs;
   Rx<TransactionDetails> transactionDetails = TransactionDetails().obs;
@@ -69,11 +65,8 @@ class BookingController extends GetxController {
   //pocGetLockStatus
 
   Rx<LockModel> lockModel = LockModel().obs;
-  Rx<ImoblizerStatus> imoblizerStatus = ImoblizerStatus().obs;
   RxBool lockLoader = false.obs;
   RxBool UnlockLoader = false.obs;
-  RxBool imoblizerLockLoader = false.obs;
-  RxBool imoblizerUnlockLoader = false.obs;
 
   RxDouble totalFare = 0.0.obs;
   RxDouble extraWaitingCharge = 0.0.obs;
@@ -102,6 +95,7 @@ class BookingController extends GetxController {
 //QR Scanner Use
   final qrBarCodeScannerDialogPlugin = QrBarCodeScannerDialog().obs;
   RxString code = "".obs;
+  var connectivityStream;
 
   Timer? timer;
 
@@ -128,25 +122,33 @@ class BookingController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    timer = Timer.periodic(Duration(seconds: 2),
-        (Timer t) => getBookingDetailsUsingBookingIdTimmer());
+    // connectivityStream = Connectivity();
+    //     .onConnectivityChanged
+    //     .listen((ConnectivityResult result) async {
+    //   if (result == ConnectivityResult.none) {
+    //     showMySnackbar(
+    //         title: "No Internet Connection", msg: "Please connect to internet");
+    //     hasInternet.value = false;
+    //   } else {
+    //     hasInternet.value = true;
+    //   }
+    // });
+    // timer = Timer.periodic(const Duration(seconds: 2),
+    //     (Timer t) => getBookingDetailsUsingBookingIdTimmer());
   }
 
   @override
   void onClose() {
     timer?.cancel();
+    connectivityStream.cancel();
     super.dispose();
   }
 
   resetValue() {
-    frontHood.value = File("");
-    leftSide.value = File("");
-    backSide.value = File("");
-    rightSide.value = File("");
-    frontImageStatus.value = 0;
-    backImageStatus.value = 0;
-    leftImageStatus.value = 0;
-    rightImageStatus.value = 0;
+    frontHood.value = null;
+    leftSide.value = null;
+    backSide.value = null;
+    rightSide.value = null;
   }
 
   RxBool bookingDetailsLoader = false.obs;
@@ -178,12 +180,15 @@ class BookingController extends GetxController {
   getBookingDetailsUsingBookingIdTimmer() async {
     try {
       //TODO booking id error
-      print("booking id : ${bookingId}");
+      if (!hasInternet.value) {
+        return;
+      }
+      print("bookingId : ${bookingId}");
       bookingDetailsLoader.value = true;
       final response = await APIManager.getBookingByBookingId(
-          bookingId: bookingId == ""
-              ? "${rideHistory.value.data?[0]?.Id}"
-              : bookingId);
+        bookingId:
+            bookingId == "" ? "${rideHistory.value.data?[0]?.Id}" : bookingId,
+      );
       getBookingDetailsModel.value =
           BookingDetailsModels.fromJson(jsonDecode(response.toString()));
 
@@ -193,7 +198,7 @@ class BookingController extends GetxController {
       bookingDetailsLoader.value = false;
     } catch (e) {
       bookingDetailsLoader.value = false;
-      throw "Error while fetching booking details by booking id";
+      // throw "Error while fetching booking details by booking id";
     }
   }
 
@@ -221,7 +226,7 @@ class BookingController extends GetxController {
     }
   }
 
-  Future<dynamic> uploadImage(String path) async {
+  Future<dynamic> uploadImages(List<File> images) async {
     String token = Get.find<GetStorageService>().jwToken;
     var request = http.MultipartRequest(
       'POST',
@@ -229,7 +234,10 @@ class BookingController extends GetxController {
     );
     request.fields.addAll({'type': 'userProfile'});
     var headers = {'accept': 'application/json', 'token': token};
-    request.files.add(await http.MultipartFile.fromPath('file', path));
+    for (int i = 0; i < images.length; i++) {
+      request.files
+          .add(await http.MultipartFile.fromPath('file', images[i].path));
+    }
     request.headers.addAll(headers);
     var response = await request.send();
     if (response.statusCode == 200) {
@@ -253,16 +261,12 @@ class BookingController extends GetxController {
     GenralCamera.openCamera(onCapture: (pickedImage) {
       if (pickedImage != null) {
         if (selectedSideFoto == "front") {
-          frontImageStatus.value = 1;
           frontHood.value = pickedImage;
         } else if (selectedSideFoto == "leftside") {
-          leftImageStatus.value = 1;
           leftSide.value = pickedImage;
         } else if (selectedSideFoto == "rightside") {
-          rightImageStatus.value = 1;
           rightSide.value = pickedImage;
         } else {
-          backImageStatus.value = 1;
           backSide.value = pickedImage;
         }
       }
@@ -302,179 +306,49 @@ class BookingController extends GetxController {
     }*/
   }
 
-  Future<int> uploadInspectionImage(String process) async {
-    if (frontImageStatus.value == 0 ||
-        leftImageStatus.value == 0 ||
-        rightImageStatus.value == 0 ||
-        backImageStatus == 0) {
-      showMySnackbar(title: "Error", msg: "All image mandatory");
-      return 0;
+  Future<List<String>> uploadInspectionImages(BuildContext context) async {
+    if (frontHood.value == null ||
+        leftSide.value == null ||
+        rightSide.value == null ||
+        backSide.value == null) {
+      throw MyException("All image mandatory");
     } else {
+      List<String?> carsImage = [];
       try {
-        instanceOfGlobalData.loader.value = true;
-        carsImage.value.clear();
-        for (int i = 0; i < 4; i++) {
-          if (i == 0) {
-            var response = await uploadImage(frontHood.value.path);
-            imageUpload.value = ImageUpload.fromJson(response);
-            carsImage.add(imageUpload.value.urls?[0]);
-          } else if (i == 1) {
-            var response = await uploadImage(leftSide.value.path);
-            imageUpload.value = ImageUpload.fromJson(response);
-            carsImage.add(imageUpload.value.urls?[0]);
-          } else if (i == 2) {
-            var response = await uploadImage(rightSide.value.path);
-            imageUpload.value = ImageUpload.fromJson(response);
-            carsImage.add(imageUpload.value.urls?[0]);
-          } else if (i == 3) {
-            var response = await uploadImage(backSide.value.path);
-            imageUpload.value = ImageUpload.fromJson(response);
-            carsImage.add(imageUpload.value.urls?[0]);
-          }
-        }
-
-        if (process == "S") {
-          var body = {
-            "type": "beforeRide",
-            "carImagesBeforeRide": [
-              {"respectiveSide": "Front Hood", "image": carsImage.value[0]},
-              {"respectiveSide": "Left Side", "image": carsImage.value[1]},
-              {"respectiveSide": "Right Side", "image": carsImage.value[2]},
-              {"respectiveSide": "Back Side", "image": carsImage.value[3]}
-            ]
-          };
-          final response = await APIManager.postInspectionImageUrl(
-              body: body,
-              bookingId:
-                  (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
-                      .toString());
-          inspectionModel.value =
-              InspectionModel.fromJson(jsonDecode(response.toString()));
-
-          if (inspectionModel.value.status == true) {
-            try {
-              await markBookingOngoing();
-              showMySnackbar(
-                  title: "Message", msg: "Booking Completed have a safe ride");
-
-              resetValue();
-            } catch (e) {
-              showMySnackbar(title: "Error", msg: "Error While ongoing ride");
-            }
-          }
-        } else {
-          var body = {
-            "type": "afterRide",
-            "carImagesAfterRide": [
-              {"respectiveSide": "Front Hood", "image": carsImage.value[0]},
-              {"respectiveSide": "Left Side", "image": carsImage.value[1]},
-              {"respectiveSide": "Right Side", "image": carsImage.value[2]},
-              {"respectiveSide": "Back Side", "image": carsImage.value[3]}
-            ]
-          };
-          final response = await APIManager.postInspectionImageUrl(
-              body: body,
-              bookingId:
-                  (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
-                      .toString());
-          inspectionModel.value =
-              InspectionModel.fromJson(jsonDecode(response.toString()));
-
-          if (inspectionModel.value.status == true) {
-            try {
-              var body2 = {
-                "dropLocation": {
-                  "type": "Point",
-                  "coordinates": [80.9229409563887, 26.842241990735474],
-                  "address": "Lucknow"
-                }
-              };
-
-              final responseend = await APIManager.endInspectionImageUrl(
-                  body: body2,
-                  bookingId: (bookingId == ""
-                          ? rideHistory.value.data![0]!.Id
-                          : bookingId)
-                      .toString());
-              endride.value =
-                  EndRide.fromJson(jsonDecode(responseend.toString()));
-
-              final response = await APIManager.getCarPricingById(
-                  carId: (endride.value.data?.car).toString());
-              carPriceById.value =
-                  CarPriceById.fromJson(jsonDecode(response.toString()));
-
-              calculateTotalBookingTimeAndTotalAmount(
-                  extraMileCharges: double.parse(
-                      "${carPriceById.value.carPricing?.extraMileRate}"),
-                  extraTimeCharges: double.parse(
-                      "${carPriceById.value.carPricing?.extraMinuteRate}"),
-                  additionalWaitingTime:
-                      (endride.value.data?.additionalWaitingTime)!.toInt(),
-                  dropTime: (endride.value.data?.dropTime).toString(),
-                  pickupTime: (endride.value.data?.pickupTime).toString());
-              milage.value =
-                  (endride.value.data?.tripData?[0]?.event?.status?.mileage)!;
-              showMySnackbar(
-                  title: "Message", msg: "Ride Completed successfully");
-
-              resetValue();
-
-              if (Get.find<GlobalData>().rideTicker.isActive) {
-                Get.find<GlobalData>().rideTicker.cancel();
-                Get.find<GlobalData>().checkRideTicker.value = false;
-              }
-
-              /*if(Get.find<GlobalData>().timer.isActive){
-                Get.find<GlobalData>().timer.cancel();
-                Get.find<GlobalData>().start.value=60;
-                Get.find<GlobalData>().checkTimer.value=false;
-                Get.find<GlobalData>().minute.value=14;
-
-              }
-              if(Get.find<GlobalData>().ridetimer.isActive){
-                Get.find<GlobalData>().ridetimer.cancel();
-                Get.find<GlobalData>().ridestart.value=0;
-                Get.find<GlobalData>().checkRideTimer.value=false;
-                Get.find<GlobalData>().rideminute.value=0;
-                Get.find<GlobalData>().ridehour.value=0;
-
-              }*/
-            } catch (e) {
-              showMySnackbar(title: "Error", msg: "Error While ending ride");
-              throw Exception('status code is ${response.statusCode}');
-            }
-          }
-        }
-        instanceOfGlobalData.loader.value = false;
-        return 1;
+        lodingMsg.value = "Uploading Images";
+        context.loaderOverlay.show();
+        final response = await uploadImages([
+          frontHood.value!,
+          leftSide.value!,
+          rightSide.value!,
+          backSide.value!,
+        ]);
+        imageUpload.value = ImageUpload.fromJson(response);
+        carsImage = imageUpload.value.urls!;
+        context.loaderOverlay.hide();
+        return carsImage as List<String>;
       } catch (e) {
         instanceOfGlobalData.loader.value = false;
-        print("while uploding car sides image");
-        return 0;
+        throw MyException("Error while uploading images");
       }
     }
   }
 
-  Future<int> markBookingOngoing() async {
+  Future<BookingOngoing> markBookingOngoing() async {
     try {
-      var body = {
+      final body = {
         "additionalWaitingTime": instanceOfGlobalData.aditionalWaiting.value,
         "waitingTime": instanceOfGlobalData.totalWaiting.value
       };
-
       final response = await APIManager.markBookingOngoing(
           bookingId:
               bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId,
           body: body);
-      bookingOngoing.value =
+      final bookingOngoing =
           BookingOngoing.fromJson(jsonDecode(response.toString()));
-
-      print("response.data : ${response.toString()}");
-
-      return 1;
+      return bookingOngoing;
     } catch (e) {
-      return 0;
+      throw MyException("Error while marking booking ongoing");
     }
   }
 
@@ -509,7 +383,7 @@ class BookingController extends GetxController {
     final response = await http.get(Uri.parse(url), headers: headers);
 
     if (response.statusCode == 200) {
-      imoblizerStatus.value =
+      final imoblizerStatus =
           ImoblizerStatus.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('status code is ${response.statusCode}');
@@ -584,54 +458,27 @@ class BookingController extends GetxController {
     }
   }
 
-  Future<String> putImoblizerLock(String status) async {
-    imoblizerLockLoader.value = true;
-    final url = Endpoints.getLockStatus +
-        "${Get.find<GetStorageService>().getQNR}/immobilizer";
-    var headers = {
-      "Content-Type": "application/json",
-      "X-CloudBoxx-ApiKey":
-          "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
-    };
-    var body = {"state": status};
-    print(headers);
-    final response = await http.put(Uri.parse(url),
-        headers: headers, body: jsonEncode(body));
-
-    if (response.statusCode == 200) {
-      imoblizerStatus.value =
-          ImoblizerStatus.fromJson(jsonDecode(response.body));
-      imoblizerLockLoader.value = false;
-      return (imoblizerStatus.value.state).toString();
-    } else {
-      imoblizerLockLoader.value = false;
-      throw Exception('status code is ${response.statusCode}');
-    }
-  }
-
-  Future<String> putImoblizerUnlock(String status) async {
-    imoblizerUnlockLoader.value = true;
-    final url = Endpoints.getLockStatus +
-        "${Get.find<GetStorageService>().getQNR}/immobilizer";
-    var headers = {
-      "Content-Type": "application/json",
-      "X-CloudBoxx-ApiKey":
-          "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
-    };
-    var body = {"state": status};
-    print(headers);
-    final response = await http.put(Uri.parse(url),
-        headers: headers, body: jsonEncode(body));
-
-    if (response.statusCode == 200) {
-      imoblizerStatus.value =
-          ImoblizerStatus.fromJson(jsonDecode(response.body));
-
-      imoblizerUnlockLoader.value = false;
-      return (imoblizerStatus.value.state).toString();
-    } else {
-      imoblizerUnlockLoader.value = false;
-      throw Exception('status code is ${response.statusCode}');
+  Future<LockStatus> changeImmobilizerLock(LockStatus status) async {
+    try {
+      final url =
+          "${Endpoints.getLockStatus}${Get.find<GetStorageService>().getQNR}/immobilizer";
+      var headers = {
+        "Content-Type": "application/json",
+        "X-CloudBoxx-ApiKey":
+            "W5nQBVHwxnZd6Iivnsu+31yg60EEdyrwbW5p1FVEgFuHEiKhDlbg0+gBlF4X+dm/"
+      };
+      var body = {"state": status.toString()};
+      final response = await http.put(Uri.parse(url),
+          headers: headers, body: jsonEncode(body));
+      if (response.statusCode == 200) {
+        final imoblizerStatus =
+            ImoblizerStatus.fromJson(jsonDecode(response.body));
+        return imoblizerStatus.lockStatus;
+      } else {
+        throw Exception('status code is ${response.statusCode}');
+      }
+    } catch (e) {
+      throw MyException('Error while changing immobilizer lock');
     }
   }
 
@@ -656,9 +503,10 @@ class BookingController extends GetxController {
     try {
       if (rideStart.value == true) {
         print("ride Start");
-
+        if (!hasInternet.value) {
+          return;
+        }
         loader.value = true;
-
         final response = await APIManager.getOnGoingRideHistory();
         rideHistory.value =
             RideHistory.fromJson(jsonDecode(response.toString()));
@@ -839,4 +687,231 @@ class BookingController extends GetxController {
       throw 'Could not launch $url';
     }
   }
+
+  Future<InspectionModel> inspectRide(
+      RideStatus rideStatus, List<String> carsImage) async {
+    try {
+      final response = await APIManager.postInspectionImageUrl(
+          body: {
+            "type": rideStatus == RideStatus.start ? "beforeRide" : "afterRide",
+            "carImagesAfterRide": [
+              {"respectiveSide": "Front Hood", "image": carsImage[0]},
+              {"respectiveSide": "Left Side", "image": carsImage[1]},
+              {"respectiveSide": "Right Side", "image": carsImage[2]},
+              {"respectiveSide": "Back Side", "image": carsImage[3]}
+            ]
+          },
+          bookingId:
+              (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
+                  .toString());
+      final inspectionModel =
+          InspectionModel.fromJson(jsonDecode(response.toString()));
+      return inspectionModel;
+    } catch (e) {
+      showMySnackbar(title: "Error", msg: "Error while inspection");
+      throw Exception('status code is $e');
+    }
+  }
+
+  startRide(BuildContext context) async {
+    try {
+      final images = await uploadInspectionImages(context);
+      lodingMsg.value = "Inspecting Images";
+      context.loaderOverlay.show();
+      final inspectionModel = await inspectRide(RideStatus.start, images);
+      context.loaderOverlay.hide();
+      if (inspectionModel.status == true) {
+        carInspection.value = false;
+        try {
+          await markBookingOngoing();
+          rideStart.value = true;
+          showMySnackbar(
+              title: "Message", msg: "Booking Completed have a safe ride");
+          lodingMsg.value = "Updating lock";
+          context.loaderOverlay.show();
+          final lockStatus = await changeImmobilizerLock(LockStatus.unlocked);
+          context.loaderOverlay.hide();
+          if (lockStatus == LockStatus.unlocked) {
+            showMySnackbar(title: "Message", msg: "Ride Started");
+          } else {
+            showMySnackbar(title: "Error", msg: "Error while unlocking");
+          }
+          resetValue();
+        } catch (e) {
+          showMySnackbar(title: "Error", msg: "Error While ongoing ride");
+        }
+      }
+    } on MyException catch (e) {
+      context.loaderOverlay.hide();
+      showMySnackbar(title: "Error", msg: e.toString());
+    } catch (e) {
+      context.loaderOverlay.hide();
+    }
+  }
+
+  //   if (inspectionModel.value.status == true) {
+  //     try {
+  //       await markBookingOngoing();
+  //       showMySnackbar(
+  //           title: "Message", msg: "Booking Completed have a safe ride");
+  //       resetValue();
+  //     } catch (e) {
+  //       showMySnackbar(title: "Error", msg: "Error While ongoing ride");
+  //     }
+  //   }
+  //   if (inspectionModel.value.status == true) {
+  //     try {
+  //       var body2 = {
+  //         "dropLocation": {
+  //           "type": "Point",
+  //           "coordinates": [80.9229409563887, 26.842241990735474],
+  //           "address": "Lucknow"
+  //         }
+  //       };
+  //
+  //       final responseend = await APIManager.endInspectionImageUrl(
+  //           body: body2,
+  //           bookingId: (bookingId == ""
+  //               ? rideHistory.value.data![0]!.Id
+  //               : bookingId)
+  //               .toString());
+  //       endride.value =
+  //           EndRide.fromJson(jsonDecode(responseend.toString()));
+  //
+  //       final response = await APIManager.getCarPricingById(
+  //           carId: (endride.value.data?.car).toString());
+  //       carPriceById.value =
+  //           CarPriceById.fromJson(jsonDecode(response.toString()));
+  //
+  //       calculateTotalBookingTimeAndTotalAmount(
+  //           extraMileCharges: double.parse(
+  //               "${carPriceById.value.carPricing?.extraMileRate}"),
+  //           extraTimeCharges: double.parse(
+  //               "${carPriceById.value.carPricing?.extraMinuteRate}"),
+  //           additionalWaitingTime:
+  //           (endride.value.data?.additionalWaitingTime)!.toInt(),
+  //           dropTime: (endride.value.data?.dropTime).toString(),
+  //           pickupTime: (endride.value.data?.pickupTime).toString());
+  //       milage.value =
+  //       (endride.value.data?.tripData?[0]?.event?.status?.mileage)!;
+  //       showMySnackbar(
+  //           title: "Message", msg: "Ride Completed successfully");
+  //
+  //       resetValue();
+  //
+  //       if (instanceOfGlobalData.rideTicker.isActive) {
+  //         instanceOfGlobalData.rideTicker.cancel();
+  //         instanceOfGlobalData.checkRideTicker.value = false;
+  //       }
+  //     } catch (e) {
+  //       showMySnackbar(title: "Error", msg: "Error While ending ride");
+  //       throw Exception('status code is ${response.statusCode}');
+  //     }
+  //   }
+  // }
+
+  // verifyAndEnd() {
+  //   if (controller.frontImageStatus.value == 0 ||
+  //       controller.leftImageStatus.value == 0 ||
+  //       controller.rightImageStatus.value == 0 ||
+  //       controller.backImageStatus == 0) {
+  //     showMySnackbar(title: "Error", msg: "All image mandatory");
+  //   } else {
+  //     controller.lodingMsg.value = "Updating central lock";
+  //     context.loaderOverlay.show();
+  //     controller.putAutoCentralLock("locked").then((value) {
+  //       if (value == "locked") {
+  //         Future.delayed(const Duration(seconds: 1), () {
+  //           controller.lodingMsg.value = "Updating immobilizer lock";
+  //           controller.putImoblizerLock("locked").then((value) {
+  //             if (value == "locked") {
+  //               Future.delayed(const Duration(seconds: 1), () {
+  //                 controller.lodingMsg.value = "Uploading image";
+  //
+  //                 controller.uploadInspectionImages("E").then((value) {
+  //                   if (value == 1) {
+  //                     controller.bookingPriceDetails.value = true;
+  //                     controller.endrideInspection.value = false;
+  //                     controller.rideStart.value = false;
+  //                     context.loaderOverlay.hide();
+  //                     controller.carBooking.value = false;
+  //                   } else {
+  //                     context.loaderOverlay.hide();
+  //                     showMySnackbar(
+  //                         title: "Error", msg: "Error while inspection");
+  //                   }
+  //                 });
+  //               });
+  //             } else {
+  //               Future.delayed(const Duration(seconds: 1), () {
+  //                 context.loaderOverlay.hide();
+  //                 showMySnackbar(
+  //                     title: "Error",
+  //                     msg: "Error while updating immobilizer lock");
+  //                 controller.lodingMsg.value = "Analyzing your car";
+  //               });
+  //             }
+  //           });
+  //         });
+  //       } else {
+  //         Future.delayed(const Duration(seconds: 1), () {
+  //           context.loaderOverlay.hide();
+  //           showMySnackbar(
+  //               title: "Error", msg: "Error while updating central lock");
+  //           controller.lodingMsg.value = "Analyzing your car";
+  //         });
+  //       }
+  //     });
+  //   }
+  // }
+
+  // Future<void> verifyAndInspect(
+  //     BuildContext context, RideStatus rideStatus) async {
+  //   if (frontImageStatus.value == 0 ||
+  //       leftImageStatus.value == 0 ||
+  //       rightImageStatus.value == 0 ||
+  //       backImageStatus == 0) {
+  //     showMySnackbar(title: "Error", msg: "All image mandatory");
+  //   } else {
+  //     lodingMsg.value = "Uploading image";
+  //     context.loaderOverlay.show();
+  //
+  //     uploadInspectionImages("S").then((value) {
+  //       if (value == 1) {
+  //         putImoblizerUnlock("unlocked").then((value) {
+  //           if (value != "locked") {
+  //             Future.delayed(const Duration(seconds: 1), () {
+  //               context.loaderOverlay.hide();
+  //               rideStart.value = true;
+  //               carInspection.value = false;
+  //             });
+  //           } else {
+  //             showMySnackbar(title: "Error", msg: "Error unlocking imoblizer");
+  //           }
+  //         });
+  //       } else {
+  //         showMySnackbar(title: "Error", msg: "Error while inspection");
+  //       }
+  //     });
+  //   }
+  //   rideStart.value = true;
+  // }
+}
+
+enum RideStatus { start, end }
+
+enum LockStatus {
+  locked,
+  unlocked,
+  unknown;
+
+  @override
+  String toString() {
+    return this == LockStatus.locked ? "locked" : "unlocked";
+  }
+}
+
+class MyException implements Exception {
+  final String message;
+  MyException(this.message);
 }

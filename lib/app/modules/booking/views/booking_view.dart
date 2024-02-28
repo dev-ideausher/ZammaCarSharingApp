@@ -1,21 +1,19 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'package:zammacarsharing/app/modules/widgets/button_design.dart';
 import 'package:zammacarsharing/app/routes/app_pages.dart';
 import 'package:zammacarsharing/app/services/colors.dart';
-import 'package:zammacarsharing/app/services/globalData.dart';
 import 'package:zammacarsharing/app/services/responsiveSize.dart';
 import 'package:zammacarsharing/app/services/snackbar.dart';
-import 'package:zammacarsharing/app/services/storage.dart';
 
 import '../controllers/booking_controller.dart';
 
@@ -27,7 +25,7 @@ class BookingView extends GetView<BookingController> {
         useDefaultLoading: false,
         overlayWidget: Center(
             child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           height: 70.kh,
@@ -43,71 +41,67 @@ class BookingView extends GetView<BookingController> {
             ),
             Obx(
               () => Text(
-                "${controller.lodingMsg.value}",
+                controller.lodingMsg.value,
                 style: GoogleFonts.urbanist(fontSize: 16),
               ),
             ),
           ]),
         )),
-        child: Container(
-          child: Obx(
-            () => Stack(
-              children: [
-                Container(
-                  height: 800.kh,
-                  color: Colors.blue,
-                  child: GoogleMap(
-                    onMapCreated: (mapController) {
-                      //  controller.mapCompleter.complete(mapController);
-                    },
-                    //  markers: controller.listOfMarker,
-                    initialCameraPosition: CameraPosition(
-                      target: controller.center,
-                      zoom: 11.0,
-                    ),
+        child: Obx(
+          () => Stack(
+            children: [
+              Container(
+                height: 800.kh,
+                color: Colors.blue,
+                child: GoogleMap(
+                  onMapCreated: (mapController) {
+                    //  controller.mapCompleter.complete(mapController);
+                  },
+                  //  markers: controller.listOfMarker,
+                  initialCameraPosition: CameraPosition(
+                    target: controller.center,
+                    zoom: 11.0,
                   ),
                 ),
-                Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color.fromRGBO(32, 32, 32, 0.54),
-                      Color.fromRGBO(27, 27, 27, 0),
-                    ],
-                  )),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 50, 0, 0),
-                  child: InkWell(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                      )),
-                ),
-                controller.carBooking.value == true
-                    ? carBooking(0.6)
-                    : SizedBox(),
-                controller.carInspection.value == true
-                    ? carInspection(0.9)
-                    : SizedBox(),
-                controller.rideStart.value == true
-                    ? rideStart(0.75)
-                    : SizedBox(),
-                controller.endrideInspection.value == true
-                    ? endrideInspection(0.85)
-                    : SizedBox(),
-                controller.bookingPriceDetails.value == true
-                    ? bookingPriceDetails(0.7)
-                    : SizedBox(),
-              ],
-            ),
+              ),
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromRGBO(32, 32, 32, 0.54),
+                    Color.fromRGBO(27, 27, 27, 0),
+                  ],
+                )),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 50, 0, 0),
+                child: InkWell(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                    )),
+              ),
+              controller.carBooking.value == true
+                  ? carBooking(0.6)
+                  : SizedBox(),
+              controller.carInspection.value == true
+                  ? carInspection(0.9)
+                  : SizedBox(),
+              controller.rideStart.value == true ? rideStart(0.75) : SizedBox(),
+              controller.endrideInspection.value == true
+                  ? endrideInspection(0.85)
+                  : SizedBox(),
+              controller.bookingPriceDetails.value == true
+                  ? bookingPriceDetails(0.7)
+                  : SizedBox(),
+            ],
           ),
         ),
       ),
@@ -575,13 +569,7 @@ class BookingView extends GetView<BookingController> {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "",
-                              style: GoogleFonts.urbanist(
-                                  // fontSize: 24.kh,
-                                  color: ColorUtil.ZammaBlack,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                            const Spacer(),
                             InkWell(
                               onTap: () {
                                 controller.carInspection.value = false;
@@ -599,12 +587,12 @@ class BookingView extends GetView<BookingController> {
                           Text("Free Waiting",
                               style: GoogleFonts.urbanist(
                                   color: Color(0xFFB4BCE1))),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Obx(
                             () => controller.loader.value == true
-                                ? CircularProgressIndicator()
+                                ? const CircularProgressIndicator()
                                 : Text(
                                     "${controller.instanceOfGlobalData.waitingRideTime.value}",
                                     // "${controller.instanceOfGlobalData.minute.value}:${controller.instanceOfGlobalData.start.value}",
@@ -675,7 +663,8 @@ class BookingView extends GetView<BookingController> {
                                           ),
                                           image: DecorationImage(
                                             image: FileImage(
-                                                controller.frontHood.value),
+                                                controller.frontHood.value ??
+                                                    File("")),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -734,7 +723,8 @@ class BookingView extends GetView<BookingController> {
                                           ),
                                           image: DecorationImage(
                                             image: FileImage(
-                                                controller.leftSide.value),
+                                                controller.leftSide.value ??
+                                                    File("")),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -800,7 +790,8 @@ class BookingView extends GetView<BookingController> {
                                           ),
                                           image: DecorationImage(
                                             image: FileImage(
-                                                controller.rightSide.value),
+                                                controller.rightSide.value ??
+                                                    File("")),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -858,7 +849,8 @@ class BookingView extends GetView<BookingController> {
                                           ),
                                           image: DecorationImage(
                                             image: FileImage(
-                                                controller.backSide.value),
+                                                controller.backSide.value ??
+                                                    File("")),
                                             fit: BoxFit.cover,
                                           ),
                                         ),
@@ -914,51 +906,8 @@ class BookingView extends GetView<BookingController> {
                                 )
                               : ButtonDesign(
                                   name: "Done",
-                                  onPressed: () {
-                                    if (controller.frontImageStatus.value == 0 ||
-                                        controller.leftImageStatus.value == 0 ||
-                                        controller.rightImageStatus.value ==
-                                            0 ||
-                                        controller.backImageStatus == 0) {
-                                      showMySnackbar(
-                                          title: "Error",
-                                          msg: "All image mandatory");
-                                    } else {
-                                      controller.lodingMsg.value =
-                                          "Uploading image";
-                                      context.loaderOverlay.show();
-                                      controller
-                                          .uploadInspectionImage("S")
-                                          .then((value) {
-                                        if (value == 1) {
-                                          controller
-                                              .putImoblizerUnlock("unlocked")
-                                              .then((value) {
-                                            if (value != "locked") {
-                                              Future.delayed(
-                                                  const Duration(seconds: 1),
-                                                  () {
-                                                context.loaderOverlay.hide();
-                                                controller.rideStart.value =
-                                                    true;
-                                                controller.carInspection.value =
-                                                    false;
-                                              });
-                                            } else {
-                                              showMySnackbar(
-                                                  title: "Error",
-                                                  msg:
-                                                      "Error unlocking imoblizer");
-                                            }
-                                          });
-                                        } else {
-                                          showMySnackbar(
-                                              title: "Error",
-                                              msg: "Error while inspection");
-                                        }
-                                      });
-                                    }
-                                    //controller.rideStart.value = true;
+                                  onPressed: () async {
+                                    await controller.startRide(context);
                                   }),
                         ),
                         SizedBox(
@@ -1151,9 +1100,11 @@ class BookingView extends GetView<BookingController> {
                           ),
                           Obx(
                             () => controller.loader.value == true
-                                ? CircularProgressIndicator(color: Colors.white)
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white)
                                 : Text(
-                                    "${controller.instanceOfGlobalData.rideTime.value}",
+                                    controller
+                                        .instanceOfGlobalData.rideTime.value,
                                     /* "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
                                     style: GoogleFonts.urbanist(
                                         fontWeight: FontWeight.bold,
@@ -1254,7 +1205,7 @@ class BookingView extends GetView<BookingController> {
                                 SvgPicture.asset("assets/icons/battery.svg"),
                                 Obx(
                                   () => Text(
-                                    "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel == null ? "0" :controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType == "fule" ? "Liter" : "%"}",
+                                    "${controller.getBookingDetailsModel.value.data?.car?.fuelLevel == null ? "0" : controller.getBookingDetailsModel.value.data?.car?.fuelLevel} ${controller.getBookingDetailsModel.value.data?.car?.fuelType == "fule" ? "Liter" : "%"}",
                                     style: GoogleFonts.urbanist(fontSize: 14),
                                   ),
                                 ),
@@ -1441,7 +1392,8 @@ class BookingView extends GetView<BookingController> {
                           height: 20.kh,
                         ),
 
-                        Obx(() => Row(
+                        Obx(
+                          () => Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
@@ -1486,10 +1438,9 @@ class BookingView extends GetView<BookingController> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                                      BorderRadius.all(Radius.circular(20)),
                                   border: Border.all(
-                                      width: 0.5,
-                                      color: Color(0xFF5F5F5F))),
+                                      width: 0.5, color: Color(0xFF5F5F5F))),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -1761,7 +1712,8 @@ class BookingView extends GetView<BookingController> {
                                         ),
                                         image: DecorationImage(
                                           image: FileImage(
-                                              controller.frontHood.value),
+                                              controller.frontHood.value ??
+                                                  File("")),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -1819,7 +1771,8 @@ class BookingView extends GetView<BookingController> {
                                         ),
                                         image: DecorationImage(
                                           image: FileImage(
-                                              controller.leftSide.value),
+                                              controller.leftSide.value ??
+                                                  File("")),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -1885,7 +1838,8 @@ class BookingView extends GetView<BookingController> {
                                         ),
                                         image: DecorationImage(
                                           image: FileImage(
-                                              controller.rightSide.value),
+                                              controller.rightSide.value ??
+                                                  File("")),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -1943,7 +1897,8 @@ class BookingView extends GetView<BookingController> {
                                         ),
                                         image: DecorationImage(
                                           image: FileImage(
-                                              controller.backSide.value),
+                                              controller.backSide.value ??
+                                                  File("")),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -1988,120 +1943,22 @@ class BookingView extends GetView<BookingController> {
                       ),
 
                       Obx(
-                        () => controller.instanceOfGlobalData.loader.value ==
-                                true
-                            ? Center(
-                                child: SizedBox(
-                                    width: 200.kh,
-                                    height: 56.kh,
-                                    child: Lottie.asset(
-                                        'assets/json/car_loader.json')),
-                              )
-                            : ButtonDesign(
-                                name: "Done",
-                                onPressed: () {
-                                  if (controller.frontImageStatus.value == 0 ||
-                                      controller.leftImageStatus.value == 0 ||
-                                      controller.rightImageStatus.value == 0 ||
-                                      controller.backImageStatus == 0) {
-                                    showMySnackbar(
-                                        title: "Error",
-                                        msg: "All image mandatory");
-                                  } else {
-                                    controller.lodingMsg.value =
-                                        "Updating central lock";
-                                    context.loaderOverlay.show();
-                                    controller
-                                        .putAutoCentralLock("locked")
-                                        .then((value) {
-                                      if (value == "locked") {
-                                        Future.delayed(
-                                            const Duration(seconds: 1), () {
-                                          controller.lodingMsg.value =
-                                              "Updating immobilizer lock";
-                                          controller
-                                              .putImoblizerLock("locked")
-                                              .then((value) {
-                                            if (value == "locked") {
-                                              Future.delayed(
-                                                  const Duration(seconds: 1),
-                                                  () {
-                                                controller.lodingMsg.value =
-                                                    "Uploading image";
-
-                                                controller
-                                                    .uploadInspectionImage("E")
-                                                    .then((value) {
-                                                  if (value == 1) {
-                                                    controller
-                                                        .bookingPriceDetails
-                                                        .value = true;
-                                                    controller.endrideInspection
-                                                        .value = false;
-                                                    controller.rideStart.value =
-                                                        false;
-                                                    context.loaderOverlay
-                                                        .hide();
-                                                    controller.carBooking
-                                                        .value = false;
-                                                  } else {
-                                                    context.loaderOverlay
-                                                        .hide();
-                                                    showMySnackbar(
-                                                        title: "Error",
-                                                        msg:
-                                                            "Error while inspection");
-                                                  }
-                                                });
-                                              });
-                                            } else {
-                                              Future.delayed(
-                                                  const Duration(seconds: 1),
-                                                  () {
-                                                context.loaderOverlay.hide();
-                                                showMySnackbar(
-                                                    title: "Error",
-                                                    msg:
-                                                        "Error while updating immobilizer lock");
-                                                controller.lodingMsg.value =
-                                                    "Analyzing your car";
-                                              });
-                                            }
-                                          });
-                                        });
-                                      } else {
-                                        Future.delayed(
-                                            const Duration(seconds: 1), () {
-                                          context.loaderOverlay.hide();
-                                          showMySnackbar(
-                                              title: "Error",
-                                              msg:
-                                                  "Error while updating central lock");
-                                          controller.lodingMsg.value =
-                                              "Analyzing your car";
-                                        });
-                                      }
-                                    });
-                                  }
-                                  /*controller
-                                          .putImoblizerLock("locked")
-                                          .then((value) {
-                                        if (value == "locked") {
-                                          Future.delayed(
-                                              const Duration(seconds: 1), () {
-                                            context.loaderOverlay.hide();
-                                            controller.bookingPriceDetails
-                                                .value = true;
-                                            controller.endrideInspection.value =
-                                                false;
-                                            controller.rideStart.value = false;
-                                            controller.carBooking.value = false;
-                                          });
-                                        }
-                                      });*/
-
-                                  // Get.toNamed(Routes.LOGIN);
-                                }),
+                        () =>
+                            controller.instanceOfGlobalData.loader.value == true
+                                ? Center(
+                                    child: SizedBox(
+                                        width: 200.kh,
+                                        height: 56.kh,
+                                        child: Lottie.asset(
+                                            'assets/json/car_loader.json')),
+                                  )
+                                : ButtonDesign(
+                                    name: "Done",
+                                    onPressed: () {
+                                      //TODO End ride
+                                      // controller.verifyAndInspect(
+                                      //     context, RideStatus.end);
+                                    }),
                       ),
                       // SizedBox(
                       //   height: 10.kh,

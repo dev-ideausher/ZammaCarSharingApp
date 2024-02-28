@@ -17,7 +17,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
 
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
+    const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.black, // navigation bar color
         statusBarColor: ColorUtil.kPrimary, // status bar color
         statusBarBrightness: Brightness.light),

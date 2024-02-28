@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'AppInterceptors.dart';
 import 'endpoints.dart';
@@ -7,16 +8,20 @@ class DioClient {
 // dio instance
   final Dio _dio;
 
-  bool isOverlayLoader ;
-  bool showSnakbar ;
+  bool isOverlayLoader;
+  bool showSnakbar;
 
-  DioClient(this._dio, {this.isOverlayLoader = false, this.showSnakbar = false}) {
+  DioClient(this._dio,
+      {this.isOverlayLoader = false, this.showSnakbar = false}) {
     _dio
       ..options.baseUrl = Endpoints.baseUrl
-      ..options.connectTimeout = Duration(milliseconds: Endpoints.connectionTimeout)
-      ..options.receiveTimeout = Duration(milliseconds: Endpoints.receiveTimeout)
+      ..options.connectTimeout =
+          Duration(milliseconds: Endpoints.connectionTimeout)
+      ..options.receiveTimeout =
+          Duration(milliseconds: Endpoints.receiveTimeout)
       ..options.responseType = ResponseType.json
-      ..interceptors.add(AppInterceptors(isOverlayLoader: isOverlayLoader, showSnakbar: showSnakbar));
+      ..interceptors.add(AppInterceptors(
+          isOverlayLoader: isOverlayLoader, showSnakbar: showSnakbar));
   }
 
 // Get:-----------------------------------------------------------------------
@@ -37,6 +42,8 @@ class DioClient {
       onReceiveProgress: onReceiveProgress,
     );
 
+    print("Response: ${response.data}");
+
     return response;
   }
 
@@ -50,6 +57,13 @@ class DioClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    _dio.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+    ));
     final Response response = await _dio.post(
       url,
       data: data,
@@ -72,6 +86,13 @@ class DioClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    _dio.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+    ));
     try {
       final Response response = await _dio.put(
         url,
@@ -98,6 +119,13 @@ class DioClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    _dio.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+    ));
     try {
       final Response response = await _dio.delete(
         url,
@@ -112,18 +140,23 @@ class DioClient {
     }
   }
 
-
-
   // Patch:-----------------------------------------------------------------------
   Future<Response> patch(
-      String url, {
-        data,
-        Map<String, dynamic>? queryParameters,
-        Options? options,
-        CancelToken? cancelToken,
-        ProgressCallback? onSendProgress,
-        ProgressCallback? onReceiveProgress,
-      }) async {
+    String url, {
+    data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    _dio.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+    ));
     try {
       final Response response = await _dio.patch(
         url,
@@ -139,5 +172,4 @@ class DioClient {
       rethrow;
     }
   }
-
 }
