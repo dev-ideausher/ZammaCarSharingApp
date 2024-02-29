@@ -58,9 +58,7 @@ class BookingController extends GetxController {
 
   Rx<ImageUpload> imageUpload = ImageUpload().obs;
   Rx<RideHistory> rideHistory = RideHistory().obs;
-  Rx<EndRide> endride = EndRide().obs;
   Rx<TransactionDetails> transactionDetails = TransactionDetails().obs;
-  Rx<CarPriceById> carPriceById = CarPriceById().obs;
 
   //pocGetLockStatus
 
@@ -78,7 +76,6 @@ class BookingController extends GetxController {
   RxString finalDistanceTravel = "".obs;
   RxDouble finalTotalAmount = 0.0.obs;
   RxDouble paidAmount = 1.0.obs;
-  RxInt milage = 0.obs;
   RxString lodingMsg = "Analyzing your car".obs;
 
   final instanceOfGlobalData = Get.find<GlobalData>();
@@ -581,7 +578,7 @@ class BookingController extends GetxController {
       required String dropTime,
       required int additionalWaitingTime,
       required double extraTimeCharges,
-      required double extraMileCharges}) async {
+      required double extraMileCharges}) {
     DateTime startDate = DateTime.parse((pickupTime).toString());
     DateTime endDate = DateTime.parse((dropTime).toString());
     final actualDifference = endDate.toUtc().difference(startDate.toUtc());
@@ -719,36 +716,102 @@ class BookingController extends GetxController {
       lodingMsg.value = "Inspecting Images";
       context.loaderOverlay.show();
       final inspectionModel = await inspectRide(RideStatus.start, images);
-      context.loaderOverlay.hide();
+      resetValue();
       if (inspectionModel.status == true) {
-        carInspection.value = false;
         try {
           await markBookingOngoing();
-          rideStart.value = true;
           showMySnackbar(
               title: "Message", msg: "Booking Completed have a safe ride");
           lodingMsg.value = "Updating lock";
-          context.loaderOverlay.show();
           final lockStatus = await changeImmobilizerLock(LockStatus.unlocked);
-          context.loaderOverlay.hide();
           if (lockStatus == LockStatus.unlocked) {
+            rideStart.value = true;
+            carInspection.value = false;
             showMySnackbar(title: "Message", msg: "Ride Started");
           } else {
             showMySnackbar(title: "Error", msg: "Error while unlocking");
           }
-          resetValue();
         } catch (e) {
           showMySnackbar(title: "Error", msg: "Error While ongoing ride");
         }
       }
     } on MyException catch (e) {
-      context.loaderOverlay.hide();
       showMySnackbar(title: "Error", msg: e.toString());
     } catch (e) {
-      context.loaderOverlay.hide();
+      showMySnackbar(title: "Error", msg: "Error while starting ride");
     }
+    context.loaderOverlay.hide();
   }
 
+  endRide(BuildContext context) async {
+    try {
+      final images = await uploadInspectionImages(context);
+      lodingMsg.value = "Inspecting Images";
+      context.loaderOverlay.show();
+      final inspectionModel = await inspectRide(RideStatus.end, images);
+      if (inspectionModel.status == true) {
+        lodingMsg.value = "Ending Ride";
+        await endBooking();
+        lodingMsg.value = "Updating lock";
+        final lockStatus = await changeImmobilizerLock(LockStatus.locked);
+        if (lockStatus == LockStatus.locked) {
+          showMySnackbar(title: "Message", msg: "Car Locked");
+        } else {
+          showMySnackbar(title: "Error", msg: "Error while unlocking");
+        }
+        bookingPriceDetails.value = true;
+        endrideInspection.value = false;
+        carInspection.value = false;
+        rideStart.value = false;
+        carBooking.value = false;
+        resetValue();
+        showMySnackbar(title: "Message", msg: "Ride Completed successfully");
+      } else {
+        showMySnackbar(title: "Error", msg: "Error while ending ride");
+      }
+    } on MyException catch (e) {
+      showMySnackbar(title: "Error", msg: e.toString());
+    } catch (e) {}
+    context.loaderOverlay.hide();
+  }
+
+  Future<void> endBooking() async {
+    final hasPermission = await handleLocationPermission();
+
+    if (!hasPermission) {
+      //mapLoader.value=false;
+      throw MyException("Location permission not granted");
+    }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final response = await APIManager.endInspectionImageUrl(
+        body: {
+          "dropLocation": {
+            "type": "Point",
+            "coordinates": [position.longitude, position.latitude],
+            "address": "Unknown"
+          }
+        },
+        bookingId:
+            (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
+                .toString());
+    final endride = EndRide.fromJson(jsonDecode(response.toString()));
+    final response2 = await APIManager.getCarPricingById(
+        carId: (endride.data?.car).toString());
+    final carPriceById =
+        CarPriceById.fromJson(jsonDecode(response2.toString()));
+    calculateTotalBookingTimeAndTotalAmount(
+        extraMileCharges:
+            double.parse("${carPriceById.carPricing?.extraMileRate}"),
+        extraTimeCharges:
+            double.parse("${carPriceById.carPricing?.extraMinuteRate}"),
+        additionalWaitingTime: (endride.data?.additionalWaitingTime)!.toInt(),
+        dropTime: (endride.data?.dropTime).toString(),
+        pickupTime: (endride.data?.pickupTime).toString());
+
+    // final mileage =
+    // (endRideModel.data?.tripData?[0]?.event?.status?.mileage)!;
+  }
   //   if (inspectionModel.value.status == true) {
   //     try {
   //       await markBookingOngoing();
@@ -914,4 +977,9 @@ enum LockStatus {
 class MyException implements Exception {
   final String message;
   MyException(this.message);
+
+  @override
+  String toString() {
+    return message;
+  }
 }
