@@ -34,6 +34,13 @@ class DioClient {
     bool isOverlayLoader = true,
     bool showSnakbar = true,
   }) async {
+    _dio.interceptors.add(PrettyDioLogger(
+      requestHeader: true,
+      requestBody: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+    ));
     final Response response = await _dio.get(
       url,
       queryParameters: queryParameters,
@@ -41,8 +48,6 @@ class DioClient {
       cancelToken: cancelToken,
       onReceiveProgress: onReceiveProgress,
     );
-
-    print("Response: ${response.data}");
 
     return response;
   }

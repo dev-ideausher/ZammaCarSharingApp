@@ -119,7 +119,7 @@ class BookingController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // connectivityStream = Connectivity();
+    // connectivityStream = Connectivity()
     //     .onConnectivityChanged
     //     .listen((ConnectivityResult result) async {
     //   if (result == ConnectivityResult.none) {
@@ -130,8 +130,9 @@ class BookingController extends GetxController {
     //     hasInternet.value = true;
     //   }
     // });
-    // timer = Timer.periodic(const Duration(seconds: 2),
-    //     (Timer t) => getBookingDetailsUsingBookingIdTimmer());
+    hasInternet.value = true;
+    timer = Timer.periodic(const Duration(seconds: 2),
+        (Timer t) => getBookingDetailsUsingBookingIdTimmer());
   }
 
   @override
@@ -335,7 +336,9 @@ class BookingController extends GetxController {
     try {
       final body = {
         "additionalWaitingTime": instanceOfGlobalData.aditionalWaiting.value,
-        "waitingTime": instanceOfGlobalData.totalWaiting.value
+        "waitingTime": instanceOfGlobalData.totalWaiting.value,
+        // pickUpTime : "2022-12-21T13:52:44.615Z"
+        "pickupTime": DateTime.now().toIso8601String(),
       };
       final response = await APIManager.markBookingOngoing(
           bookingId:
@@ -584,7 +587,7 @@ class BookingController extends GetxController {
     final actualDifference = endDate.toUtc().difference(startDate.toUtc());
 
     int second = actualDifference.inSeconds;
-    finalTralvelTime.value = "${actualDifference.inMinutes.toString()}";
+    finalTralvelTime.value = actualDifference.inMinutes.toString();
 
     //0.39 dollar per minute
     double drivingAmount = (second) * (0.0065);
@@ -691,7 +694,9 @@ class BookingController extends GetxController {
       final response = await APIManager.postInspectionImageUrl(
           body: {
             "type": rideStatus == RideStatus.start ? "beforeRide" : "afterRide",
-            "carImagesAfterRide": [
+            RideStatus.start == rideStatus
+                ? "carImagesBeforeRide"
+                : "carImagesAfterRide": [
               {"respectiveSide": "Front Hood", "image": carsImage[0]},
               {"respectiveSide": "Left Side", "image": carsImage[1]},
               {"respectiveSide": "Right Side", "image": carsImage[2]},
@@ -719,12 +724,12 @@ class BookingController extends GetxController {
       resetValue();
       if (inspectionModel.status == true) {
         try {
-          await markBookingOngoing();
-          showMySnackbar(
-              title: "Message", msg: "Booking Completed have a safe ride");
           lodingMsg.value = "Updating lock";
           final lockStatus = await changeImmobilizerLock(LockStatus.unlocked);
           if (lockStatus == LockStatus.unlocked) {
+            await markBookingOngoing();
+            showMySnackbar(
+                title: "Message", msg: "Booking Completed have a safe ride");
             rideStart.value = true;
             carInspection.value = false;
             showMySnackbar(title: "Message", msg: "Ride Started");
@@ -789,8 +794,9 @@ class BookingController extends GetxController {
           "dropLocation": {
             "type": "Point",
             "coordinates": [position.longitude, position.latitude],
-            "address": "Unknown"
-          }
+            "address": "Unknown",
+          },
+          "dropTime": DateTime.now().toIso8601String()
         },
         bookingId:
             (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)

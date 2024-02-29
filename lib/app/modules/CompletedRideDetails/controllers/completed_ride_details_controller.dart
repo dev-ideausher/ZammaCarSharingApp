@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:zammacarsharing/app/modules/models/card_data_model.dart';
-import 'package:zammacarsharing/app/modules/models/ride_history_model.dart';
+import 'package:intl/intodel.dart';
 import 'package:zammacarsharing/app/modules/models/routes_models.dart';
 import 'package:zammacarsharing/app/modules/models/saved_cards_model.dart';
 import 'package:zammacarsharing/app/modules/models/transationdetails_model.dart';
@@ -36,9 +34,9 @@ class CompletedRideDetailsController extends GetxController {
   RxString durationOfRide = "".obs;
   RxString carModel = "".obs;
   final Completer<GoogleMapController> mapCompleter = Completer();
- // final RxSet<Polyline> polyline = {}.obs;
+  // final RxSet<Polyline> polyline = {}.obs;
   RxSet<Polyline> polyline = Set<Polyline>().obs;
-RxBool loader=false.obs;
+  RxBool loader = false.obs;
   // Data Coming From RideHistory Controller
   final bookingId = Get.arguments[0];
   final model = Get.arguments[1];
@@ -64,25 +62,30 @@ RxBool loader=false.obs;
   getBooking() async {
     try {
       final response = await APIManager.getBooking(bookingid: bookingId);
-      bookingRoutesModel.value = BookingRoutesModel.fromJson(jsonDecode(response.toString()));
+      bookingRoutesModel.value =
+          BookingRoutesModel.fromJson(jsonDecode(response.toString()));
       List<LatLng> latlngSegment1 = [];
-      for(int i=0;i<((bookingRoutesModel.value.data?.path)!.length);i++){
-        latlngSegment1.add(LatLng(double.parse((bookingRoutesModel.value.data?.path?[i]?[0]).toString()), double.parse((bookingRoutesModel.value.data?.path?[i]?[1]).toString())));
+      for (int i = 0;
+          i < ((bookingRoutesModel.value.data?.path)!.length);
+          i++) {
+        latlngSegment1.add(LatLng(
+            double.parse(
+                (bookingRoutesModel.value.data?.path?[i]?[0]).toString()),
+            double.parse(
+                (bookingRoutesModel.value.data?.path?[i]?[1]).toString())));
         print("path $i ${bookingRoutesModel.value.data?.path?[i]?[0]}");
         print("path $i ${bookingRoutesModel.value.data?.path?[i]?[1]}");
       }
       center = LatLng(latlngSegment1[0].latitude, latlngSegment1[0].longitude);
       polyline.value.add(Polyline(
-        polylineId: PolylineId('line1'),
-        visible: true,
-        //latlng is List<LatLng>
-        points: latlngSegment1,
-        width: 4,
-        color: ColorUtil.kPrimary
-      ));
+          polylineId: PolylineId('line1'),
+          visible: true,
+          //latlng is List<LatLng>
+          points: latlngSegment1,
+          width: 4,
+          color: ColorUtil.kPrimary));
       polyline.refresh();
       mapanimate();
-
     } catch (e) {}
   }
 
@@ -150,34 +153,34 @@ RxBool loader=false.obs;
 
   getrideHistory() async {
     try {
-      loader.value=true;
+      loader.value = true;
       final response = await APIManager.getfinalRideHistory();
       rideHistory.value = RideHistory.fromJson(jsonDecode(response.toString()));
-      carModel.value=(rideHistory.value.data?[0]?.car?.model).toString();
+      carModel.value = (rideHistory.value.data?[0]?.car?.model).toString();
       // pickupAddress.value =
       //     (rideHistory.value.data?[index]?.pickupLocation?.address).toString();
       double plat = double.parse(
           "${rideHistory.value.data?[index]?.pickupLocation?.coordinates?[1]}");
       double plng = double.parse(
           "${rideHistory.value.data?[index]?.pickupLocation?.coordinates?[0]}");
-      getAddressFromLatLng(plat, plng,"pick");
+      getAddressFromLatLng(plat, plng, "pick");
       //dropAddress.value=(rideHistory.value.data?[index]?.dropLocation?.address).toString();
       double lat = double.parse(
           "${rideHistory.value.data?[index]?.dropLocation?.coordinates?[1]}");
       double lng = double.parse(
           "${rideHistory.value.data?[index]?.dropLocation?.coordinates?[0]}");
-      getAddressFromLatLng(lat, lng,"drop");
+      getAddressFromLatLng(lat, lng, "drop");
       convertPickupDateTime(
           pickupTime: (rideHistory.value.data?[index]?.pickupTime).toString(),
           droptime: (rideHistory.value.data?[index]?.dropTime).toString());
 
-      loader.value=false;
+      loader.value = false;
     } catch (e) {
-      loader.value=false;
+      loader.value = false;
     }
   }
 
-  getAddressFromLatLng(lat, lng,key) async {
+  getAddressFromLatLng(lat, lng, key) async {
     placemarkFromCoordinates(lat, lng).then((List<Placemark> placemarks) async {
       Placemark place = placemarks[0];
       print(
@@ -190,25 +193,19 @@ RxBool loader=false.obs;
       getGlobalServicesInstance.country.value = place.country.toString();
       getFreshRecommendation();
       getFeaturedAds();*/
-      if(key=="pick") {
+      if (key == "pick") {
         pickupAddress.value =
-        "${place.street}, ${place.subLocality},${place
-            .administrativeArea}, ${place.postalCode} ";
-        final body={
-          "pickupAddress":pickupAddress.value,
-          "dropAddress":""
-        };
-        final response2 = await APIManager.updateAddress(bookingId: bookingId, body: body);
+            "${place.street}, ${place.subLocality},${place.administrativeArea}, ${place.postalCode} ";
+        final body = {"pickupAddress": pickupAddress.value, "dropAddress": ""};
+        final response2 =
+            await APIManager.updateAddress(bookingId: bookingId, body: body);
       }
-      if(key=="drop") {
+      if (key == "drop") {
         dropAddress.value =
-        "${place.street}, ${place.subLocality},${place
-            .administrativeArea}, ${place.postalCode} ";
-        final body={
-          "pickupAddress":"",
-          "dropAddress":dropAddress.value
-        };
-        final response2 = await APIManager.updateAddress(bookingId: bookingId, body: body);
+            "${place.street}, ${place.subLocality},${place.administrativeArea}, ${place.postalCode} ";
+        final body = {"pickupAddress": "", "dropAddress": dropAddress.value};
+        final response2 =
+            await APIManager.updateAddress(bookingId: bookingId, body: body);
       }
     }).catchError((e) {
       debugPrint(e);
@@ -220,9 +217,11 @@ RxBool loader=false.obs;
     print(
         "Date Time Format : ${TimeOfDay.fromDateTime(DateTime.parse(pickupTime).toLocal()).format(Get.context!)}");
     DateTime startDate = DateFormat("hh:mm a").parse(
-        "${TimeOfDay.fromDateTime(DateTime.parse(pickupTime).toLocal()).format(Get.context!)}");
+        TimeOfDay.fromDateTime(DateTime.parse(pickupTime).toLocal())
+            .format(Get.context!));
     DateTime endDate = DateFormat("hh:mm a").parse(
-        "${TimeOfDay.fromDateTime(DateTime.parse(droptime).toLocal()).format(Get.context!)}");
+        TimeOfDay.fromDateTime(DateTime.parse(droptime).toLocal())
+            .format(Get.context!));
     final actualDifference = endDate.difference(startDate);
     durationOfRide.value = (actualDifference.inMinutes).toString();
     // return outputDate;
