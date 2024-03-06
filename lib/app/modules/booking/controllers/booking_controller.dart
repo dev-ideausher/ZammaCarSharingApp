@@ -310,8 +310,6 @@ class BookingController extends GetxController {
       final body = {
         "additionalWaitingTime": instanceOfGlobalData.aditionalWaiting.value,
         "waitingTime": instanceOfGlobalData.totalWaiting.value,
-        // pickUpTime : "2022-12-21T13:52:44.615Z"
-        "pickupTime": DateTime.now().toIso8601String(),
       };
       final response = await APIManager.markBookingOngoing(
           bookingId:
@@ -705,15 +703,6 @@ class BookingController extends GetxController {
           lodingMsg.value = "Updating lock";
           final lockStatus = await changeImmobilizerLock(LockStatus.unlocked);
           if (lockStatus == LockStatus.unlocked) {
-            final response = await APIManager.getBookingByBookingId(
-              bookingId: bookingId == ""
-                  ? "${rideHistory.value.data?[0]?.Id}"
-                  : bookingId,
-            );
-            getBookingDetailsModel.value =
-                BookingDetailsModels.fromJson(jsonDecode(response.toString()));
-            startTime.value = DateTime.parse(
-                (getBookingDetailsModel.value.data?.pickupTime).toString());
             rideStart.value = true;
             carInspection.value = false;
             showMySnackbar(title: "Message", msg: "Ride Started");

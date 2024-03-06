@@ -1663,14 +1663,35 @@ class BookingView extends GetView<BookingController> {
                           height: 5,
                         ),
                         Obx(
-                          () => Text(
-                            "${controller.instanceOfGlobalData.rideTime.value}",
-                            /*  "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
-                            style: GoogleFonts.urbanist(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 28.kh,
-                                color: Colors.white),
-                          ),
+                          () => controller.loader.value == true
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white)
+                              : StreamBuilder<DateTime>(
+                                  stream: Stream.periodic(
+                                          const Duration(seconds: 1))
+                                      .asyncMap((i) => Future<DateTime>.value(
+                                          DateTime.now().toUtc())),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    }
+                                    final String val =
+                                        controller.secondToFormatted(
+                                      snapshot.data!
+                                          .difference(
+                                              controller.startTime.value!)
+                                          .inSeconds,
+                                    );
+                                    return Text(
+                                      val,
+                                      /* "${controller.instanceOfGlobalData.ridehour.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridehour.value}" : controller.instanceOfGlobalData.ridehour.value}:${controller.instanceOfGlobalData.rideminute.value < 10 ? "0" + "${controller.instanceOfGlobalData.rideminute.value}" : controller.instanceOfGlobalData.rideminute.value}:${controller.instanceOfGlobalData.ridestart.value < 10 ? "0" + "${controller.instanceOfGlobalData.ridestart.value}" : controller.instanceOfGlobalData.ridestart.value}",*/
+                                      style: GoogleFonts.urbanist(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 28.kh,
+                                          color: Colors.white),
+                                    );
+                                  }),
                         )
                       ],
                     ),
