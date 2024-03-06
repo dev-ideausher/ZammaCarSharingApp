@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:zammacarsharing/app/modules/models/otp_used_class.dart';
 import 'package:zammacarsharing/app/services/storage.dart';
@@ -177,10 +176,9 @@ class GlobalData extends GetxService {
   var waitHour = 0.obs;
   var waitMinute = 0.obs;
   var waitSecond = 0.obs;
-  RxBool extraWaiting=false.obs;
-  RxInt totalWaiting=0.obs;
-  RxInt aditionalWaiting=0.obs;
-
+  RxBool extraWaiting = false.obs;
+  RxInt totalWaiting = 0.obs;
+  RxInt aditionalWaiting = 0.obs;
 
   String secondToFormatted(int tick) {
     Duration duration = Duration(seconds: tick);
@@ -195,20 +193,18 @@ class GlobalData extends GetxService {
   }
 
   void lastStampToseconds({required DateTime startTime}) {
-    print("bjhbhjbhbjhbjbjhjbh");
-    if(checkWaitRideTicker.value==true){
-      checkWaitRideTicker.value=false;
+    if (checkWaitRideTicker.value == true) {
+      checkWaitRideTicker.value = false;
       waitingRideTicker.cancel();
     }
 
-    waitingRideTime.value="";
-    checkRideTicker.value=true;
+    waitingRideTime.value = "";
+    checkRideTicker.value = true;
 
-    rideTicker = Timer.periodic( Duration(seconds: 1), (val) {
+    rideTicker = Timer.periodic(Duration(seconds: 1), (val) {
       rideTime.value = secondToFormatted(
           DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds);
       print("Ticker : ${rideTime.value}");
-
     });
   }
 
@@ -225,41 +221,36 @@ class GlobalData extends GetxService {
     waitSecond.value = int.parse(twoDigitSeconds);
     print("twoDigitSeconds :${twoDigitSeconds}");
 
-
-
     return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
+
   void waitingLastStampToseconds({required DateTime startTime}) {
     //waitingRideTicker.cancel();
- /*   rideTime.value = secondToFormatted(
+    /*   rideTime.value = secondToFormatted(
         DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds);*/
-    checkWaitRideTicker.value=true;
+    checkWaitRideTicker.value = true;
     waitingRideTicker = Timer.periodic(const Duration(seconds: 1), (val) {
-      if((DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds)>=900) {
-
+      if ((DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds) >=
+          900) {
         waitingRideTime.value = waitingSecondToFormatted(
-            (DateTime
-                .now()
-                .toUtc()
-                .difference(startTime.toUtc())
-                .inSeconds) - 900);
-        extraWaiting.value=true;
-       totalWaiting.value=(DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds);
-       aditionalWaiting.value=(DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds)- 900;
+            (DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds) -
+                900);
+        extraWaiting.value = true;
+        totalWaiting.value =
+            (DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds);
+        aditionalWaiting.value =
+            (DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds) -
+                900;
         print("Ticker : ${waitingRideTime.value}");
-      }else{
-        waitingRideTime.value = waitingSecondToFormatted(
-            900-(DateTime.now()
-                .toUtc()
-                .difference(startTime.toUtc())
-                .inSeconds));
-        extraWaiting.value=false;
-        totalWaiting.value=(DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds);
-        aditionalWaiting.value=0;
+      } else {
+        waitingRideTime.value = waitingSecondToFormatted(900 -
+            (DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds));
+        extraWaiting.value = false;
+        totalWaiting.value =
+            (DateTime.now().toUtc().difference(startTime.toUtc()).inSeconds);
+        aditionalWaiting.value = 0;
         print("Ticker : ${waitingRideTime.value}");
       }
     });
   }
-
-
 }

@@ -133,8 +133,6 @@ class CompletedRideDetailsController extends GetxController {
 
   getCardDetails(String cardId) async {
     try {
-      print("ride Start");
-
       final response = await APIManager.getSavedCards();
       savedCardsresponse.value = savedCardsModel.fromJson(
         jsonDecode(
