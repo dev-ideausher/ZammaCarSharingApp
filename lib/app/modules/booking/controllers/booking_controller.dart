@@ -705,6 +705,7 @@ class BookingController extends GetxController {
           if (lockStatus == LockStatus.unlocked) {
             rideStart.value = true;
             carInspection.value = false;
+            instanceOfGlobalData.cancelWaiting();
             showMySnackbar(title: "Message", msg: "Ride Started");
           } else {
             showMySnackbar(title: "Error", msg: "Error while unlocking");
@@ -737,11 +738,9 @@ class BookingController extends GetxController {
         } else {
           showMySnackbar(title: "Error", msg: "Error while unlocking");
         }
-        bookingPriceDetails.value = true;
         endrideInspection.value = false;
-        carInspection.value = false;
         rideStart.value = false;
-        carBooking.value = false;
+        bookingPriceDetails.value = true;
         resetValue();
         showMySnackbar(title: "Message", msg: "Ride Completed successfully");
       } else {

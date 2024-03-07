@@ -224,6 +224,10 @@ class GlobalData extends GetxService {
     return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
   }
 
+  cancelWaiting() {
+    waitingRideTicker.cancel();
+  }
+
   void waitingLastStampToseconds({required DateTime startTime}) {
     //waitingRideTicker.cancel();
     /*   rideTime.value = secondToFormatted(
