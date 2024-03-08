@@ -54,7 +54,7 @@ class APIManager {
           data: jsonEncode(body));
   static Future<Response> getBookingByBookingId(
           {required String bookingId}) async =>
-      await DioClient(Dio(), showSnakbar: true, isOverlayLoader: false)
+      await DioClient(Dio(), showSnakbar: false, isOverlayLoader: false)
           .get(Endpoints.createBooking + "/$bookingId");
   static Future<Response> postInspectionImageUrl(
           {required dynamic body, required String bookingId}) async =>

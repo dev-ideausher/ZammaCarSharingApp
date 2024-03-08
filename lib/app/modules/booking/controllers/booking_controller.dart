@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
@@ -131,17 +132,17 @@ class BookingController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    // connectivityStream = Connectivity()
-    //     .onConnectivityChanged
-    //     .listen((ConnectivityResult result) async {
-    //   if (result == ConnectivityResult.none) {
-    //     showMySnackbar(
-    //         title: "No Internet Connection", msg: "Please connect to internet");
-    //     hasInternet.value = false;
-    //   } else {
-    //     hasInternet.value = true;
-    //   }
-    // });
+    connectivityStream = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      if (result == ConnectivityResult.none) {
+        showMySnackbar(
+            title: "No Internet Connection", msg: "Please connect to internet");
+        hasInternet.value = false;
+      } else {
+        hasInternet.value = true;
+      }
+    });
     hasInternet.value = true;
     timer = Timer.periodic(const Duration(seconds: 2),
         (Timer t) => getBookingDetailsUsingBookingIdTimmer());
@@ -740,6 +741,8 @@ class BookingController extends GetxController {
         }
         endrideInspection.value = false;
         rideStart.value = false;
+        carInspection.value = false;
+        carBooking.value = false;
         bookingPriceDetails.value = true;
         resetValue();
         showMySnackbar(title: "Message", msg: "Ride Completed successfully");
@@ -759,33 +762,36 @@ class BookingController extends GetxController {
       //mapLoader.value=false;
       throw MyException("Location permission not granted");
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    final response = await APIManager.endInspectionImageUrl(
-        body: {
-          "dropLocation": {
-            "type": "Point",
-            "coordinates": [position.longitude, position.latitude],
-            "address": "Unknown",
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      final response = await APIManager.endInspectionImageUrl(
+          body: {
+            "dropLocation": {
+              "type": "Point",
+              "coordinates": [position.longitude, position.latitude],
+              "address": "Unknown",
+            },
           },
-          "dropTime": DateTime.now().toIso8601String()
-        },
-        bookingId:
-            (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
-                .toString());
-    final endride = EndRide.fromJson(jsonDecode(response.toString()));
-    final response2 = await APIManager.getCarPricingById(
-        carId: (endride.data?.car).toString());
-    final carPriceById =
-        CarPriceById.fromJson(jsonDecode(response2.toString()));
-    calculateTotalBookingTimeAndTotalAmount(
-        extraMileCharges:
-            double.parse("${carPriceById.carPricing?.extraMileRate}"),
-        extraTimeCharges:
-            double.parse("${carPriceById.carPricing?.extraMinuteRate}"),
-        additionalWaitingTime: (endride.data?.additionalWaitingTime)!.toInt(),
-        dropTime: (endride.data?.dropTime).toString(),
-        pickupTime: (endride.data?.pickupTime).toString());
+          bookingId:
+              (bookingId == "" ? rideHistory.value.data![0]!.Id : bookingId)
+                  .toString());
+      final endride = EndRide.fromJson(jsonDecode(response.toString()));
+      final response2 = await APIManager.getCarPricingById(
+          carId: (endride.data?.car).toString());
+      final carPriceById =
+          CarPriceById.fromJson(jsonDecode(response2.toString()));
+      calculateTotalBookingTimeAndTotalAmount(
+          extraMileCharges:
+              double.parse("${carPriceById.carPricing?.extraMileRate}"),
+          extraTimeCharges:
+              double.parse("${carPriceById.carPricing?.extraMinuteRate}"),
+          additionalWaitingTime: (endride.data?.additionalWaitingTime)!.toInt(),
+          dropTime: (endride.data?.dropTime).toString(),
+          pickupTime: (endride.data?.pickupTime).toString());
+    } catch (e) {
+      throw MyException("Error while ending ride");
+    }
   }
 }
 
